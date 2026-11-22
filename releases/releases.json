@@ -1,3 +1,13 @@
 {
-  "releases": []
+  "releases": [
+    {
+      "version": "0.1.0",
+      "digest": "sha256:e45e8545f5e0afc63c61774555762a859c27b32f9fa0720568b9e5f0b705f6f2",
+      "channel": "beta",
+      "published_at": "2026-11-22T19:38:56.000Z",
+      "min_db_migration": "20261122172000",
+      "notes": "First public release: the exporter as its own repository, image and binaries with build provenance.",
+      "revoked": false
+    }
+  ]
 }
