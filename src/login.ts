@@ -34,20 +34,25 @@ async function main(): Promise<void> {
   console.log('If the 127.0.0.1 page does not open afterwards (the exporter runs on another computer),');
   console.log('copy its address from the browser\'s address bar and paste it here. Quit: Ctrl+C or q.\n');
 
-  const code = await waitForCode(config.oauthCallbackPort, login.state);
+  const code = await waitForCode(config.oauthCallbackPort, config.listenHost, login.state);
   await login.finish(code);
   console.log(`\nDone: token saved to ${config.oauthTokenPath}. The running exporter picks it up by itself.`);
   console.log('You can revoke access on the dashboard\'s Exporters page (/exporters).');
   process.exit(0);
 }
 
+const escapeHtml = (s: string) =>
+  s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] ?? c);
+
 function page(title: string, text: string): string {
+  title = escapeHtml(title);
+  text = escapeHtml(text);
   return `<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>${title}</title>
 <body style="font:16px system-ui;max-width:32rem;margin:15vh auto;padding:0 16px"><h1 style="font-size:20px">${title}</h1><p>${text}</p></body>`;
 }
 
 /** Resolves with the authorization code from the loopback callback or from a pasted URL. */
-function waitForCode(port: number, state: string): Promise<string> {
+function waitForCode(port: number, listenHost: string, state: string): Promise<string> {
   return new Promise((resolve, reject) => {
     const rl = createInterface({ input: process.stdin, output: process.stdout, terminal: false });
     const done = (fn: () => void) => {
@@ -71,9 +76,10 @@ function waitForCode(port: number, state: string): Promise<string> {
       if ('code' in r) done(() => resolve(r.code));
       else console.error(`Error: ${r.error}`);
     });
-    // 0.0.0.0: in Docker the port is published to the host's 127.0.0.1 only (deploy/docker-compose.yml).
+    // LISTEN_HOST: loopback natively; 0.0.0.0 in Docker, where the port is published to the
+    // host's 127.0.0.1 only (deploy/docker-compose.yml).
     server.on('error', (err) => console.error(`Cannot listen on :${port} (${err.message}), paste the address by hand instead.`));
-    server.listen(port, '0.0.0.0');
+    server.listen(port, listenHost);
 
     const cancel = () => done(() => reject(new Error('Login cancelled')));
     // In Docker this runs as PID 1, which gets no default SIGINT handler: Ctrl+C would do nothing.

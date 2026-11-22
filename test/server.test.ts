@@ -44,3 +44,10 @@ describe('config', () => {
     expect(() => loadConfig({ SOURCE: 'nope' })).toThrow('Invalid SOURCE');
   });
 });
+
+describe('listen address', () => {
+  it('binds to loopback and checks the peer by default; Docker sets both', () => {
+    expect(loadConfig({})).toMatchObject({ listenHost: '127.0.0.1', uiPeerCheck: true });
+    expect(loadConfig({ LISTEN_HOST: '0.0.0.0', UI_PEER_CHECK: 'off' })).toMatchObject({ listenHost: '0.0.0.0', uiPeerCheck: false });
+  });
+});

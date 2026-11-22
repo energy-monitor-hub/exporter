@@ -200,6 +200,7 @@ const supabaseUrl = config.supabaseUrl;
 
 const server = createHttpServer({
   allowedHosts: config.uiAllowedHosts,
+  peerCheck: config.uiPeerCheck,
   health: () => {
     const last = source?.adapter.lastMessageAt;
     return {
@@ -269,7 +270,7 @@ const server = createHttpServer({
     },
   },
 });
-server.listen(config.port, () => log.info(`exporter: status page ${config.uiUrl}/ (health: /healthz)`));
+server.listen(config.port, config.listenHost, () => log.info(`exporter: status page ${config.uiUrl}/ (health: /healthz)`));
 
 flusher?.start();
 if (envCreds) {

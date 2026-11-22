@@ -2,6 +2,14 @@ import { SOURCES } from './sources/types.js';
 
 export interface Config {
   port: number;
+  /** Address the HTTP server binds to. Loopback by default; the Docker image sets 0.0.0.0 and publishes the port on the host's 127.0.0.1. */
+  listenHost: string;
+  /**
+   * Also require a loopback peer address for the setup endpoints (credentials, sharing).
+   * On by default; the Docker image turns it off, because published ports reach the
+   * container from the bridge gateway, never from 127.0.0.1.
+   */
+  uiPeerCheck: boolean;
   /** Address of the status page as the browser sees it; the page's login comes back to `<uiUrl>/callback`. */
   uiUrl: string;
   /** Extra host names the status page answers to (it always does for localhost and IP addresses). */
@@ -71,6 +79,8 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
   const port = int(env, 'HEALTH_PORT', 9101, 1, 65535);
   return {
     port,
+    listenHost: env.LISTEN_HOST || '127.0.0.1',
+    uiPeerCheck: env.UI_PEER_CHECK !== 'off',
     uiUrl: (env.UI_URL || `http://127.0.0.1:${port}`).replace(/\/+$/, ''),
     uiAllowedHosts: (env.UI_ALLOWED_HOSTS ?? '')
       .split(',')

@@ -131,7 +131,7 @@ How it is protected:
 
 - The credentials are encrypted with AES-256-GCM in `/data/credentials.json` (`CREDENTIALS_PATH`, `0600`). The random 256-bit key is **not** on the volume: Supabase keeps it, one per exporter (`public.exporter_keys`), and hands it out only to a token issued to that exporter (`client_id` claim), never to the web app's session. The server never sees the password.
 - **Revoking the exporter** on the dashboard's Exporters page deletes its key, so any copy of the volume or a backup becomes useless. "Forget credentials" on the status page deletes the file and the key.
-- The setup form answers only through a loopback host name (`127.0.0.1` / `localhost`), even when `UI_ALLOWED_HOSTS` opens the page to your LAN.
+- The setup form answers only through a loopback host name (`127.0.0.1` / `localhost`) and, natively, only to connections from this computer, even when `UI_ALLOWED_HOSTS` and `LISTEN_HOST` open the page to your LAN.
 - Honest limits: while the exporter is **not** revoked, whoever copies the whole volume also has `oauth.json` and can fetch the key (refresh token rotation will then log your exporter out, which is your signal to revoke it). Malware running on the same machine can read the process memory. A restart needs internet to fetch the key; EcoFlow's MQTT is a cloud service, so without internet there is no data anyway.
 - Logging in again from another port registers a new exporter with a new key: enter the credentials again then.
 
@@ -148,7 +148,7 @@ The exporter serves a simple status page itself: **http://127.0.0.1:9101/** (the
 
 The page is plain HTML + JS in `src/ui/` (no build, no dependencies), with data from `GET /api/status`. The UI is in English; the "UK" button switches it to Ukrainian. Logging in from the page registers a separate OAuth client (a different redirect address than `login` on `:9102`), so the dashboard's "Exporters" page may show one more row; you can revoke the old one.
 
-The page only answers on `localhost` / IP addresses (DNS rebinding protection); add any other host name to `UI_ALLOWED_HOSTS`. If the port is published somewhere other than `127.0.0.1:9101`, set `UI_URL`.
+The page only answers on `localhost` / IP addresses (DNS rebinding protection); add any other host name to `UI_ALLOWED_HOSTS`. If the port is published somewhere other than `127.0.0.1:9101`, set `UI_URL`. Natively the exporter listens on `127.0.0.1` only; `LISTEN_HOST=0.0.0.0` opens the page to your LAN (the Docker image already listens on `0.0.0.0` inside the container, and compose publishes the port on `127.0.0.1`).
 
 ### Helping support a new model
 

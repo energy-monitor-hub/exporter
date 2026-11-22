@@ -14,6 +14,12 @@ ENV CREDENTIALS_PATH=/data/credentials.json
 ENV DECODER_CACHE_DIR=/data/decoders
 # node:sqlite is still flagged experimental in Node 22; the warning is noise.
 ENV NODE_OPTIONS=--disable-warning=ExperimentalWarning
+# Listen on all interfaces inside the container; compose publishes the ports on the host's
+# 127.0.0.1 only. Published ports arrive from the bridge gateway, not from loopback, so the
+# setup endpoints rely on the loopback Host check alone (UI_PEER_CHECK=off). Publish the
+# ports on 127.0.0.1, never on all interfaces.
+ENV LISTEN_HOST=0.0.0.0
+ENV UI_PEER_CHECK=off
 RUN mkdir -p /data && chown node:node /data
 # Node 22 ships npm 10, which ignores `min-release-age` (.npmrc). Pin npm 11.
 # npm-pin: npm

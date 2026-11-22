@@ -37,6 +37,8 @@ export interface ServerOptions {
   assetsDir?: URL;
   /** Host names accepted besides localhost and IP literals (UI_ALLOWED_HOSTS). */
   allowedHosts?: readonly string[];
+  /** Setup endpoints also require a loopback peer address (UI_PEER_CHECK, default on). */
+  peerCheck?: boolean;
 }
 
 const ASSETS: Record<string, { file: string; type: string }> = {
@@ -101,6 +103,13 @@ export function isLoopbackHost(host: string | undefined): boolean {
   return name === 'localhost' || name.endsWith('.localhost') || name === 'host.docker.internal' || name === '::1' || /^127\.\d+\.\d+\.\d+$/.test(name);
 }
 
+/** True for a connection from this computer (IPv4, IPv6 or IPv4-mapped IPv6 loopback). */
+export function isLoopbackAddress(addr: string | undefined): boolean {
+  if (!addr) return false;
+  const a = addr.toLowerCase().replace(/^::ffff:/, '');
+  return a === '::1' || /^127\.\d+\.\d+\.\d+$/.test(a);
+}
+
 function json(res: ServerResponse, status: number, body: unknown): void {
   res.writeHead(status, { ...SECURITY_HEADERS, 'Content-Type': 'application/json' });
   res.end(JSON.stringify(body));
@@ -128,6 +137,11 @@ export function createHttpServer(opts: ServerOptions): Server {
   const assetsDir = opts.assetsDir;
   const assets = opts.ui ? loadAssets(assetsDir ? () => assetsDir : undefined) : new Map();
   const ui = opts.ui;
+  const peerCheck = opts.peerCheck ?? true;
+  // The Host header is chosen by the client, so on its own it only stops DNS rebinding from a
+  // browser. A LAN client can send any Host: the peer address has to be loopback too.
+  const fromThisComputer = (req: IncomingMessage) =>
+    isLoopbackHost(req.headers.host) && (!peerCheck || isLoopbackAddress(req.socket.remoteAddress));
 
   const handle = async (req: IncomingMessage, res: ServerResponse): Promise<void> => {
     const url = new URL(req.url ?? '/', 'http://localhost');
@@ -199,7 +213,7 @@ export function createHttpServer(opts: ServerOptions): Server {
           return;
         }
         if (path === '/api/credentials' || path === '/api/credentials/forget') {
-          if (!isLoopbackHost(req.headers.host)) {
+          if (!fromThisComputer(req)) {
             json(res, 403, { error: 'credentials can only be changed from this computer (open the page via 127.0.0.1)' });
             return;
           }
@@ -216,7 +230,7 @@ export function createHttpServer(opts: ServerOptions): Server {
         }
         if (path.startsWith('/api/discovery/') && ui.discovery) {
           // Sends data off this machine: only from the computer the exporter runs on.
-          if (!isLoopbackHost(req.headers.host)) {
+          if (!fromThisComputer(req)) {
             json(res, 403, { error: 'sharing can only be started from this computer (open the page via 127.0.0.1)' });
             return;
           }

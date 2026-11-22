@@ -8,7 +8,7 @@ import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import type { FetchFn } from '../src/oauth/client.js';
 import { beginLogin } from '../src/oauth/flow.js';
 import { readStoredAuth, writeStoredAuth } from '../src/oauth/session.js';
-import { createHttpServer, isAllowedHost, isLoopbackHost, type UiApi } from '../src/server.js';
+import { createHttpServer, isAllowedHost, isLoopbackAddress, isLoopbackHost, type UiApi } from '../src/server.js';
 import { maskSn, OutageHistory, packSummary } from '../src/status.js';
 
 const URL_ = 'https://proj.supabase.co';
@@ -110,6 +110,16 @@ describe('status page server', () => {
     expect(isLoopbackHost('192.168.1.5:9101')).toBe(false);
     expect(isLoopbackHost('[::1]:9101')).toBe(true);
     expect(isLoopbackHost('127.0.0.1:9101')).toBe(true);
+  });
+
+  it('tells loopback peers from LAN peers (a Host header alone can be forged)', () => {
+    expect(isLoopbackAddress('127.0.0.1')).toBe(true);
+    expect(isLoopbackAddress('::1')).toBe(true);
+    expect(isLoopbackAddress('::ffff:127.0.0.1')).toBe(true);
+    expect(isLoopbackAddress('192.168.1.5')).toBe(false);
+    expect(isLoopbackAddress('::ffff:192.168.1.5')).toBe(false);
+    expect(isLoopbackAddress('fe80::1')).toBe(false);
+    expect(isLoopbackAddress(undefined)).toBe(false);
   });
 
   it('serves discovery status and actions (loopback, with the UI header)', async () => {
