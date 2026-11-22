@@ -1,0 +1,53 @@
+{
+  "name": "energy-monitor-hub-exporter",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Local telemetry exporter for EcoFlow stations (private MQTT, protobuf) -> your Supabase. Credentials stay on your machine.",
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0",
+    "npm": ">=11.10.0"
+  },
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc -p tsconfig.json && node -e \"const fs = require('node:fs'); fs.cpSync('src/proto', 'dist/proto', { recursive: true }); fs.cpSync('src/ui', 'dist/ui', { recursive: true })\"",
+    "start": "node dist/index.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "record": "tsx src/record.ts",
+    "login": "tsx src/login.ts",
+    "samples": "tsx src/admin/samples.ts",
+    "packs": "tsx src/packs/cli.ts",
+    "sea": "node scripts/build-sea.mjs",
+    "stack:dev": "docker compose -f deploy/docker-compose.yml -f deploy/docker-compose.dev.yml watch",
+    "stack:down": "docker compose -f deploy/docker-compose.yml -f deploy/docker-compose.dev.yml down",
+    "stack:logs": "docker compose -f deploy/docker-compose.yml -f deploy/docker-compose.dev.yml logs -f exporter"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "2.119.0",
+    "dotenv": "18.0.10",
+    "mqtt": "5.16.1",
+    "protobufjs": "8.8.1",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.6",
+    "esbuild": "0.28.2",
+    "postject": "1.0.0-alpha.6",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2",
+    "vitest": "5.1.0"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true,
+    "fsevents@2.3.3": false
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/energy-monitor-hub/exporter.git"
+  },
+  "dbContract": {
+    "minMigration": "20261122172000"
+  }
+}

@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Exporter status</title>
+    <link rel="stylesheet" href="/app.css" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M9 1 3 9h4l-1 6 6-8H8z' fill='%23d97706'/%3E%3C/svg%3E" />
+  </head>
+  <body>
+    <header>
+      <div>
+        <h1 data-i18n="title">Exporter status</h1>
+        <p class="muted" id="device">…</p>
+      </div>
+      <div class="header-actions">
+        <span class="muted small" id="updated"></span>
+        <button type="button" class="ghost" id="theme" aria-label="Theme">Auto</button>
+        <button type="button" class="ghost" id="lang" aria-label="Language">UK</button>
+      </div>
+    </header>
+
+    <div id="banner" class="banner" hidden></div>
+
+    <main>
+      <section class="card wide" id="setup-card">
+        <div class="card-head">
+          <h2 data-i18n="setup">EcoFlow account</h2>
+          <span class="badge" id="setup-badge">…</span>
+        </div>
+        <p class="muted small" id="setup-hint"></p>
+        <p class="error small" id="setup-error" hidden></p>
+        <form id="setup-form" hidden autocomplete="on">
+          <div class="fields">
+            <label><span data-i18n="ecoEmail">E-mail of the EcoFlow app account</span>
+              <input id="eco-user" name="username" type="email" autocomplete="username" required maxlength="200" />
+            </label>
+            <label><span data-i18n="ecoPassword">Password</span>
+              <input id="eco-pass" name="password" type="password" autocomplete="current-password" required maxlength="200" />
+            </label>
+            <label><span data-i18n="ecoSn">Serial number of the station</span>
+              <input id="eco-sn" name="sn" type="text" autocomplete="off" required pattern="[A-Za-z0-9]{6,40}" spellcheck="false" />
+            </label>
+            <label><span data-i18n="ecoHost">Server</span>
+              <select id="eco-host" name="apiHost">
+                <option value="">api.ecoflow.com</option>
+                <option value="api-e.ecoflow.com">api-e.ecoflow.com (EU)</option>
+                <option value="api-a.ecoflow.com">api-a.ecoflow.com</option>
+              </select>
+            </label>
+          </div>
+          <p class="muted small" data-i18n="setupPrivacy">The password is checked with EcoFlow, then stored only on this computer, encrypted. The key is kept with your exporter login, so revoking this exporter on the dashboard makes a copy of the file useless. The exporter uses EcoFlow's unofficial app interface with your account, at your own risk.</p>
+          <div class="actions">
+            <button type="submit" class="primary" id="setup-save" data-i18n="setupSave">Check and save</button>
+          </div>
+        </form>
+        <div class="actions" id="setup-forget-row" hidden>
+          <button type="button" id="setup-forget" data-i18n="setupForget">Forget credentials</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <h2 data-i18n="device">Device connection</h2>
+          <span class="badge" id="source-badge">…</span>
+        </div>
+        <dl>
+          <dt data-i18n="lastMessage">Last message</dt>
+          <dd id="last-message">—</dd>
+          <dt data-i18n="lastSample">Last sample</dt>
+          <dd id="last-sample">—</dd>
+          <dt data-i18n="running">Running for</dt>
+          <dd id="uptime">—</dd>
+          <dt data-i18n="version">Version</dt>
+          <dd id="version">—</dd>
+          <dt data-i18n="decoder">Data decoder</dt>
+          <dd id="decoder">—</dd>
+        </dl>
+        <p class="muted small" id="decoder-note"></p>
+        <div class="actions">
+          <button type="button" id="reconnect" data-i18n="reconnect">Reconnect</button>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <h2 data-i18n="cloud">Supabase login</h2>
+          <span class="badge" id="auth-badge">…</span>
+        </div>
+        <p class="muted small" id="auth-hint"></p>
+        <dl>
+          <dt data-i18n="tokenExpires">Access token until</dt>
+          <dd id="auth-expires">—</dd>
+        </dl>
+        <p class="error small" id="auth-error" hidden></p>
+        <div class="actions">
+          <button type="button" class="primary" id="login" data-i18n="login" hidden>Log in</button>
+        </div>
+        <form id="paste" hidden>
+          <label for="paste-url" class="small" data-i18n="pasteHint">If the browser did not come back here, paste the address it ended on:</label>
+          <div class="row">
+            <input id="paste-url" type="url" required placeholder="http://127.0.0.1:9101/callback?code=…" />
+            <button type="submit" data-i18n="finish">Finish</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <h2 data-i18n="queue">Write queue</h2>
+          <span class="badge" id="queue-badge">…</span>
+        </div>
+        <dl>
+          <dt data-i18n="pending">Rows waiting</dt>
+          <dd id="queue-pending">—</dd>
+          <dt data-i18n="lastWrite">Last write</dt>
+          <dd id="queue-ok">—</dd>
+        </dl>
+        <p class="error small" id="queue-error" hidden></p>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <h2 data-i18n="grid">Grid</h2>
+          <span class="badge" id="grid-badge">…</span>
+        </div>
+        <dl>
+          <dt data-i18n="outageSince">Outage since</dt>
+          <dd id="outage-since">—</dd>
+          <dt data-i18n="outageFor">Without grid for</dt>
+          <dd id="outage-for">—</dd>
+        </dl>
+      </section>
+
+      <section class="card wide">
+        <div class="card-head">
+          <h2 data-i18n="values">Latest values</h2>
+        </div>
+        <div class="tiles" id="tiles"></div>
+        <div class="table-wrap">
+          <table id="packs">
+            <thead>
+              <tr>
+                <th data-i18n="pack">Pack</th>
+                <th class="num" data-i18n="soc">SoC</th>
+                <th class="num" data-i18n="soh">SoH</th>
+                <th class="num" data-i18n="cycles">Cycles</th>
+                <th class="num" data-i18n="cellMin">Cell min</th>
+                <th class="num" data-i18n="cellMax">Cell max</th>
+                <th class="num" data-i18n="spread">Spread</th>
+                <th class="num" data-i18n="temp">Temp</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="muted small" id="no-values" hidden data-i18n="noValues">Nothing from the device yet.</p>
+      </section>
+
+      <section class="card wide">
+        <div class="card-head">
+          <h2 data-i18n="outages">Recent outages</h2>
+        </div>
+        <div class="table-wrap">
+          <table id="outages">
+            <thead>
+              <tr>
+                <th data-i18n="start">Start</th>
+                <th data-i18n="duration">Duration</th>
+                <th class="num" data-i18n="socRange">SoC</th>
+                <th class="num" data-i18n="energy">Used</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="muted small" id="outages-note"></p>
+      </section>
+      <section class="card wide" id="disc-card">
+        <div class="card-head">
+          <h2 data-i18n="disc">Help support your model</h2>
+          <span class="badge" id="disc-badge">…</span>
+        </div>
+        <p class="muted small" id="disc-hint"></p>
+        <p class="error small" id="disc-error" hidden></p>
+        <div id="disc-body" hidden>
+          <h3 data-i18n="discCensus">Model census</h3>
+          <p class="consent-text small" id="census-text"></p>
+          <label class="check" id="census-consent-row"><input type="checkbox" id="census-consent" /> <span data-i18n="discAgree">I have read this and agree</span></label>
+          <div class="actions">
+            <button type="button" id="census-send" data-i18n="discCensusSend">Send census</button>
+            <span class="muted small" id="census-sent"></span>
+          </div>
+
+          <h3 data-i18n="discSample">Share a sample</h3>
+          <p class="consent-text small" id="sample-text"></p>
+          <label class="check" id="sample-consent-row"><input type="checkbox" id="sample-consent" /> <span data-i18n="discAgree">I have read this and agree</span></label>
+          <div class="actions" id="sample-start-row">
+            <select id="sample-minutes" aria-label="Minutes">
+              <option value="5">5</option>
+              <option value="10" selected>10</option>
+              <option value="15">15</option>
+            </select>
+            <span class="muted small" data-i18n="discMinutes">minutes</span>
+            <button type="button" id="sample-record" data-i18n="discRecord">Record</button>
+          </div>
+          <div class="actions" id="sample-rec-row" hidden>
+            <span class="small" id="sample-progress"></span>
+            <button type="button" id="sample-stop" data-i18n="discStop">Stop</button>
+          </div>
+          <div id="sample-ready" hidden>
+            <dl id="sample-summary"></dl>
+            <p class="error small" id="sample-blocked" hidden></p>
+            <div class="actions">
+              <button type="button" class="primary" id="sample-send" data-i18n="discSend">Send</button>
+              <button type="button" id="sample-discard" data-i18n="discDiscard">Discard</button>
+            </div>
+          </div>
+          <p class="muted small" id="sample-result"></p>
+        </div>
+      </section>
+    </main>
+
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>

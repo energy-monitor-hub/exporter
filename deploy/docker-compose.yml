@@ -1,0 +1,66 @@
+name: ecoflow
+
+# Production: only the exporter runs locally. Data goes to your Supabase project.
+# The image is built for amd64 + arm64 in GitHub Actions (exporter-image.yml):
+#   docker compose -f deploy/docker-compose.yml pull && docker compose -f deploy/docker-compose.yml up -d
+# Settings: .env in the repository root (next to .env.example).
+# Defaults to this repository's image; ECOFLOW_IMAGE_REPO=ghcr.io/<owner>/<repo> (shell or
+# deploy/.env) takes a fork's. `up --build` builds it locally instead.
+# ECOFLOW_EXPORTER_IMAGE pins an exact release instead of :main, e.g. the
+# `<image>@sha256:<digest>` the status page shows when an update is out (docs/UPDATES.md).
+x-exporter-image: &exporter-image ${ECOFLOW_EXPORTER_IMAGE:-${ECOFLOW_IMAGE_REPO:-ghcr.io/energy-monitor-hub/exporter}:main}
+
+services:
+  exporter:
+    image: *exporter-image
+    build:
+      context: ..
+      target: prod
+    env_file:
+      - path: ../.env
+        required: false
+    environment:
+      HEALTH_PORT: "9101"
+    volumes:
+      # All of the exporter's state, despite the volume's name: write queue (buffer.sqlite),
+      # OAuth tokens (oauth.json), encrypted EcoFlow credentials (credentials.json; the key
+      # stays in Supabase) and cached decoder packs (decoders/). Paths: ENV in the Dockerfile.
+      - buffer:/data
+    ports:
+      - "127.0.0.1:9101:9101"
+    extra_hosts:
+      # lets SUPABASE_URL=http://host.docker.internal:54321 reach a local Supabase on Linux too
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:9101/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+
+  # One-off exporter login (OAuth, approve it on the dashboard):
+  #   docker compose -f deploy/docker-compose.yml run --rm --service-ports login
+  # Writes /data/oauth.json; the running exporter picks it up without a restart.
+  login:
+    profiles: ["login"]
+    image: *exporter-image
+    build:
+      context: ..
+      target: prod
+    env_file:
+      - path: ../.env
+        required: false
+    volumes:
+      - buffer:/data
+    ports:
+      # the browser comes back to http://127.0.0.1:9102/callback after the consent page
+      - "127.0.0.1:9102:9102"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    command: ["node", "dist/login.js"]
+    # tini as PID 1 forwards Ctrl+C to node
+    init: true
+    restart: "no"
+
+volumes:
+  buffer:

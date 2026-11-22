@@ -1,0 +1,82 @@
+name: exporter-binaries
+
+# The exporter as one executable per OS/arch, without Docker (docs/NATIVE.md, issue #45):
+# Node Single Executable Applications, same code as the image. Each build runs its own
+# --self-check on its runner.
+#   pull request / workflow_dispatch: build and check only
+#   tag vX.Y.Z: also attest build provenance for each binary and attach it with its SHA-256
+#               sum to the GitHub release. Check a download with
+#                 gh attestation verify <file> --repo <owner>/<repo>
+# Unsigned (no Apple Developer ID / Windows certificate yet): macOS gets an ad-hoc signature.
+
+on:
+  push:
+    tags: ['v[0-9]+.[0-9]+.[0-9]+']
+  pull_request:
+    paths:
+      - 'src/**'
+      - 'scripts/build-sea.mjs'
+      - 'package.json'
+      - 'package-lock.json'
+      - '.github/workflows/exporter-binaries.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  # npm-pin: npm
+  NPM_VERSION: 11.21.2
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { runner: ubuntu-24.04, target: linux-x64 }
+          - { runner: ubuntu-24.04-arm, target: linux-arm64 }
+          - { runner: macos-15, target: darwin-arm64 }
+          - { runner: windows-2025, target: win-x64, ext: .exe }
+    runs-on: ${{ matrix.runner }}
+    permissions:
+      contents: write # gh release upload, on tags only
+      id-token: write # Sigstore certificate for the provenance attestation
+      attestations: write
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22.23.5
+      - run: npm install -g "npm@${NPM_VERSION}"
+      - run: npm ci
+      - run: node scripts/build-sea.mjs
+      - name: Self-check and name
+        id: out
+        run: |
+          src="build/sea/ecoflow-exporter${{ matrix.ext }}"
+          "$src" --self-check
+          file="ecoflow-exporter-${{ matrix.target }}${{ matrix.ext }}"
+          mv "$src" "build/sea/$file"
+          (cd build/sea && (sha256sum "$file" 2>/dev/null || shasum -a 256 "$file") > "$file.sha256")
+          echo "file=build/sea/$file" >> "$GITHUB_OUTPUT"
+          ls -l build/sea
+      - name: Build provenance attestation
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-path: ${{ steps.out.outputs.file }}
+      - name: Attach to the release
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          FILE: ${{ steps.out.outputs.file }}
+        run: |
+          gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1 || gh release create "$GITHUB_REF_NAME" --verify-tag --title "$GITHUB_REF_NAME" --notes "See docs/UPDATES.md and docs/NATIVE.md." || true
+          gh release upload "$GITHUB_REF_NAME" "$FILE" "$FILE.sha256" --clobber

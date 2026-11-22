@@ -1,0 +1,6328 @@
+{
+  "format": "ecoflow-dashboard/decoder-pack/1",
+  "id": "ecoflow-delta3maxplus",
+  "version": 1,
+  "minExporterVersion": "0.1.0",
+  "descriptor": {
+    "vendor": "ecoflow",
+    "model": "DELTA 3 Max Plus"
+  },
+  "match": {
+    "vendor": "ecoflow",
+    "productCodes": [],
+    "fallback": true
+  },
+  "proto": {
+    "nested": {
+      "Header": {
+        "oneofs": {
+          "_pdata": {
+            "oneof": [
+              "pdata"
+            ]
+          },
+          "_src": {
+            "oneof": [
+              "src"
+            ]
+          },
+          "_dest": {
+            "oneof": [
+              "dest"
+            ]
+          },
+          "_dSrc": {
+            "oneof": [
+              "dSrc"
+            ]
+          },
+          "_dDest": {
+            "oneof": [
+              "dDest"
+            ]
+          },
+          "_encType": {
+            "oneof": [
+              "encType"
+            ]
+          },
+          "_checkType": {
+            "oneof": [
+              "checkType"
+            ]
+          },
+          "_cmdFunc": {
+            "oneof": [
+              "cmdFunc"
+            ]
+          },
+          "_cmdId": {
+            "oneof": [
+              "cmdId"
+            ]
+          },
+          "_dataLen": {
+            "oneof": [
+              "dataLen"
+            ]
+          },
+          "_needAck": {
+            "oneof": [
+              "needAck"
+            ]
+          },
+          "_isAck": {
+            "oneof": [
+              "isAck"
+            ]
+          },
+          "_seq": {
+            "oneof": [
+              "seq"
+            ]
+          },
+          "_productId": {
+            "oneof": [
+              "productId"
+            ]
+          },
+          "_version": {
+            "oneof": [
+              "version"
+            ]
+          },
+          "_payloadVer": {
+            "oneof": [
+              "payloadVer"
+            ]
+          },
+          "_timeSnap": {
+            "oneof": [
+              "timeSnap"
+            ]
+          },
+          "_isRwCmd": {
+            "oneof": [
+              "isRwCmd"
+            ]
+          },
+          "_isQueue": {
+            "oneof": [
+              "isQueue"
+            ]
+          },
+          "_ackType": {
+            "oneof": [
+              "ackType"
+            ]
+          },
+          "_code": {
+            "oneof": [
+              "code"
+            ]
+          },
+          "_from": {
+            "oneof": [
+              "from"
+            ]
+          },
+          "_moduleSn": {
+            "oneof": [
+              "moduleSn"
+            ]
+          },
+          "_deviceSn": {
+            "oneof": [
+              "deviceSn"
+            ]
+          }
+        },
+        "fields": {
+          "pdata": {
+            "type": "bytes",
+            "id": 1,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "src": {
+            "type": "int32",
+            "id": 2,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "dest": {
+            "type": "int32",
+            "id": 3,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "dSrc": {
+            "type": "int32",
+            "id": 4,
+            "protoName": "d_src",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "dDest": {
+            "type": "int32",
+            "id": 5,
+            "protoName": "d_dest",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "encType": {
+            "type": "int32",
+            "id": 6,
+            "protoName": "enc_type",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "checkType": {
+            "type": "int32",
+            "id": 7,
+            "protoName": "check_type",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cmdFunc": {
+            "type": "int32",
+            "id": 8,
+            "protoName": "cmd_func",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cmdId": {
+            "type": "int32",
+            "id": 9,
+            "protoName": "cmd_id",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "dataLen": {
+            "type": "int32",
+            "id": 10,
+            "protoName": "data_len",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "needAck": {
+            "type": "int32",
+            "id": 11,
+            "protoName": "need_ack",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "isAck": {
+            "type": "int32",
+            "id": 12,
+            "protoName": "is_ack",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "seq": {
+            "type": "int32",
+            "id": 14,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "productId": {
+            "type": "int32",
+            "id": 15,
+            "protoName": "product_id",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "version": {
+            "type": "int32",
+            "id": 16,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "payloadVer": {
+            "type": "int32",
+            "id": 17,
+            "protoName": "payload_ver",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "timeSnap": {
+            "type": "int32",
+            "id": 18,
+            "protoName": "time_snap",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "isRwCmd": {
+            "type": "int32",
+            "id": 19,
+            "protoName": "is_rw_cmd",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "isQueue": {
+            "type": "int32",
+            "id": 20,
+            "protoName": "is_queue",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "ackType": {
+            "type": "int32",
+            "id": 21,
+            "protoName": "ack_type",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "code": {
+            "type": "string",
+            "id": 22,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "from": {
+            "type": "string",
+            "id": 23,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "moduleSn": {
+            "type": "string",
+            "id": 24,
+            "protoName": "module_sn",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "deviceSn": {
+            "type": "string",
+            "id": 25,
+            "protoName": "device_sn",
+            "options": {
+              "proto3_optional": true
+            }
+          }
+        }
+      },
+      "FloatList": {
+        "fields": {
+          "value": {
+            "rule": "repeated",
+            "type": "float",
+            "id": 1
+          }
+        }
+      },
+      "HeaderMessage": {
+        "fields": {
+          "header": {
+            "rule": "repeated",
+            "type": "Header",
+            "id": 1
+          }
+        }
+      },
+      "AppRuquestBpEuLawData": {
+        "oneofs": {
+          "_packSn": {
+            "oneof": [
+              "packSn"
+            ]
+          },
+          "_appToBmsLaunchDate": {
+            "oneof": [
+              "appToBmsLaunchDate"
+            ]
+          },
+          "_appLaunchDateSetType": {
+            "oneof": [
+              "appLaunchDateSetType"
+            ]
+          },
+          "_appToBmsResetFlag": {
+            "oneof": [
+              "appToBmsResetFlag"
+            ]
+          },
+          "_bmsDataUploadEn": {
+            "oneof": [
+              "bmsDataUploadEn"
+            ]
+          }
+        },
+        "fields": {
+          "packSn": {
+            "type": "string",
+            "id": 1,
+            "protoName": "pack_sn",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "appToBmsLaunchDate": {
+            "type": "uint32",
+            "id": 2,
+            "protoName": "app_to_bms_launch_date",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "appLaunchDateSetType": {
+            "type": "uint32",
+            "id": 3,
+            "protoName": "app_launch_date_set_type",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "appToBmsResetFlag": {
+            "type": "uint32",
+            "id": 4,
+            "protoName": "app_to_bms_reset_flag",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsDataUploadEn": {
+            "type": "uint32",
+            "id": 5,
+            "protoName": "bms_data_upload_en",
+            "options": {
+              "proto3_optional": true
+            }
+          }
+        }
+      },
+      "AppRuquestBpEuLawDataAck": {
+        "oneofs": {
+          "_bmsSn": {
+            "oneof": [
+              "bmsSn"
+            ]
+          },
+          "_soh": {
+            "oneof": [
+              "soh"
+            ]
+          },
+          "_accuChgCap": {
+            "oneof": [
+              "accuChgCap"
+            ]
+          },
+          "_accuDsgCap": {
+            "oneof": [
+              "accuDsgCap"
+            ]
+          },
+          "_accuChgEnergy": {
+            "oneof": [
+              "accuChgEnergy"
+            ]
+          },
+          "_accuDsgEnergy": {
+            "oneof": [
+              "accuDsgEnergy"
+            ]
+          },
+          "_deepDsgCnt": {
+            "oneof": [
+              "deepDsgCnt"
+            ]
+          },
+          "_highTempUseTime": {
+            "oneof": [
+              "highTempUseTime"
+            ]
+          },
+          "_lowTempUseTime": {
+            "oneof": [
+              "lowTempUseTime"
+            ]
+          },
+          "_highTempChgTime": {
+            "oneof": [
+              "highTempChgTime"
+            ]
+          },
+          "_lowTempChgTime": {
+            "oneof": [
+              "lowTempChgTime"
+            ]
+          },
+          "_bpLaunchDate": {
+            "oneof": [
+              "bpLaunchDate"
+            ]
+          },
+          "_bpCycles": {
+            "oneof": [
+              "bpCycles"
+            ]
+          },
+          "_bpPowerCapability": {
+            "oneof": [
+              "bpPowerCapability"
+            ]
+          },
+          "_bpRoundTripEff": {
+            "oneof": [
+              "bpRoundTripEff"
+            ]
+          },
+          "_bpSelfDsgRate": {
+            "oneof": [
+              "bpSelfDsgRate"
+            ]
+          },
+          "_bpOhmRes": {
+            "oneof": [
+              "bpOhmRes"
+            ]
+          },
+          "_bpResetFlag": {
+            "oneof": [
+              "bpResetFlag"
+            ]
+          },
+          "_bpLaunchDateFlag": {
+            "oneof": [
+              "bpLaunchDateFlag"
+            ]
+          },
+          "_num": {
+            "oneof": [
+              "num"
+            ]
+          }
+        },
+        "fields": {
+          "bmsSn": {
+            "type": "string",
+            "id": 1,
+            "protoName": "bms_sn",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "soh": {
+            "type": "uint32",
+            "id": 2,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "accuChgCap": {
+            "type": "uint32",
+            "id": 3,
+            "protoName": "accu_chg_cap",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "accuDsgCap": {
+            "type": "uint32",
+            "id": 4,
+            "protoName": "accu_dsg_cap",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "accuChgEnergy": {
+            "type": "uint32",
+            "id": 5,
+            "protoName": "accu_chg_energy",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "accuDsgEnergy": {
+            "type": "uint32",
+            "id": 6,
+            "protoName": "accu_dsg_energy",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "deepDsgCnt": {
+            "type": "uint32",
+            "id": 7,
+            "protoName": "deep_dsg_cnt",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "highTempUseTime": {
+            "type": "uint32",
+            "id": 8,
+            "protoName": "high_temp_use_time",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "lowTempUseTime": {
+            "type": "uint32",
+            "id": 9,
+            "protoName": "low_temp_use_time",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "highTempChgTime": {
+            "type": "uint32",
+            "id": 10,
+            "protoName": "high_temp_chg_time",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "lowTempChgTime": {
+            "type": "uint32",
+            "id": 11,
+            "protoName": "low_temp_chg_time",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bpLaunchDate": {
+            "type": "uint32",
+            "id": 12,
+            "protoName": "bp_launch_date",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bpCycles": {
+            "type": "uint32",
+            "id": 13,
+            "protoName": "bp_cycles",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bpPowerCapability": {
+            "type": "float",
+            "id": 14,
+            "protoName": "bp_power_capability",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bpRoundTripEff": {
+            "type": "float",
+            "id": 15,
+            "protoName": "bp_round_trip_eff",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bpSelfDsgRate": {
+            "type": "float",
+            "id": 16,
+            "protoName": "bp_self_dsg_rate",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bpOhmRes": {
+            "type": "float",
+            "id": 17,
+            "protoName": "bp_ohm_res",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bpResetFlag": {
+            "type": "BpResetType",
+            "id": 18,
+            "protoName": "bp_reset_flag",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bpLaunchDateFlag": {
+            "type": "AppDateType",
+            "id": 19,
+            "protoName": "bp_launch_date_flag",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "num": {
+            "type": "uint32",
+            "id": 20,
+            "options": {
+              "proto3_optional": true
+            }
+          }
+        }
+      },
+      "AppDateType": {
+        "values": {
+          "NONE_SET": 0,
+          "APP_AUTO_SET": 1,
+          "APP_MANUAL_SET": 2,
+          "BMS_AUTO_SET": 3
+        }
+      },
+      "BpResetType": {
+        "values": {
+          "NONE_RESET_VAL": 0,
+          "HAS_RESET_VAL": 1,
+          "NEED_RESET_VAL": 2,
+          "MASTER_RESET": 3
+        }
+      },
+      "ConfigRead": {
+        "fields": {
+          "actionId": {
+            "rule": "repeated",
+            "type": "uint32",
+            "id": 1,
+            "protoName": "action_id"
+          }
+        }
+      },
+      "ConfigReadAck": {
+        "oneofs": {
+          "_cfgUtcTime": {
+            "oneof": [
+              "cfgUtcTime"
+            ]
+          },
+          "_cfgUtcTimezone": {
+            "oneof": [
+              "cfgUtcTimezone"
+            ]
+          },
+          "_getTimeTaskList": {
+            "oneof": [
+              "getTimeTaskList"
+            ]
+          }
+        },
+        "fields": {
+          "cfgUtcTime": {
+            "type": "uint32",
+            "id": 6,
+            "protoName": "cfg_utc_time",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cfgUtcTimezone": {
+            "type": "int32",
+            "id": 7,
+            "protoName": "cfg_utc_timezone",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "getTimeTaskList": {
+            "type": "GetAllTimeTaskReadck",
+            "id": 41,
+            "protoName": "get_time_task_list",
+            "options": {
+              "proto3_optional": true
+            }
+          }
+        }
+      },
+      "GetAllTimeTaskReadck": {
+        "fields": {
+          "timeTask": {
+            "rule": "repeated",
+            "type": "SetTimeTaskWrite",
+            "id": 1,
+            "protoName": "time_task"
+          }
+        }
+      },
+      "STATISTICS_OBJECT": {
+        "values": {
+          "STATISTICS_OBJECT_START": 0,
+          "STATISTICS_OBJECT_DEV_WORK_TIME": 1,
+          "STATISTICS_OBJECT_AC_OUT_ENERGY": 2,
+          "STATISTICS_OBJECT_DC12V_OUT_ENERGY": 3,
+          "STATISTICS_OBJECT_TYPEC_OUT_ENERGY": 4,
+          "STATISTICS_OBJECT_USBA_OUT_ENERGY": 5,
+          "STATISTICS_OBJECT_AC_IN_ENERGY": 6,
+          "STATISTICS_OBJECT_PV_IN_ENERGY": 7,
+          "STATISTICS_OBJECT_AC_IN_0W_100W_TIME": 8,
+          "STATISTICS_OBJECT_AC_IN_OVER_100W_TIME": 9,
+          "STATISTICS_OBJECT_AC_OUT_0W_50W_TIME": 10,
+          "STATISTICS_OBJECT_AC_OUT_50W_100W_TIME": 11,
+          "STATISTICS_OBJECT_AC_OUT_100W_200W_TIME": 12,
+          "STATISTICS_OBJECT_AC_OUT_OVER_200W_TIME": 13,
+          "STATISTICS_OBJECT_AC_OUT_200W_300W_TIME": 14,
+          "STATISTICS_OBJECT_AC_OUT_300W_400W_TIME": 15,
+          "STATISTICS_OBJECT_AC_OUT_400W_500W_TIME": 16,
+          "STATISTICS_OBJECT_AC_OUT_OVER_500W_TIME": 17,
+          "STATISTICS_OBJECT_PV_IN_TIME": 18,
+          "STATISTICS_OBJECT_TYPEC_IN_TIME": 19,
+          "STATISTICS_OBJECT_DC_OUT_0W_60W_TIME": 20,
+          "STATISTICS_OBJECT_DC_OUT_OVER_60W_TIME": 21,
+          "STATISTICS_OBJECT_TYPEC_OUT_0W_30W_TIME": 22,
+          "STATISTICS_OBJECT_TYPEC_OUT_30W_60W_TIME": 23,
+          "STATISTICS_OBJECT_TYPEC_OUT_OVER_60W_TIME": 24,
+          "STATISTICS_OBJECT_USBA_OUT_TIME": 25,
+          "STATISTICS_OBJECT_LED_OUT_TIME": 26
+        }
+      },
+      "StatisticsRecordItem": {
+        "oneofs": {
+          "_statisticsObject": {
+            "oneof": [
+              "statisticsObject"
+            ]
+          },
+          "_statisticsContent": {
+            "oneof": [
+              "statisticsContent"
+            ]
+          }
+        },
+        "fields": {
+          "statisticsObject": {
+            "type": "STATISTICS_OBJECT",
+            "id": 1,
+            "protoName": "statistics_object",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "statisticsContent": {
+            "type": "uint32",
+            "id": 2,
+            "protoName": "statistics_content",
+            "options": {
+              "proto3_optional": true
+            }
+          }
+        }
+      },
+      "DisplayStatisticsRecordList": {
+        "fields": {
+          "listInfo": {
+            "rule": "repeated",
+            "type": "StatisticsRecordItem",
+            "id": 1,
+            "protoName": "list_info"
+          }
+        }
+      },
+      "RuntimeStatisticsRecordList": {
+        "fields": {
+          "listInfo": {
+            "rule": "repeated",
+            "type": "StatisticsRecordItem",
+            "id": 1,
+            "protoName": "list_info"
+          }
+        }
+      },
+      "ems_heartbeat_pack_v1p0_t": {
+        "oneofs": {
+          "_chgState": {
+            "oneof": [
+              "chgState"
+            ]
+          },
+          "_chgCmd": {
+            "oneof": [
+              "chgCmd"
+            ]
+          },
+          "_dsgCmd": {
+            "oneof": [
+              "dsgCmd"
+            ]
+          },
+          "_chgVol": {
+            "oneof": [
+              "chgVol"
+            ]
+          },
+          "_chgAmp": {
+            "oneof": [
+              "chgAmp"
+            ]
+          },
+          "_fanLevel": {
+            "oneof": [
+              "fanLevel"
+            ]
+          },
+          "_maxChargeSoc": {
+            "oneof": [
+              "maxChargeSoc"
+            ]
+          },
+          "_bmsModel": {
+            "oneof": [
+              "bmsModel"
+            ]
+          },
+          "_lcdShowSoc": {
+            "oneof": [
+              "lcdShowSoc"
+            ]
+          },
+          "_openUpsFlag": {
+            "oneof": [
+              "openUpsFlag"
+            ]
+          },
+          "_bmsWarningState": {
+            "oneof": [
+              "bmsWarningState"
+            ]
+          },
+          "_chgRemainTime": {
+            "oneof": [
+              "chgRemainTime"
+            ]
+          },
+          "_dsgRemainTime": {
+            "oneof": [
+              "dsgRemainTime"
+            ]
+          },
+          "_emsIsNormalFlag": {
+            "oneof": [
+              "emsIsNormalFlag"
+            ]
+          },
+          "_f32LcdShowSoc": {
+            "oneof": [
+              "f32LcdShowSoc"
+            ]
+          },
+          "_maxAvailableNum": {
+            "oneof": [
+              "maxAvailableNum"
+            ]
+          },
+          "_openBmsIdx": {
+            "oneof": [
+              "openBmsIdx"
+            ]
+          },
+          "_paraVolMin": {
+            "oneof": [
+              "paraVolMin"
+            ]
+          },
+          "_paraVolMax": {
+            "oneof": [
+              "paraVolMax"
+            ]
+          },
+          "_minDsgSoc": {
+            "oneof": [
+              "minDsgSoc"
+            ]
+          },
+          "_minOpenOilEbSoc": {
+            "oneof": [
+              "minOpenOilEbSoc"
+            ]
+          },
+          "_maxCloseOilEbSoc": {
+            "oneof": [
+              "maxCloseOilEbSoc"
+            ]
+          }
+        },
+        "fields": {
+          "chgState": {
+            "type": "uint32",
+            "id": 1,
+            "protoName": "chg_state",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "chgCmd": {
+            "type": "uint32",
+            "id": 2,
+            "protoName": "chg_cmd",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "dsgCmd": {
+            "type": "uint32",
+            "id": 3,
+            "protoName": "dsg_cmd",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "chgVol": {
+            "type": "uint32",
+            "id": 4,
+            "protoName": "chg_vol",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "chgAmp": {
+            "type": "uint32",
+            "id": 5,
+            "protoName": "chg_amp",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "fanLevel": {
+            "type": "uint32",
+            "id": 6,
+            "protoName": "fan_level",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "maxChargeSoc": {
+            "type": "uint32",
+            "id": 7,
+            "protoName": "max_charge_soc",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsModel": {
+            "type": "uint32",
+            "id": 8,
+            "protoName": "bms_model",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "lcdShowSoc": {
+            "type": "uint32",
+            "id": 9,
+            "protoName": "lcd_show_soc",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "openUpsFlag": {
+            "type": "uint32",
+            "id": 10,
+            "protoName": "open_ups_flag",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsWarningState": {
+            "type": "uint32",
+            "id": 11,
+            "protoName": "bms_warning_state",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "chgRemainTime": {
+            "type": "uint32",
+            "id": 12,
+            "protoName": "chg_remain_time",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "dsgRemainTime": {
+            "type": "uint32",
+            "id": 13,
+            "protoName": "dsg_remain_time",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "emsIsNormalFlag": {
+            "type": "uint32",
+            "id": 14,
+            "protoName": "ems_is_normal_flag",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "f32LcdShowSoc": {
+            "type": "float",
+            "id": 15,
+            "protoName": "f32_lcd_show_soc",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsIsConnt": {
+            "rule": "repeated",
+            "type": "uint32",
+            "id": 16,
+            "protoName": "bms_is_connt"
+          },
+          "maxAvailableNum": {
+            "type": "uint32",
+            "id": 17,
+            "protoName": "max_available_num",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "openBmsIdx": {
+            "type": "uint32",
+            "id": 18,
+            "protoName": "open_bms_idx",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "paraVolMin": {
+            "type": "uint32",
+            "id": 19,
+            "protoName": "para_vol_min",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "paraVolMax": {
+            "type": "uint32",
+            "id": 20,
+            "protoName": "para_vol_max",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "minDsgSoc": {
+            "type": "uint32",
+            "id": 21,
+            "protoName": "min_dsg_soc",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "minOpenOilEbSoc": {
+            "type": "uint32",
+            "id": 22,
+            "protoName": "min_open_oil_eb_soc",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "maxCloseOilEbSoc": {
+            "type": "uint32",
+            "id": 23,
+            "protoName": "max_close_oil_eb_soc",
+            "options": {
+              "proto3_optional": true
+            }
+          }
+        }
+      },
+      "ems_heartbeat_pack_v1p3_t": {
+        "oneofs": {
+          "_chgDisableCond": {
+            "oneof": [
+              "chgDisableCond"
+            ]
+          },
+          "_dsgDisableCond": {
+            "oneof": [
+              "dsgDisableCond"
+            ]
+          },
+          "_chgLinePlugInFlag": {
+            "oneof": [
+              "chgLinePlugInFlag"
+            ]
+          },
+          "_sysChgDsgState": {
+            "oneof": [
+              "sysChgDsgState"
+            ]
+          },
+          "_emsHeartbeatVer": {
+            "oneof": [
+              "emsHeartbeatVer"
+            ]
+          }
+        },
+        "fields": {
+          "chgDisableCond": {
+            "type": "uint32",
+            "id": 1,
+            "protoName": "chg_disable_cond",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "dsgDisableCond": {
+            "type": "uint32",
+            "id": 2,
+            "protoName": "dsg_disable_cond",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "chgLinePlugInFlag": {
+            "type": "uint32",
+            "id": 3,
+            "protoName": "chg_line_plug_in_flag",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "sysChgDsgState": {
+            "type": "uint32",
+            "id": 4,
+            "protoName": "sys_chg_dsg_state",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "emsHeartbeatVer": {
+            "type": "uint32",
+            "id": 5,
+            "protoName": "ems_heartbeat_ver",
+            "options": {
+              "proto3_optional": true
+            }
+          }
+        }
+      },
+      "CMSHeartBeatReport": {
+        "oneofs": {
+          "_v1p0": {
+            "oneof": [
+              "v1p0"
+            ]
+          },
+          "_v1p3": {
+            "oneof": [
+              "v1p3"
+            ]
+          }
+        },
+        "fields": {
+          "v1p0": {
+            "type": "ems_heartbeat_pack_v1p0_t",
+            "id": 1,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "v1p3": {
+            "type": "ems_heartbeat_pack_v1p3_t",
+            "id": 2,
+            "options": {
+              "proto3_optional": true
+            }
+          }
+        }
+      },
+      "BMSHeartBeatReport": {
+        "oneofs": {
+          "_num": {
+            "oneof": [
+              "num"
+            ]
+          },
+          "_type": {
+            "oneof": [
+              "type"
+            ]
+          },
+          "_cellId": {
+            "oneof": [
+              "cellId"
+            ]
+          },
+          "_errCode": {
+            "oneof": [
+              "errCode"
+            ]
+          },
+          "_sysVer": {
+            "oneof": [
+              "sysVer"
+            ]
+          },
+          "_soc": {
+            "oneof": [
+              "soc"
+            ]
+          },
+          "_vol": {
+            "oneof": [
+              "vol"
+            ]
+          },
+          "_amp": {
+            "oneof": [
+              "amp"
+            ]
+          },
+          "_temp": {
+            "oneof": [
+              "temp"
+            ]
+          },
+          "_openBmsFlag": {
+            "oneof": [
+              "openBmsFlag"
+            ]
+          },
+          "_designCap": {
+            "oneof": [
+              "designCap"
+            ]
+          },
+          "_remainCap": {
+            "oneof": [
+              "remainCap"
+            ]
+          },
+          "_fullCap": {
+            "oneof": [
+              "fullCap"
+            ]
+          },
+          "_cycles": {
+            "oneof": [
+              "cycles"
+            ]
+          },
+          "_soh": {
+            "oneof": [
+              "soh"
+            ]
+          },
+          "_maxCellVol": {
+            "oneof": [
+              "maxCellVol"
+            ]
+          },
+          "_minCellVol": {
+            "oneof": [
+              "minCellVol"
+            ]
+          },
+          "_maxCellTemp": {
+            "oneof": [
+              "maxCellTemp"
+            ]
+          },
+          "_minCellTemp": {
+            "oneof": [
+              "minCellTemp"
+            ]
+          },
+          "_maxMosTemp": {
+            "oneof": [
+              "maxMosTemp"
+            ]
+          },
+          "_minMosTemp": {
+            "oneof": [
+              "minMosTemp"
+            ]
+          },
+          "_bmsFault": {
+            "oneof": [
+              "bmsFault"
+            ]
+          },
+          "_bqSysStatReg": {
+            "oneof": [
+              "bqSysStatReg"
+            ]
+          },
+          "_tagChgAmp": {
+            "oneof": [
+              "tagChgAmp"
+            ]
+          },
+          "_f32ShowSoc": {
+            "oneof": [
+              "f32ShowSoc"
+            ]
+          },
+          "_inputWatts": {
+            "oneof": [
+              "inputWatts"
+            ]
+          },
+          "_outputWatts": {
+            "oneof": [
+              "outputWatts"
+            ]
+          },
+          "_remainTime": {
+            "oneof": [
+              "remainTime"
+            ]
+          },
+          "_mosState": {
+            "oneof": [
+              "mosState"
+            ]
+          },
+          "_balanceState": {
+            "oneof": [
+              "balanceState"
+            ]
+          },
+          "_maxVolDiff": {
+            "oneof": [
+              "maxVolDiff"
+            ]
+          },
+          "_cellSeriesNum": {
+            "oneof": [
+              "cellSeriesNum"
+            ]
+          },
+          "_cellNtcNum": {
+            "oneof": [
+              "cellNtcNum"
+            ]
+          },
+          "_hwVer": {
+            "oneof": [
+              "hwVer"
+            ]
+          },
+          "_bmsHeartbeatVer": {
+            "oneof": [
+              "bmsHeartbeatVer"
+            ]
+          },
+          "_ecloudOcv": {
+            "oneof": [
+              "ecloudOcv"
+            ]
+          },
+          "_bmsSn": {
+            "oneof": [
+              "bmsSn"
+            ]
+          },
+          "_productType": {
+            "oneof": [
+              "productType"
+            ]
+          },
+          "_productDetail": {
+            "oneof": [
+              "productDetail"
+            ]
+          },
+          "_actSoc": {
+            "oneof": [
+              "actSoc"
+            ]
+          },
+          "_diffSoc": {
+            "oneof": [
+              "diffSoc"
+            ]
+          },
+          "_targetSoc": {
+            "oneof": [
+              "targetSoc"
+            ]
+          },
+          "_sysLoaderVer": {
+            "oneof": [
+              "sysLoaderVer"
+            ]
+          },
+          "_sysState": {
+            "oneof": [
+              "sysState"
+            ]
+          },
+          "_chgDsgState": {
+            "oneof": [
+              "chgDsgState"
+            ]
+          },
+          "_allErrCode": {
+            "oneof": [
+              "allErrCode"
+            ]
+          },
+          "_allBmsFault": {
+            "oneof": [
+              "allBmsFault"
+            ]
+          },
+          "_accuChgCap": {
+            "oneof": [
+              "accuChgCap"
+            ]
+          },
+          "_accuDsgCap": {
+            "oneof": [
+              "accuDsgCap"
+            ]
+          },
+          "_realSoh": {
+            "oneof": [
+              "realSoh"
+            ]
+          },
+          "_calendarSoh": {
+            "oneof": [
+              "calendarSoh"
+            ]
+          },
+          "_cycleSoh": {
+            "oneof": [
+              "cycleSoh"
+            ]
+          },
+          "_mosNtcNum": {
+            "oneof": [
+              "mosNtcNum"
+            ]
+          },
+          "_envNtcNum": {
+            "oneof": [
+              "envNtcNum"
+            ]
+          },
+          "_heatfilmNtcNum": {
+            "oneof": [
+              "heatfilmNtcNum"
+            ]
+          },
+          "_curSensorNtcNum": {
+            "oneof": [
+              "curSensorNtcNum"
+            ]
+          },
+          "_maxEnvTemp": {
+            "oneof": [
+              "maxEnvTemp"
+            ]
+          },
+          "_minEnvTemp": {
+            "oneof": [
+              "minEnvTemp"
+            ]
+          },
+          "_maxHeatfilmTemp": {
+            "oneof": [
+              "maxHeatfilmTemp"
+            ]
+          },
+          "_minHeatfilmTemp": {
+            "oneof": [
+              "minHeatfilmTemp"
+            ]
+          },
+          "_maxCurSensorTemp": {
+            "oneof": [
+              "maxCurSensorTemp"
+            ]
+          },
+          "_minCurSensorTemp": {
+            "oneof": [
+              "minCurSensorTemp"
+            ]
+          },
+          "_balanceCmd": {
+            "oneof": [
+              "balanceCmd"
+            ]
+          },
+          "_afeSysStatus": {
+            "oneof": [
+              "afeSysStatus"
+            ]
+          },
+          "_mcuPinInStatus": {
+            "oneof": [
+              "mcuPinInStatus"
+            ]
+          },
+          "_mcuPinOutStatus": {
+            "oneof": [
+              "mcuPinOutStatus"
+            ]
+          },
+          "_bmsAlarmState1": {
+            "oneof": [
+              "bmsAlarmState1"
+            ]
+          },
+          "_bmsAlarmState2": {
+            "oneof": [
+              "bmsAlarmState2"
+            ]
+          },
+          "_bmsProtectState1": {
+            "oneof": [
+              "bmsProtectState1"
+            ]
+          },
+          "_bmsProtectState2": {
+            "oneof": [
+              "bmsProtectState2"
+            ]
+          },
+          "_bmsFaultState": {
+            "oneof": [
+              "bmsFaultState"
+            ]
+          },
+          "_accuChgEnergy": {
+            "oneof": [
+              "accuChgEnergy"
+            ]
+          },
+          "_accuDsgEnergy": {
+            "oneof": [
+              "accuDsgEnergy"
+            ]
+          },
+          "_packSn": {
+            "oneof": [
+              "packSn"
+            ]
+          },
+          "_waterInFlag": {
+            "oneof": [
+              "waterInFlag"
+            ]
+          },
+          "_unknown83": {
+            "oneof": [
+              "unknown83"
+            ]
+          },
+          "_unknown84": {
+            "oneof": [
+              "unknown84"
+            ]
+          },
+          "_unknown85": {
+            "oneof": [
+              "unknown85"
+            ]
+          },
+          "_unknown86": {
+            "oneof": [
+              "unknown86"
+            ]
+          },
+          "_unknown87": {
+            "oneof": [
+              "unknown87"
+            ]
+          }
+        },
+        "fields": {
+          "num": {
+            "type": "uint32",
+            "id": 1,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "type": {
+            "type": "uint32",
+            "id": 2,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cellId": {
+            "type": "uint32",
+            "id": 3,
+            "protoName": "cell_id",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "errCode": {
+            "type": "uint32",
+            "id": 4,
+            "protoName": "err_code",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "sysVer": {
+            "type": "uint32",
+            "id": 5,
+            "protoName": "sys_ver",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "soc": {
+            "type": "uint32",
+            "id": 6,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "vol": {
+            "type": "uint32",
+            "id": 7,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "amp": {
+            "type": "int32",
+            "id": 8,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "temp": {
+            "type": "int32",
+            "id": 9,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "openBmsFlag": {
+            "type": "uint32",
+            "id": 10,
+            "protoName": "open_bms_flag",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "designCap": {
+            "type": "uint32",
+            "id": 11,
+            "protoName": "design_cap",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "remainCap": {
+            "type": "uint32",
+            "id": 12,
+            "protoName": "remain_cap",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "fullCap": {
+            "type": "uint32",
+            "id": 13,
+            "protoName": "full_cap",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cycles": {
+            "type": "uint32",
+            "id": 14,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "soh": {
+            "type": "uint32",
+            "id": 15,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "maxCellVol": {
+            "type": "uint32",
+            "id": 16,
+            "protoName": "max_cell_vol",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "minCellVol": {
+            "type": "uint32",
+            "id": 17,
+            "protoName": "min_cell_vol",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "maxCellTemp": {
+            "type": "int32",
+            "id": 18,
+            "protoName": "max_cell_temp",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "minCellTemp": {
+            "type": "int32",
+            "id": 19,
+            "protoName": "min_cell_temp",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "maxMosTemp": {
+            "type": "int32",
+            "id": 20,
+            "protoName": "max_mos_temp",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "minMosTemp": {
+            "type": "int32",
+            "id": 21,
+            "protoName": "min_mos_temp",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsFault": {
+            "type": "uint32",
+            "id": 22,
+            "protoName": "bms_fault",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bqSysStatReg": {
+            "type": "uint32",
+            "id": 23,
+            "protoName": "bq_sys_stat_reg",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "tagChgAmp": {
+            "type": "uint32",
+            "id": 24,
+            "protoName": "tag_chg_amp",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "f32ShowSoc": {
+            "type": "float",
+            "id": 25,
+            "protoName": "f32_show_soc",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "inputWatts": {
+            "type": "uint32",
+            "id": 26,
+            "protoName": "input_watts",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "outputWatts": {
+            "type": "uint32",
+            "id": 27,
+            "protoName": "output_watts",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "remainTime": {
+            "type": "uint32",
+            "id": 28,
+            "protoName": "remain_time",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "mosState": {
+            "type": "uint32",
+            "id": 29,
+            "protoName": "mos_state",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "balanceState": {
+            "type": "uint32",
+            "id": 30,
+            "protoName": "balance_state",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "maxVolDiff": {
+            "type": "uint32",
+            "id": 31,
+            "protoName": "max_vol_diff",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cellSeriesNum": {
+            "type": "uint32",
+            "id": 32,
+            "protoName": "cell_series_num",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cellVol": {
+            "rule": "repeated",
+            "type": "uint32",
+            "id": 33,
+            "protoName": "cell_vol"
+          },
+          "cellNtcNum": {
+            "type": "uint32",
+            "id": 34,
+            "protoName": "cell_ntc_num",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cellTemp": {
+            "rule": "repeated",
+            "type": "int32",
+            "id": 35,
+            "protoName": "cell_temp"
+          },
+          "hwVer": {
+            "type": "string",
+            "id": 36,
+            "protoName": "hw_ver",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsHeartbeatVer": {
+            "type": "uint32",
+            "id": 37,
+            "protoName": "bms_heartbeat_ver",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "ecloudOcv": {
+            "type": "uint32",
+            "id": 38,
+            "protoName": "ecloud_ocv",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsSn": {
+            "type": "string",
+            "id": 39,
+            "protoName": "bms_sn",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "productType": {
+            "type": "uint32",
+            "id": 40,
+            "protoName": "product_type",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "productDetail": {
+            "type": "uint32",
+            "id": 41,
+            "protoName": "product_detail",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "actSoc": {
+            "type": "float",
+            "id": 42,
+            "protoName": "act_soc",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "diffSoc": {
+            "type": "float",
+            "id": 43,
+            "protoName": "diff_soc",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "targetSoc": {
+            "type": "float",
+            "id": 44,
+            "protoName": "target_soc",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "sysLoaderVer": {
+            "type": "uint32",
+            "id": 45,
+            "protoName": "sys_loader_ver",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "sysState": {
+            "type": "uint32",
+            "id": 46,
+            "protoName": "sys_state",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "chgDsgState": {
+            "type": "uint32",
+            "id": 47,
+            "protoName": "chg_dsg_state",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "allErrCode": {
+            "type": "uint32",
+            "id": 48,
+            "protoName": "all_err_code",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "allBmsFault": {
+            "type": "uint32",
+            "id": 49,
+            "protoName": "all_bms_fault",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "accuChgCap": {
+            "type": "uint32",
+            "id": 50,
+            "protoName": "accu_chg_cap",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "accuDsgCap": {
+            "type": "uint32",
+            "id": 51,
+            "protoName": "accu_dsg_cap",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "realSoh": {
+            "type": "float",
+            "id": 52,
+            "protoName": "real_soh",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "calendarSoh": {
+            "type": "float",
+            "id": 53,
+            "protoName": "calendar_soh",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cycleSoh": {
+            "type": "float",
+            "id": 54,
+            "protoName": "cycle_soh",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "mosNtcNum": {
+            "type": "uint32",
+            "id": 55,
+            "protoName": "mos_ntc_num",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "mosTemp": {
+            "rule": "repeated",
+            "type": "int32",
+            "id": 56,
+            "protoName": "mos_temp"
+          },
+          "envNtcNum": {
+            "type": "uint32",
+            "id": 57,
+            "protoName": "env_ntc_num",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "envTemp": {
+            "rule": "repeated",
+            "type": "int32",
+            "id": 58,
+            "protoName": "env_temp"
+          },
+          "heatfilmNtcNum": {
+            "type": "uint32",
+            "id": 59,
+            "protoName": "heatfilm_ntc_num",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "heatfilmTemp": {
+            "rule": "repeated",
+            "type": "int32",
+            "id": 60,
+            "protoName": "heatfilm_temp"
+          },
+          "curSensorNtcNum": {
+            "type": "uint32",
+            "id": 61,
+            "protoName": "cur_sensor_ntc_num",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "curSensorTemp": {
+            "rule": "repeated",
+            "type": "int32",
+            "id": 62,
+            "protoName": "cur_sensor_temp"
+          },
+          "maxEnvTemp": {
+            "type": "int32",
+            "id": 63,
+            "protoName": "max_env_temp",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "minEnvTemp": {
+            "type": "int32",
+            "id": 64,
+            "protoName": "min_env_temp",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "maxHeatfilmTemp": {
+            "type": "int32",
+            "id": 65,
+            "protoName": "max_heatfilm_temp",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "minHeatfilmTemp": {
+            "type": "int32",
+            "id": 66,
+            "protoName": "min_heatfilm_temp",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "maxCurSensorTemp": {
+            "type": "int32",
+            "id": 67,
+            "protoName": "max_cur_sensor_temp",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "minCurSensorTemp": {
+            "type": "int32",
+            "id": 68,
+            "protoName": "min_cur_sensor_temp",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "balanceCmd": {
+            "type": "uint32",
+            "id": 69,
+            "protoName": "balance_cmd",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "remainBalanceTime": {
+            "rule": "repeated",
+            "type": "uint32",
+            "id": 70,
+            "protoName": "remain_balance_time"
+          },
+          "afeSysStatus": {
+            "type": "uint32",
+            "id": 71,
+            "protoName": "afe_sys_status",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "mcuPinInStatus": {
+            "type": "uint32",
+            "id": 72,
+            "protoName": "mcu_pin_in_status",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "mcuPinOutStatus": {
+            "type": "uint32",
+            "id": 73,
+            "protoName": "mcu_pin_out_status",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsAlarmState1": {
+            "type": "uint32",
+            "id": 74,
+            "protoName": "bms_alarm_state1",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsAlarmState2": {
+            "type": "uint32",
+            "id": 75,
+            "protoName": "bms_alarm_state2",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsProtectState1": {
+            "type": "uint32",
+            "id": 76,
+            "protoName": "bms_protect_state1",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsProtectState2": {
+            "type": "uint32",
+            "id": 77,
+            "protoName": "bms_protect_state2",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsFaultState": {
+            "type": "uint32",
+            "id": 78,
+            "protoName": "bms_fault_state",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "accuChgEnergy": {
+            "type": "uint32",
+            "id": 79,
+            "protoName": "accu_chg_energy",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "accuDsgEnergy": {
+            "type": "uint32",
+            "id": 80,
+            "protoName": "accu_dsg_energy",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "packSn": {
+            "type": "string",
+            "id": 81,
+            "protoName": "pack_sn",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "waterInFlag": {
+            "type": "uint32",
+            "id": 82,
+            "protoName": "water_in_flag",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "unknown83": {
+            "type": "uint32",
+            "id": 83,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "unknown84": {
+            "type": "uint32",
+            "id": 84,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "unknown85": {
+            "type": "uint32",
+            "id": 85,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "unknown86": {
+            "type": "uint32",
+            "id": 86,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "unknown87": {
+            "type": "bytes",
+            "id": 87,
+            "options": {
+              "proto3_optional": true
+            }
+          }
+        }
+      },
+      "RuntimePropertyUpload": {
+        "oneofs": {
+          "_tempPcsDc": {
+            "oneof": [
+              "tempPcsDc"
+            ]
+          },
+          "_tempPcsAc": {
+            "oneof": [
+              "tempPcsAc"
+            ]
+          },
+          "_plugInInfoAcOutType": {
+            "oneof": [
+              "plugInInfoAcOutType"
+            ]
+          },
+          "_plugInInfoAcOutFreq": {
+            "oneof": [
+              "plugInInfoAcOutFreq"
+            ]
+          },
+          "_plugInInfoAcOutVol": {
+            "oneof": [
+              "plugInInfoAcOutVol"
+            ]
+          },
+          "_plugInInfoAcInVol": {
+            "oneof": [
+              "plugInInfoAcInVol"
+            ]
+          },
+          "_plugInInfoPv2Amp": {
+            "oneof": [
+              "plugInInfoPv2Amp"
+            ]
+          },
+          "_plugInInfoDcp2Vol": {
+            "oneof": [
+              "plugInInfoDcp2Vol"
+            ]
+          },
+          "_plugInInfoDcp2Amp": {
+            "oneof": [
+              "plugInInfoDcp2Amp"
+            ]
+          },
+          "_plugInInfoBmsVol": {
+            "oneof": [
+              "plugInInfoBmsVol"
+            ]
+          },
+          "_pdBmsCommErr": {
+            "oneof": [
+              "pdBmsCommErr"
+            ]
+          },
+          "_pdIotCommErr": {
+            "oneof": [
+              "pdIotCommErr"
+            ]
+          },
+          "_pdFirmVer": {
+            "oneof": [
+              "pdFirmVer"
+            ]
+          },
+          "_iotFirmVer": {
+            "oneof": [
+              "iotFirmVer"
+            ]
+          },
+          "_plugInInfoAcInAmp": {
+            "oneof": [
+              "plugInInfoAcInAmp"
+            ]
+          },
+          "_plugInInfoAcOutAmp": {
+            "oneof": [
+              "plugInInfoAcOutAmp"
+            ]
+          },
+          "_bmsFirmVer": {
+            "oneof": [
+              "bmsFirmVer"
+            ]
+          },
+          "_bmsBattVol": {
+            "oneof": [
+              "bmsBattVol"
+            ]
+          },
+          "_bmsBattAmp": {
+            "oneof": [
+              "bmsBattAmp"
+            ]
+          },
+          "_bmsBalState": {
+            "oneof": [
+              "bmsBalState"
+            ]
+          },
+          "_bmsFullCap": {
+            "oneof": [
+              "bmsFullCap"
+            ]
+          },
+          "_bmsRemainCap": {
+            "oneof": [
+              "bmsRemainCap"
+            ]
+          },
+          "_bmsAlmState": {
+            "oneof": [
+              "bmsAlmState"
+            ]
+          },
+          "_bmsProState": {
+            "oneof": [
+              "bmsProState"
+            ]
+          },
+          "_bmsFltState": {
+            "oneof": [
+              "bmsFltState"
+            ]
+          },
+          "_bmsErrCode": {
+            "oneof": [
+              "bmsErrCode"
+            ]
+          },
+          "_bmsMinCellVol": {
+            "oneof": [
+              "bmsMinCellVol"
+            ]
+          },
+          "_bmsMaxCellVol": {
+            "oneof": [
+              "bmsMaxCellVol"
+            ]
+          },
+          "_cmsBattVol": {
+            "oneof": [
+              "cmsBattVol"
+            ]
+          },
+          "_cmsBattAmp": {
+            "oneof": [
+              "cmsBattAmp"
+            ]
+          },
+          "_cmsChgReqVol": {
+            "oneof": [
+              "cmsChgReqVol"
+            ]
+          },
+          "_cmsChgReqAmp": {
+            "oneof": [
+              "cmsChgReqAmp"
+            ]
+          },
+          "_bmsOverloadIcon": {
+            "oneof": [
+              "bmsOverloadIcon"
+            ]
+          },
+          "_bmsWarnIcon": {
+            "oneof": [
+              "bmsWarnIcon"
+            ]
+          },
+          "_bmsHighTempIcon": {
+            "oneof": [
+              "bmsHighTempIcon"
+            ]
+          },
+          "_bmsLowTempIcon": {
+            "oneof": [
+              "bmsLowTempIcon"
+            ]
+          },
+          "_bmsLimitIcon": {
+            "oneof": [
+              "bmsLimitIcon"
+            ]
+          },
+          "_bmsAlmState_2": {
+            "oneof": [
+              "bmsAlmState_2"
+            ]
+          },
+          "_bmsProState_2": {
+            "oneof": [
+              "bmsProState_2"
+            ]
+          },
+          "_displayPropertyFullUploadPeriod": {
+            "oneof": [
+              "displayPropertyFullUploadPeriod"
+            ]
+          },
+          "_displayPropertyIncrementalUploadPeriod": {
+            "oneof": [
+              "displayPropertyIncrementalUploadPeriod"
+            ]
+          },
+          "_runtimePropertyFullUploadPeriod": {
+            "oneof": [
+              "runtimePropertyFullUploadPeriod"
+            ]
+          },
+          "_runtimePropertyIncrementalUploadPeriod": {
+            "oneof": [
+              "runtimePropertyIncrementalUploadPeriod"
+            ]
+          },
+          "_pvVinRef": {
+            "oneof": [
+              "pvVinRef"
+            ]
+          },
+          "_pv2VinRef": {
+            "oneof": [
+              "pv2VinRef"
+            ]
+          },
+          "_invMonitorFlag": {
+            "oneof": [
+              "invMonitorFlag"
+            ]
+          },
+          "_invMainFsmstate": {
+            "oneof": [
+              "invMainFsmstate"
+            ]
+          },
+          "_plugInInfoPfcOutVol": {
+            "oneof": [
+              "plugInInfoPfcOutVol"
+            ]
+          },
+          "_llcMonitorFlag": {
+            "oneof": [
+              "llcMonitorFlag"
+            ]
+          },
+          "_llcFsmstate": {
+            "oneof": [
+              "llcFsmstate"
+            ]
+          },
+          "_dcdcChgReqCur": {
+            "oneof": [
+              "dcdcChgReqCur"
+            ]
+          },
+          "_llcRecvCmsChgReqVol": {
+            "oneof": [
+              "llcRecvCmsChgReqVol"
+            ]
+          },
+          "_tempPv": {
+            "oneof": [
+              "tempPv"
+            ]
+          },
+          "_plugInInfoPvVol": {
+            "oneof": [
+              "plugInInfoPvVol"
+            ]
+          },
+          "_plugInInfoPvAmp": {
+            "oneof": [
+              "plugInInfoPvAmp"
+            ]
+          },
+          "_plugInInfo_12vVol": {
+            "oneof": [
+              "plugInInfo_12vVol"
+            ]
+          },
+          "_plugInInfo_12vAmp": {
+            "oneof": [
+              "plugInInfo_12vAmp"
+            ]
+          },
+          "_llcBatVol": {
+            "oneof": [
+              "llcBatVol"
+            ]
+          },
+          "_llcBatCur": {
+            "oneof": [
+              "llcBatCur"
+            ]
+          },
+          "_llcBusVol": {
+            "oneof": [
+              "llcBusVol"
+            ]
+          },
+          "_tempPv2": {
+            "oneof": [
+              "tempPv2"
+            ]
+          },
+          "_plugInInfoPv2Vol": {
+            "oneof": [
+              "plugInInfoPv2Vol"
+            ]
+          },
+          "_plugInInfoDcpVol": {
+            "oneof": [
+              "plugInInfoDcpVol"
+            ]
+          },
+          "_pdDcdcCommErr": {
+            "oneof": [
+              "pdDcdcCommErr"
+            ]
+          },
+          "_pdInvCommErr": {
+            "oneof": [
+              "pdInvCommErr"
+            ]
+          },
+          "_dcdcFirmVer": {
+            "oneof": [
+              "dcdcFirmVer"
+            ]
+          },
+          "_invFirmVer": {
+            "oneof": [
+              "invFirmVer"
+            ]
+          },
+          "_plugInInfoDcpAmp": {
+            "oneof": [
+              "plugInInfoDcpAmp"
+            ]
+          },
+          "_unknown95": {
+            "oneof": [
+              "unknown95"
+            ]
+          },
+          "_unknown970": {
+            "oneof": [
+              "unknown970"
+            ]
+          }
+        },
+        "fields": {
+          "tempPcsDc": {
+            "type": "float",
+            "id": 26,
+            "protoName": "temp_pcs_dc",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "tempPcsAc": {
+            "type": "float",
+            "id": 27,
+            "protoName": "temp_pcs_ac",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoAcOutType": {
+            "type": "uint32",
+            "id": 59,
+            "protoName": "plug_in_info_ac_out_type",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoAcOutFreq": {
+            "type": "uint32",
+            "id": 60,
+            "protoName": "plug_in_info_ac_out_freq",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoAcOutVol": {
+            "type": "float",
+            "id": 67,
+            "protoName": "plug_in_info_ac_out_vol",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoAcInVol": {
+            "type": "float",
+            "id": 68,
+            "protoName": "plug_in_info_ac_in_vol",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoPv2Amp": {
+            "type": "float",
+            "id": 71,
+            "protoName": "plug_in_info_pv2_amp",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoDcp2Vol": {
+            "type": "float",
+            "id": 92,
+            "protoName": "plug_in_info_dcp2_vol",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoDcp2Amp": {
+            "type": "float",
+            "id": 93,
+            "protoName": "plug_in_info_dcp2_amp",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoBmsVol": {
+            "type": "float",
+            "id": 169,
+            "protoName": "plug_in_info_bms_vol",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "pdBmsCommErr": {
+            "type": "int32",
+            "id": 174,
+            "protoName": "pd_bms_comm_err",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "pdIotCommErr": {
+            "type": "int32",
+            "id": 175,
+            "protoName": "pd_iot_comm_err",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "pdFirmVer": {
+            "type": "uint32",
+            "id": 176,
+            "protoName": "pd_firm_ver",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "iotFirmVer": {
+            "type": "uint32",
+            "id": 177,
+            "protoName": "iot_firm_ver",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoAcInAmp": {
+            "type": "float",
+            "id": 223,
+            "protoName": "plug_in_info_ac_in_amp",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoAcOutAmp": {
+            "type": "float",
+            "id": 224,
+            "protoName": "plug_in_info_ac_out_amp",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsFirmVer": {
+            "type": "uint32",
+            "id": 241,
+            "protoName": "bms_firm_ver",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsBattVol": {
+            "type": "float",
+            "id": 244,
+            "protoName": "bms_batt_vol",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsBattAmp": {
+            "type": "float",
+            "id": 245,
+            "protoName": "bms_batt_amp",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsBalState": {
+            "type": "uint32",
+            "id": 246,
+            "protoName": "bms_bal_state",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsFullCap": {
+            "type": "uint32",
+            "id": 247,
+            "protoName": "bms_full_cap",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsRemainCap": {
+            "type": "uint32",
+            "id": 249,
+            "protoName": "bms_remain_cap",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsAlmState": {
+            "type": "uint32",
+            "id": 250,
+            "protoName": "bms_alm_state",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsProState": {
+            "type": "uint32",
+            "id": 251,
+            "protoName": "bms_pro_state",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsFltState": {
+            "type": "uint32",
+            "id": 252,
+            "protoName": "bms_flt_state",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsErrCode": {
+            "type": "uint32",
+            "id": 253,
+            "protoName": "bms_err_code",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsMinCellVol": {
+            "type": "uint32",
+            "id": 256,
+            "protoName": "bms_min_cell_vol",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsMaxCellVol": {
+            "type": "uint32",
+            "id": 257,
+            "protoName": "bms_max_cell_vol",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cmsBattVol": {
+            "type": "float",
+            "id": 264,
+            "protoName": "cms_batt_vol",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cmsBattAmp": {
+            "type": "float",
+            "id": 265,
+            "protoName": "cms_batt_amp",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cmsChgReqVol": {
+            "type": "float",
+            "id": 266,
+            "protoName": "cms_chg_req_vol",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cmsChgReqAmp": {
+            "type": "float",
+            "id": 267,
+            "protoName": "cms_chg_req_amp",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsOverloadIcon": {
+            "type": "uint32",
+            "id": 276,
+            "protoName": "bms_overload_icon",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsWarnIcon": {
+            "type": "uint32",
+            "id": 277,
+            "protoName": "bms_warn_icon",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsHighTempIcon": {
+            "type": "uint32",
+            "id": 278,
+            "protoName": "bms_high_temp_icon",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsLowTempIcon": {
+            "type": "uint32",
+            "id": 279,
+            "protoName": "bms_low_temp_icon",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsLimitIcon": {
+            "type": "uint32",
+            "id": 280,
+            "protoName": "bms_limit_icon",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsAlmState_2": {
+            "type": "uint32",
+            "id": 291,
+            "protoName": "bms_alm_state_2",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsProState_2": {
+            "type": "uint32",
+            "id": 292,
+            "protoName": "bms_pro_state_2",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "displayPropertyFullUploadPeriod": {
+            "type": "int32",
+            "id": 293,
+            "protoName": "display_property_full_upload_period",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "displayPropertyIncrementalUploadPeriod": {
+            "type": "int32",
+            "id": 294,
+            "protoName": "display_property_incremental_upload_period",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "runtimePropertyFullUploadPeriod": {
+            "type": "int32",
+            "id": 295,
+            "protoName": "runtime_property_full_upload_period",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "runtimePropertyIncrementalUploadPeriod": {
+            "type": "int32",
+            "id": 296,
+            "protoName": "runtime_property_incremental_upload_period",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "pvVinRef": {
+            "type": "float",
+            "id": 338,
+            "protoName": "pv_vin_ref",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "pv2VinRef": {
+            "type": "float",
+            "id": 339,
+            "protoName": "pv2_vin_ref",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "invMonitorFlag": {
+            "type": "uint32",
+            "id": 348,
+            "protoName": "inv_monitor_flag",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "invMainFsmstate": {
+            "type": "uint32",
+            "id": 349,
+            "protoName": "inv_main_fsmstate",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoPfcOutVol": {
+            "type": "float",
+            "id": 352,
+            "protoName": "plug_in_info_pfc_out_vol",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "llcMonitorFlag": {
+            "type": "uint32",
+            "id": 372,
+            "protoName": "llc_monitor_flag",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "llcFsmstate": {
+            "type": "uint32",
+            "id": 374,
+            "protoName": "llc_fsmstate",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "dcdcChgReqCur": {
+            "type": "float",
+            "id": 376,
+            "protoName": "dcdc_chg_req_cur",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "llcRecvCmsChgReqVol": {
+            "type": "float",
+            "id": 377,
+            "protoName": "llc_recv_cms_chg_req_vol",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "tempPv": {
+            "type": "float",
+            "id": 379,
+            "protoName": "temp_pv",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoPvVol": {
+            "type": "float",
+            "id": 380,
+            "protoName": "plug_in_info_pv_vol",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoPvAmp": {
+            "type": "float",
+            "id": 381,
+            "protoName": "plug_in_info_pv_amp",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfo_12vVol": {
+            "type": "float",
+            "id": 382,
+            "protoName": "plug_in_info_12v_vol",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfo_12vAmp": {
+            "type": "float",
+            "id": 383,
+            "protoName": "plug_in_info_12v_amp",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "llcBatVol": {
+            "type": "float",
+            "id": 384,
+            "protoName": "llc_bat_vol",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "llcBatCur": {
+            "type": "float",
+            "id": 385,
+            "protoName": "llc_bat_cur",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "llcBusVol": {
+            "type": "float",
+            "id": 386,
+            "protoName": "llc_bus_vol",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "tempPv2": {
+            "type": "float",
+            "id": 440,
+            "protoName": "temp_pv2",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoPv2Vol": {
+            "type": "float",
+            "id": 442,
+            "protoName": "plug_in_info_pv2_vol",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoDcpVol": {
+            "type": "float",
+            "id": 443,
+            "protoName": "plug_in_info_dcp_vol",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "pdDcdcCommErr": {
+            "type": "int32",
+            "id": 444,
+            "protoName": "pd_dcdc_comm_err",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "pdInvCommErr": {
+            "type": "int32",
+            "id": 445,
+            "protoName": "pd_inv_comm_err",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "dcdcFirmVer": {
+            "type": "uint32",
+            "id": 446,
+            "protoName": "dcdc_firm_ver",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "invFirmVer": {
+            "type": "uint32",
+            "id": 447,
+            "protoName": "inv_firm_ver",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoDcpAmp": {
+            "type": "float",
+            "id": 448,
+            "protoName": "plug_in_info_dcp_amp",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "unknown95": {
+            "type": "FloatList",
+            "id": 95,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "unknown970": {
+            "type": "FloatList",
+            "id": 970,
+            "options": {
+              "proto3_optional": true
+            }
+          }
+        }
+      },
+      "AC_IN_CHG_MODE": {
+        "values": {
+          "AC_IN_CHG_MODE_SELF_DEF_POW": 0,
+          "AC_IN_CHG_MODE_BAT_OPTIMAL_POW": 1,
+          "AC_IN_CHG_MODE_SILENCE": 2
+        }
+      },
+      "PV_PLUG_INDEX": {
+        "values": {
+          "PV_PLUG_INDEX_RESV": 0,
+          "PV_PLUG_INDEX_1": 1,
+          "PV_PLUG_INDEX_2": 2
+        }
+      },
+      "PV_CHG_VOL_SPEC": {
+        "values": {
+          "PV_CHG_VOL_SPEC_RESV": 0,
+          "PV_CHG_VOL_SPEC_12V": 1,
+          "PV_CHG_VOL_SPEC_24V": 2,
+          "PV_CHG_VOL_SPEC_48V": 3
+        }
+      },
+      "PvDcChgSetting": {
+        "oneofs": {
+          "_pvPlugIndex": {
+            "oneof": [
+              "pvPlugIndex"
+            ]
+          },
+          "_pvChgVolSpec": {
+            "oneof": [
+              "pvChgVolSpec"
+            ]
+          },
+          "_pvChgAmpLimit": {
+            "oneof": [
+              "pvChgAmpLimit"
+            ]
+          }
+        },
+        "fields": {
+          "pvPlugIndex": {
+            "type": ".PV_PLUG_INDEX",
+            "id": 1,
+            "protoName": "pv_plug_index",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "pvChgVolSpec": {
+            "type": ".PV_CHG_VOL_SPEC",
+            "id": 2,
+            "protoName": "pv_chg_vol_spec",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "pvChgAmpLimit": {
+            "type": "uint32",
+            "id": 3,
+            "protoName": "pv_chg_amp_limit",
+            "options": {
+              "proto3_optional": true
+            }
+          }
+        }
+      },
+      "PvDcChgSettingList": {
+        "fields": {
+          "listInfo": {
+            "rule": "repeated",
+            "type": ".PvDcChgSetting",
+            "id": 1,
+            "protoName": "list_info"
+          }
+        }
+      },
+      "PvChgMaxItem": {
+        "oneofs": {
+          "_pvChgVolType": {
+            "oneof": [
+              "pvChgVolType"
+            ]
+          },
+          "_pvChgAmpMax": {
+            "oneof": [
+              "pvChgAmpMax"
+            ]
+          },
+          "_pvChgAmpMini": {
+            "oneof": [
+              "pvChgAmpMini"
+            ]
+          }
+        },
+        "fields": {
+          "pvChgVolType": {
+            "type": "uint32",
+            "id": 1,
+            "protoName": "pv_chg_vol_type",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "pvChgAmpMax": {
+            "type": "uint32",
+            "id": 2,
+            "protoName": "pv_chg_amp_max",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "pvChgAmpMini": {
+            "type": "uint32",
+            "id": 3,
+            "protoName": "pv_chg_amp_mini",
+            "options": {
+              "proto3_optional": true
+            }
+          }
+        }
+      },
+      "PvChgMaxList": {
+        "fields": {
+          "pvChgMaxItem": {
+            "rule": "repeated",
+            "type": ".PvChgMaxItem",
+            "id": 1,
+            "protoName": "pv_chg_max_item"
+          }
+        }
+      },
+      "WirelessCoordinateList": {
+        "oneofs": {
+          "_connectFlag": {
+            "oneof": [
+              "connectFlag"
+            ]
+          },
+          "_devType": {
+            "oneof": [
+              "devType"
+            ]
+          },
+          "_devDetail": {
+            "oneof": [
+              "devDetail"
+            ]
+          },
+          "_devSn": {
+            "oneof": [
+              "devSn"
+            ]
+          },
+          "_devFirmVer": {
+            "oneof": [
+              "devFirmVer"
+            ]
+          },
+          "_devErrCode": {
+            "oneof": [
+              "devErrCode"
+            ]
+          }
+        },
+        "fields": {
+          "connectFlag": {
+            "type": "int32",
+            "id": 1,
+            "protoName": "connect_flag",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "devType": {
+            "type": "uint32",
+            "id": 2,
+            "protoName": "dev_type",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "devDetail": {
+            "type": "uint32",
+            "id": 3,
+            "protoName": "dev_detail",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "devSn": {
+            "type": "string",
+            "id": 4,
+            "protoName": "dev_sn",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "devFirmVer": {
+            "type": "uint32",
+            "id": 5,
+            "protoName": "dev_firm_ver",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "devErrCode": {
+            "type": "uint32",
+            "id": 6,
+            "protoName": "dev_err_code",
+            "options": {
+              "proto3_optional": true
+            }
+          }
+        }
+      },
+      "SetTimeTaskWrite": {
+        "oneofs": {
+          "_taskIndex": {
+            "oneof": [
+              "taskIndex"
+            ]
+          },
+          "_isValid": {
+            "oneof": [
+              "isValid"
+            ]
+          },
+          "_isCfg": {
+            "oneof": [
+              "isCfg"
+            ]
+          },
+          "_isEnable": {
+            "oneof": [
+              "isEnable"
+            ]
+          },
+          "_conflictFlag": {
+            "oneof": [
+              "conflictFlag"
+            ]
+          },
+          "_type": {
+            "oneof": [
+              "type"
+            ]
+          },
+          "_timeMode": {
+            "oneof": [
+              "timeMode"
+            ]
+          },
+          "_timeParam": {
+            "oneof": [
+              "timeParam"
+            ]
+          }
+        },
+        "fields": {
+          "taskIndex": {
+            "type": "uint32",
+            "id": 1,
+            "protoName": "task_index",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "isValid": {
+            "type": "int32",
+            "id": 2,
+            "protoName": "is_valid",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "isCfg": {
+            "type": "int32",
+            "id": 3,
+            "protoName": "is_cfg",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "isEnable": {
+            "type": "int32",
+            "id": 4,
+            "protoName": "is_enable",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "conflictFlag": {
+            "type": "uint32",
+            "id": 5,
+            "protoName": "conflict_flag",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "type": {
+            "type": "uint32",
+            "id": 6,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "timeMode": {
+            "type": "uint32",
+            "id": 7,
+            "protoName": "time_mode",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "timeParam": {
+            "type": "uint32",
+            "id": 8,
+            "protoName": "time_param",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "timeTable": {
+            "rule": "repeated",
+            "type": "uint32",
+            "id": 9,
+            "protoName": "time_table"
+          }
+        }
+      },
+      "ResvInfo": {
+        "fields": {
+          "resvInfo": {
+            "rule": "repeated",
+            "type": "uint32",
+            "id": 1,
+            "protoName": "resv_info"
+          }
+        }
+      },
+      "DisplayPropertyUpload": {
+        "oneofs": {
+          "_errcode": {
+            "oneof": [
+              "errcode"
+            ]
+          },
+          "_powInSumW": {
+            "oneof": [
+              "powInSumW"
+            ]
+          },
+          "_powOutSumW": {
+            "oneof": [
+              "powOutSumW"
+            ]
+          },
+          "_lcdLight": {
+            "oneof": [
+              "lcdLight"
+            ]
+          },
+          "_energyBackupEn": {
+            "oneof": [
+              "energyBackupEn"
+            ]
+          },
+          "_energyBackupStartSoc": {
+            "oneof": [
+              "energyBackupStartSoc"
+            ]
+          },
+          "_powGetQcusb1": {
+            "oneof": [
+              "powGetQcusb1"
+            ]
+          },
+          "_powGetQcusb2": {
+            "oneof": [
+              "powGetQcusb2"
+            ]
+          },
+          "_powGetTypec1": {
+            "oneof": [
+              "powGetTypec1"
+            ]
+          },
+          "_powGetTypec2": {
+            "oneof": [
+              "powGetTypec2"
+            ]
+          },
+          "_flowInfoQcusb1": {
+            "oneof": [
+              "flowInfoQcusb1"
+            ]
+          },
+          "_flowInfoQcusb2": {
+            "oneof": [
+              "flowInfoQcusb2"
+            ]
+          },
+          "_flowInfoTypec1": {
+            "oneof": [
+              "flowInfoTypec1"
+            ]
+          },
+          "_flowInfoTypec2": {
+            "oneof": [
+              "flowInfoTypec2"
+            ]
+          },
+          "_devStandbyTime": {
+            "oneof": [
+              "devStandbyTime"
+            ]
+          },
+          "_screenOffTime": {
+            "oneof": [
+              "screenOffTime"
+            ]
+          },
+          "_acStandbyTime": {
+            "oneof": [
+              "acStandbyTime"
+            ]
+          },
+          "_dcStandbyTime": {
+            "oneof": [
+              "dcStandbyTime"
+            ]
+          },
+          "_acAlwaysOnFlag": {
+            "oneof": [
+              "acAlwaysOnFlag"
+            ]
+          },
+          "_acAlwaysOnMiniSoc": {
+            "oneof": [
+              "acAlwaysOnMiniSoc"
+            ]
+          },
+          "_xboostEn": {
+            "oneof": [
+              "xboostEn"
+            ]
+          },
+          "_pcsFanLevel": {
+            "oneof": [
+              "pcsFanLevel"
+            ]
+          },
+          "_flowInfo_12v": {
+            "oneof": [
+              "flowInfo_12v"
+            ]
+          },
+          "_powGet_12v": {
+            "oneof": [
+              "powGet_12v"
+            ]
+          },
+          "_flowInfoAc2dc": {
+            "oneof": [
+              "flowInfoAc2dc"
+            ]
+          },
+          "_flowInfoDc2ac": {
+            "oneof": [
+              "flowInfoDc2ac"
+            ]
+          },
+          "_flowInfoAcIn": {
+            "oneof": [
+              "flowInfoAcIn"
+            ]
+          },
+          "_powGetAc": {
+            "oneof": [
+              "powGetAc"
+            ]
+          },
+          "_powGetAcIn": {
+            "oneof": [
+              "powGetAcIn"
+            ]
+          },
+          "_plugInInfoAcInFlag": {
+            "oneof": [
+              "plugInInfoAcInFlag"
+            ]
+          },
+          "_plugInInfoAcInFeq": {
+            "oneof": [
+              "plugInInfoAcInFeq"
+            ]
+          },
+          "_powGetPv2": {
+            "oneof": [
+              "powGetPv2"
+            ]
+          },
+          "_plugInInfoPv2DcAmpMax": {
+            "oneof": [
+              "plugInInfoPv2DcAmpMax"
+            ]
+          },
+          "_plugInInfoPv2ChgAmpMax": {
+            "oneof": [
+              "plugInInfoPv2ChgAmpMax"
+            ]
+          },
+          "_plugInInfoPv2ChgVolMax": {
+            "oneof": [
+              "plugInInfoPv2ChgVolMax"
+            ]
+          },
+          "_unknown100": {
+            "oneof": [
+              "unknown100"
+            ]
+          },
+          "_plugInInfoAcInChgMode": {
+            "oneof": [
+              "plugInInfoAcInChgMode"
+            ]
+          },
+          "_pvDcChgSettingList": {
+            "oneof": [
+              "pvDcChgSettingList"
+            ]
+          },
+          "_utcTimezone": {
+            "oneof": [
+              "utcTimezone"
+            ]
+          },
+          "_utcTimezoneId": {
+            "oneof": [
+              "utcTimezoneId"
+            ]
+          },
+          "_utcSetMode": {
+            "oneof": [
+              "utcSetMode"
+            ]
+          },
+          "_plugInInfoPvChgMaxList": {
+            "oneof": [
+              "plugInInfoPvChgMaxList"
+            ]
+          },
+          "_plugInInfoPv2ChgMaxList": {
+            "oneof": [
+              "plugInInfoPv2ChgMaxList"
+            ]
+          },
+          "_bmsErrCode": {
+            "oneof": [
+              "bmsErrCode"
+            ]
+          },
+          "_wirelessCoordinateDevList": {
+            "oneof": [
+              "wirelessCoordinateDevList"
+            ]
+          },
+          "_wirelessOilSelfStart": {
+            "oneof": [
+              "wirelessOilSelfStart"
+            ]
+          },
+          "_wirelessOilOnSoc": {
+            "oneof": [
+              "wirelessOilOnSoc"
+            ]
+          },
+          "_wirelessOilOffSoc": {
+            "oneof": [
+              "wirelessOilOffSoc"
+            ]
+          },
+          "_bypassOutDisable": {
+            "oneof": [
+              "bypassOutDisable"
+            ]
+          },
+          "_outputPowerOffMemory": {
+            "oneof": [
+              "outputPowerOffMemory"
+            ]
+          },
+          "_flowInfoBmsDsg": {
+            "oneof": [
+              "flowInfoBmsDsg"
+            ]
+          },
+          "_flowInfoBmsChg": {
+            "oneof": [
+              "flowInfoBmsChg"
+            ]
+          },
+          "_powGetBms": {
+            "oneof": [
+              "powGetBms"
+            ]
+          },
+          "_fastChargeSwitch": {
+            "oneof": [
+              "fastChargeSwitch"
+            ]
+          },
+          "_enBeep": {
+            "oneof": [
+              "enBeep"
+            ]
+          },
+          "_plugInInfoAcChargerFlag": {
+            "oneof": [
+              "plugInInfoAcChargerFlag"
+            ]
+          },
+          "_plugInInfoAcInChgPowMax": {
+            "oneof": [
+              "plugInInfoAcInChgPowMax"
+            ]
+          },
+          "_acOutFreq": {
+            "oneof": [
+              "acOutFreq"
+            ]
+          },
+          "_devSleepState": {
+            "oneof": [
+              "devSleepState"
+            ]
+          },
+          "_pdErrCode": {
+            "oneof": [
+              "pdErrCode"
+            ]
+          },
+          "_timeTaskCurrent": {
+            "oneof": [
+              "timeTaskCurrent"
+            ]
+          },
+          "_pcsFanErrFlag": {
+            "oneof": [
+              "pcsFanErrFlag"
+            ]
+          },
+          "_plugInInfoAcOutDsgPowMax": {
+            "oneof": [
+              "plugInInfoAcOutDsgPowMax"
+            ]
+          },
+          "_bmsBattSoc": {
+            "oneof": [
+              "bmsBattSoc"
+            ]
+          },
+          "_bmsBattSoh": {
+            "oneof": [
+              "bmsBattSoh"
+            ]
+          },
+          "_bmsDesignCap": {
+            "oneof": [
+              "bmsDesignCap"
+            ]
+          },
+          "_bmsDsgRemTime": {
+            "oneof": [
+              "bmsDsgRemTime"
+            ]
+          },
+          "_bmsChgRemTime": {
+            "oneof": [
+              "bmsChgRemTime"
+            ]
+          },
+          "_bmsMinCellTemp": {
+            "oneof": [
+              "bmsMinCellTemp"
+            ]
+          },
+          "_bmsMaxCellTemp": {
+            "oneof": [
+              "bmsMaxCellTemp"
+            ]
+          },
+          "_bmsMinMosTemp": {
+            "oneof": [
+              "bmsMinMosTemp"
+            ]
+          },
+          "_bmsMaxMosTemp": {
+            "oneof": [
+              "bmsMaxMosTemp"
+            ]
+          },
+          "_cmsBattSoc": {
+            "oneof": [
+              "cmsBattSoc"
+            ]
+          },
+          "_cmsBattSoh": {
+            "oneof": [
+              "cmsBattSoh"
+            ]
+          },
+          "_cmsDsgRemTime": {
+            "oneof": [
+              "cmsDsgRemTime"
+            ]
+          },
+          "_cmsChgRemTime": {
+            "oneof": [
+              "cmsChgRemTime"
+            ]
+          },
+          "_cmsMaxChgSoc": {
+            "oneof": [
+              "cmsMaxChgSoc"
+            ]
+          },
+          "_cmsMinDsgSoc": {
+            "oneof": [
+              "cmsMinDsgSoc"
+            ]
+          },
+          "_cmsOilOnSoc": {
+            "oneof": [
+              "cmsOilOnSoc"
+            ]
+          },
+          "_cmsOilOffSoc": {
+            "oneof": [
+              "cmsOilOffSoc"
+            ]
+          },
+          "_cmsOilSelfStart": {
+            "oneof": [
+              "cmsOilSelfStart"
+            ]
+          },
+          "_cmsBmsRunState": {
+            "oneof": [
+              "cmsBmsRunState"
+            ]
+          },
+          "_bmsChgDsgState": {
+            "oneof": [
+              "bmsChgDsgState"
+            ]
+          },
+          "_cmsChgDsgState": {
+            "oneof": [
+              "cmsChgDsgState"
+            ]
+          },
+          "_timeTaskConflictFlag": {
+            "oneof": [
+              "timeTaskConflictFlag"
+            ]
+          },
+          "_timeTaskChangeCnt": {
+            "oneof": [
+              "timeTaskChangeCnt"
+            ]
+          },
+          "_powGetDc": {
+            "oneof": [
+              "powGetDc"
+            ]
+          },
+          "_plugInInfoPvDcAmpMax": {
+            "oneof": [
+              "plugInInfoPvDcAmpMax"
+            ]
+          },
+          "_flowInfoPv": {
+            "oneof": [
+              "flowInfoPv"
+            ]
+          },
+          "_powGetPv": {
+            "oneof": [
+              "powGetPv"
+            ]
+          },
+          "_plugInInfoPvFlag": {
+            "oneof": [
+              "plugInInfoPvFlag"
+            ]
+          },
+          "_plugInInfoPvType": {
+            "oneof": [
+              "plugInInfoPvType"
+            ]
+          },
+          "_plugInInfoPvChargerFlag": {
+            "oneof": [
+              "plugInInfoPvChargerFlag"
+            ]
+          },
+          "_plugInInfoPvChgAmpMax": {
+            "oneof": [
+              "plugInInfoPvChgAmpMax"
+            ]
+          },
+          "_plugInInfoPvChgVolMax": {
+            "oneof": [
+              "plugInInfoPvChgVolMax"
+            ]
+          },
+          "_flowInfoAcOut": {
+            "oneof": [
+              "flowInfoAcOut"
+            ]
+          },
+          "_powGetAcOut": {
+            "oneof": [
+              "powGetAcOut"
+            ]
+          },
+          "_energyStrategyOperateMode": {
+            "oneof": [
+              "energyStrategyOperateMode"
+            ]
+          },
+          "_selfPoweredConflictFlag": {
+            "oneof": [
+              "selfPoweredConflictFlag"
+            ]
+          },
+          "_touModeConflictFlag": {
+            "oneof": [
+              "touModeConflictFlag"
+            ]
+          },
+          "_flowInfoPv2": {
+            "oneof": [
+              "flowInfoPv2"
+            ]
+          },
+          "_plugInInfoPv2Flag": {
+            "oneof": [
+              "plugInInfoPv2Flag"
+            ]
+          },
+          "_plugInInfoPv2Type": {
+            "oneof": [
+              "plugInInfoPv2Type"
+            ]
+          },
+          "_flowInfoDcpIn": {
+            "oneof": [
+              "flowInfoDcpIn"
+            ]
+          },
+          "_flowInfoDcpOut": {
+            "oneof": [
+              "flowInfoDcpOut"
+            ]
+          },
+          "_powGetDcp": {
+            "oneof": [
+              "powGetDcp"
+            ]
+          },
+          "_plugInInfoDcpInFlag": {
+            "oneof": [
+              "plugInInfoDcpInFlag"
+            ]
+          },
+          "_plugInInfoDcpType": {
+            "oneof": [
+              "plugInInfoDcpType"
+            ]
+          },
+          "_plugInInfoDcpDetail": {
+            "oneof": [
+              "plugInInfoDcpDetail"
+            ]
+          },
+          "_plugInInfoPv2ChargerFlag": {
+            "oneof": [
+              "plugInInfoPv2ChargerFlag"
+            ]
+          },
+          "_plugInInfoDcpDsgChgType": {
+            "oneof": [
+              "plugInInfoDcpDsgChgType"
+            ]
+          },
+          "_plugInInfoDcpResv": {
+            "oneof": [
+              "plugInInfoDcpResv"
+            ]
+          },
+          "_plugInInfoDcpSn": {
+            "oneof": [
+              "plugInInfoDcpSn"
+            ]
+          },
+          "_plugInInfoDcpFirmVer": {
+            "oneof": [
+              "plugInInfoDcpFirmVer"
+            ]
+          },
+          "_plugInInfoDcpChargerFlag": {
+            "oneof": [
+              "plugInInfoDcpChargerFlag"
+            ]
+          },
+          "_plugInInfoDcpRunState": {
+            "oneof": [
+              "plugInInfoDcpRunState"
+            ]
+          },
+          "_dcdcErrCode": {
+            "oneof": [
+              "dcdcErrCode"
+            ]
+          },
+          "_plugInInfoDcpErrCode": {
+            "oneof": [
+              "plugInInfoDcpErrCode"
+            ]
+          },
+          "_invErrCode": {
+            "oneof": [
+              "invErrCode"
+            ]
+          },
+          "_cmsBattPowOutMax": {
+            "oneof": [
+              "cmsBattPowOutMax"
+            ]
+          },
+          "_cmsBattPowInMax": {
+            "oneof": [
+              "cmsBattPowInMax"
+            ]
+          },
+          "_backupReverseSoc": {
+            "oneof": [
+              "backupReverseSoc"
+            ]
+          },
+          "_cmsBattFullEnergy": {
+            "oneof": [
+              "cmsBattFullEnergy"
+            ]
+          },
+          "_stormPatternEnable": {
+            "oneof": [
+              "stormPatternEnable"
+            ]
+          },
+          "_stormPatternOpenFlag": {
+            "oneof": [
+              "stormPatternOpenFlag"
+            ]
+          },
+          "_stormPatternEndTime": {
+            "oneof": [
+              "stormPatternEndTime"
+            ]
+          },
+          "_unknown972": {
+            "oneof": [
+              "unknown972"
+            ]
+          }
+        },
+        "fields": {
+          "errcode": {
+            "type": "uint32",
+            "id": 1,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "powInSumW": {
+            "type": "float",
+            "id": 3,
+            "protoName": "pow_in_sum_w",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "powOutSumW": {
+            "type": "float",
+            "id": 4,
+            "protoName": "pow_out_sum_w",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "lcdLight": {
+            "type": "uint32",
+            "id": 5,
+            "protoName": "lcd_light",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "energyBackupEn": {
+            "type": "int32",
+            "id": 7,
+            "protoName": "energy_backup_en",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "energyBackupStartSoc": {
+            "type": "uint32",
+            "id": 8,
+            "protoName": "energy_backup_start_soc",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "powGetQcusb1": {
+            "type": "float",
+            "id": 9,
+            "protoName": "pow_get_qcusb1",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "powGetQcusb2": {
+            "type": "float",
+            "id": 10,
+            "protoName": "pow_get_qcusb2",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "powGetTypec1": {
+            "type": "float",
+            "id": 11,
+            "protoName": "pow_get_typec1",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "powGetTypec2": {
+            "type": "float",
+            "id": 12,
+            "protoName": "pow_get_typec2",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "flowInfoQcusb1": {
+            "type": "uint32",
+            "id": 13,
+            "protoName": "flow_info_qcusb1",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "flowInfoQcusb2": {
+            "type": "uint32",
+            "id": 14,
+            "protoName": "flow_info_qcusb2",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "flowInfoTypec1": {
+            "type": "uint32",
+            "id": 15,
+            "protoName": "flow_info_typec1",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "flowInfoTypec2": {
+            "type": "uint32",
+            "id": 16,
+            "protoName": "flow_info_typec2",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "devStandbyTime": {
+            "type": "uint32",
+            "id": 17,
+            "protoName": "dev_standby_time",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "screenOffTime": {
+            "type": "uint32",
+            "id": 18,
+            "protoName": "screen_off_time",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "acStandbyTime": {
+            "type": "uint32",
+            "id": 19,
+            "protoName": "ac_standby_time",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "dcStandbyTime": {
+            "type": "uint32",
+            "id": 20,
+            "protoName": "dc_standby_time",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "acAlwaysOnFlag": {
+            "type": "int32",
+            "id": 22,
+            "protoName": "ac_always_on_flag",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "acAlwaysOnMiniSoc": {
+            "type": "uint32",
+            "id": 23,
+            "protoName": "ac_always_on_mini_soc",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "xboostEn": {
+            "type": "int32",
+            "id": 25,
+            "protoName": "xboost_en",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "pcsFanLevel": {
+            "type": "uint32",
+            "id": 30,
+            "protoName": "pcs_fan_level",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "flowInfo_12v": {
+            "type": "uint32",
+            "id": 33,
+            "protoName": "flow_info_12v",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "powGet_12v": {
+            "type": "float",
+            "id": 37,
+            "protoName": "pow_get_12v",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "flowInfoAc2dc": {
+            "type": "uint32",
+            "id": 45,
+            "protoName": "flow_info_ac2dc",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "flowInfoDc2ac": {
+            "type": "uint32",
+            "id": 46,
+            "protoName": "flow_info_dc2ac",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "flowInfoAcIn": {
+            "type": "uint32",
+            "id": 47,
+            "protoName": "flow_info_ac_in",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "powGetAc": {
+            "type": "float",
+            "id": 53,
+            "protoName": "pow_get_ac",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "powGetAcIn": {
+            "type": "float",
+            "id": 54,
+            "protoName": "pow_get_ac_in",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoAcInFlag": {
+            "type": "uint32",
+            "id": 61,
+            "protoName": "plug_in_info_ac_in_flag",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoAcInFeq": {
+            "type": "uint32",
+            "id": 62,
+            "protoName": "plug_in_info_ac_in_feq",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "powGetPv2": {
+            "type": "float",
+            "id": 70,
+            "protoName": "pow_get_pv2",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoPv2DcAmpMax": {
+            "type": "uint32",
+            "id": 80,
+            "protoName": "plug_in_info_pv2_dc_amp_max",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoPv2ChgAmpMax": {
+            "type": "uint32",
+            "id": 81,
+            "protoName": "plug_in_info_pv2_chg_amp_max",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoPv2ChgVolMax": {
+            "type": "uint32",
+            "id": 82,
+            "protoName": "plug_in_info_pv2_chg_vol_max",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "unknown100": {
+            "type": "float",
+            "id": 100,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoAcInChgMode": {
+            "type": ".AC_IN_CHG_MODE",
+            "id": 124,
+            "protoName": "plug_in_info_ac_in_chg_mode",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "pvDcChgSettingList": {
+            "type": ".PvDcChgSettingList",
+            "id": 125,
+            "protoName": "pv_dc_chg_setting_list",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "utcTimezone": {
+            "type": "int32",
+            "id": 133,
+            "protoName": "utc_timezone",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "utcTimezoneId": {
+            "type": "string",
+            "id": 134,
+            "protoName": "utc_timezone_id",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "utcSetMode": {
+            "type": "int32",
+            "id": 135,
+            "protoName": "utc_set_mode",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoPvChgMaxList": {
+            "type": ".PvChgMaxList",
+            "id": 136,
+            "protoName": "plug_in_info_pv_chg_max_list",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoPv2ChgMaxList": {
+            "type": ".PvChgMaxList",
+            "id": 137,
+            "protoName": "plug_in_info_pv2_chg_max_list",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsErrCode": {
+            "type": "uint32",
+            "id": 140,
+            "protoName": "bms_err_code",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "wirelessCoordinateDevList": {
+            "type": ".WirelessCoordinateList",
+            "id": 142,
+            "protoName": "wireless_coordinate_dev_list",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "wirelessOilSelfStart": {
+            "type": "int32",
+            "id": 143,
+            "protoName": "wireless_oil_self_start",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "wirelessOilOnSoc": {
+            "type": "uint32",
+            "id": 144,
+            "protoName": "wireless_oil_on_soc",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "wirelessOilOffSoc": {
+            "type": "uint32",
+            "id": 145,
+            "protoName": "wireless_oil_off_soc",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bypassOutDisable": {
+            "type": "int32",
+            "id": 146,
+            "protoName": "bypass_out_disable",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "outputPowerOffMemory": {
+            "type": "int32",
+            "id": 147,
+            "protoName": "output_power_off_memory",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "flowInfoBmsDsg": {
+            "type": "uint32",
+            "id": 152,
+            "protoName": "flow_info_bms_dsg",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "flowInfoBmsChg": {
+            "type": "uint32",
+            "id": 153,
+            "protoName": "flow_info_bms_chg",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "powGetBms": {
+            "type": "float",
+            "id": 158,
+            "protoName": "pow_get_bms",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "fastChargeSwitch": {
+            "type": "uint32",
+            "id": 182,
+            "protoName": "fast_charge_switch",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "enBeep": {
+            "type": "int32",
+            "id": 195,
+            "protoName": "en_beep",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoAcChargerFlag": {
+            "type": "int32",
+            "id": 202,
+            "protoName": "plug_in_info_ac_charger_flag",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoAcInChgPowMax": {
+            "type": "uint32",
+            "id": 209,
+            "protoName": "plug_in_info_ac_in_chg_pow_max",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "acOutFreq": {
+            "type": "uint32",
+            "id": 211,
+            "protoName": "ac_out_freq",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "devSleepState": {
+            "type": "uint32",
+            "id": 212,
+            "protoName": "dev_sleep_state",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "pdErrCode": {
+            "type": "uint32",
+            "id": 213,
+            "protoName": "pd_err_code",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "timeTaskCurrent": {
+            "type": ".SetTimeTaskWrite",
+            "id": 219,
+            "protoName": "time_task_current",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "pcsFanErrFlag": {
+            "type": "uint32",
+            "id": 226,
+            "protoName": "pcs_fan_err_flag",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoAcOutDsgPowMax": {
+            "type": "uint32",
+            "id": 238,
+            "protoName": "plug_in_info_ac_out_dsg_pow_max",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsBattSoc": {
+            "type": "float",
+            "id": 242,
+            "protoName": "bms_batt_soc",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsBattSoh": {
+            "type": "float",
+            "id": 243,
+            "protoName": "bms_batt_soh",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsDesignCap": {
+            "type": "uint32",
+            "id": 248,
+            "protoName": "bms_design_cap",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsDsgRemTime": {
+            "type": "uint32",
+            "id": 254,
+            "protoName": "bms_dsg_rem_time",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsChgRemTime": {
+            "type": "uint32",
+            "id": 255,
+            "protoName": "bms_chg_rem_time",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsMinCellTemp": {
+            "type": "int32",
+            "id": 258,
+            "protoName": "bms_min_cell_temp",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsMaxCellTemp": {
+            "type": "int32",
+            "id": 259,
+            "protoName": "bms_max_cell_temp",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsMinMosTemp": {
+            "type": "int32",
+            "id": 260,
+            "protoName": "bms_min_mos_temp",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsMaxMosTemp": {
+            "type": "int32",
+            "id": 261,
+            "protoName": "bms_max_mos_temp",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cmsBattSoc": {
+            "type": "float",
+            "id": 262,
+            "protoName": "cms_batt_soc",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cmsBattSoh": {
+            "type": "float",
+            "id": 263,
+            "protoName": "cms_batt_soh",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cmsDsgRemTime": {
+            "type": "uint32",
+            "id": 268,
+            "protoName": "cms_dsg_rem_time",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cmsChgRemTime": {
+            "type": "uint32",
+            "id": 269,
+            "protoName": "cms_chg_rem_time",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cmsMaxChgSoc": {
+            "type": "uint32",
+            "id": 270,
+            "protoName": "cms_max_chg_soc",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cmsMinDsgSoc": {
+            "type": "uint32",
+            "id": 271,
+            "protoName": "cms_min_dsg_soc",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cmsOilOnSoc": {
+            "type": "uint32",
+            "id": 272,
+            "protoName": "cms_oil_on_soc",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cmsOilOffSoc": {
+            "type": "uint32",
+            "id": 273,
+            "protoName": "cms_oil_off_soc",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cmsOilSelfStart": {
+            "type": "int32",
+            "id": 274,
+            "protoName": "cms_oil_self_start",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cmsBmsRunState": {
+            "type": "uint32",
+            "id": 275,
+            "protoName": "cms_bms_run_state",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "bmsChgDsgState": {
+            "type": "uint32",
+            "id": 281,
+            "protoName": "bms_chg_dsg_state",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cmsChgDsgState": {
+            "type": "uint32",
+            "id": 282,
+            "protoName": "cms_chg_dsg_state",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "timeTaskConflictFlag": {
+            "type": "uint32",
+            "id": 285,
+            "protoName": "time_task_conflict_flag",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "timeTaskChangeCnt": {
+            "type": "uint32",
+            "id": 286,
+            "protoName": "time_task_change_cnt",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "powGetDc": {
+            "type": "float",
+            "id": 297,
+            "protoName": "pow_get_dc",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoPvDcAmpMax": {
+            "type": "uint32",
+            "id": 356,
+            "protoName": "plug_in_info_pv_dc_amp_max",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "flowInfoPv": {
+            "type": "uint32",
+            "id": 360,
+            "protoName": "flow_info_pv",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "powGetPv": {
+            "type": "float",
+            "id": 361,
+            "protoName": "pow_get_pv",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoPvFlag": {
+            "type": "int32",
+            "id": 362,
+            "protoName": "plug_in_info_pv_flag",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoPvType": {
+            "type": "uint32",
+            "id": 363,
+            "protoName": "plug_in_info_pv_type",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoPvChargerFlag": {
+            "type": "int32",
+            "id": 364,
+            "protoName": "plug_in_info_pv_charger_flag",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoPvChgAmpMax": {
+            "type": "uint32",
+            "id": 365,
+            "protoName": "plug_in_info_pv_chg_amp_max",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoPvChgVolMax": {
+            "type": "uint32",
+            "id": 366,
+            "protoName": "plug_in_info_pv_chg_vol_max",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "flowInfoAcOut": {
+            "type": "uint32",
+            "id": 367,
+            "protoName": "flow_info_ac_out",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "powGetAcOut": {
+            "type": "float",
+            "id": 368,
+            "protoName": "pow_get_ac_out",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "energyStrategyOperateMode": {
+            "type": "CfgEnergyStrategyOperateMode",
+            "id": 393,
+            "protoName": "energy_strategy_operate_mode",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "selfPoweredConflictFlag": {
+            "type": "uint32",
+            "id": 395,
+            "protoName": "self_powered_conflict_flag",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "touModeConflictFlag": {
+            "type": "uint32",
+            "id": 396,
+            "protoName": "tou_mode_conflict_flag",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "flowInfoPv2": {
+            "type": "uint32",
+            "id": 414,
+            "protoName": "flow_info_pv2",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoPv2Flag": {
+            "type": "int32",
+            "id": 421,
+            "protoName": "plug_in_info_pv2_flag",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoPv2Type": {
+            "type": "uint32",
+            "id": 422,
+            "protoName": "plug_in_info_pv2_type",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "flowInfoDcpIn": {
+            "type": "uint32",
+            "id": 423,
+            "protoName": "flow_info_dcp_in",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "flowInfoDcpOut": {
+            "type": "uint32",
+            "id": 424,
+            "protoName": "flow_info_dcp_out",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "powGetDcp": {
+            "type": "float",
+            "id": 425,
+            "protoName": "pow_get_dcp",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoDcpInFlag": {
+            "type": "int32",
+            "id": 426,
+            "protoName": "plug_in_info_dcp_in_flag",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoDcpType": {
+            "type": "uint32",
+            "id": 427,
+            "protoName": "plug_in_info_dcp_type",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoDcpDetail": {
+            "type": "uint32",
+            "id": 428,
+            "protoName": "plug_in_info_dcp_detail",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoPv2ChargerFlag": {
+            "type": "int32",
+            "id": 430,
+            "protoName": "plug_in_info_pv2_charger_flag",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoDcpDsgChgType": {
+            "type": "uint32",
+            "id": 431,
+            "protoName": "plug_in_info_dcp_dsg_chg_type",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoDcpResv": {
+            "type": ".ResvInfo",
+            "id": 432,
+            "protoName": "plug_in_info_dcp_resv",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoDcpSn": {
+            "type": "string",
+            "id": 433,
+            "protoName": "plug_in_info_dcp_sn",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoDcpFirmVer": {
+            "type": "uint32",
+            "id": 434,
+            "protoName": "plug_in_info_dcp_firm_ver",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoDcpChargerFlag": {
+            "type": "int32",
+            "id": 435,
+            "protoName": "plug_in_info_dcp_charger_flag",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoDcpRunState": {
+            "type": "uint32",
+            "id": 436,
+            "protoName": "plug_in_info_dcp_run_state",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "dcdcErrCode": {
+            "type": "uint32",
+            "id": 437,
+            "protoName": "dcdc_err_code",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoDcpErrCode": {
+            "type": "uint32",
+            "id": 438,
+            "protoName": "plug_in_info_dcp_err_code",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "invErrCode": {
+            "type": "uint32",
+            "id": 450,
+            "protoName": "inv_err_code",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cmsBattPowOutMax": {
+            "type": "uint32",
+            "id": 459,
+            "protoName": "cms_batt_pow_out_max",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cmsBattPowInMax": {
+            "type": "uint32",
+            "id": 460,
+            "protoName": "cms_batt_pow_in_max",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "backupReverseSoc": {
+            "type": "uint32",
+            "id": 461,
+            "protoName": "backup_reverse_soc",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cmsBattFullEnergy": {
+            "type": "uint32",
+            "id": 462,
+            "protoName": "cms_batt_full_energy",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "stormPatternEnable": {
+            "type": "int32",
+            "id": 467,
+            "protoName": "storm_pattern_enable",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "stormPatternOpenFlag": {
+            "type": "int32",
+            "id": 468,
+            "protoName": "storm_pattern_open_flag",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "stormPatternEndTime": {
+            "type": "int32",
+            "id": 469,
+            "protoName": "storm_pattern_end_time",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "unknown972": {
+            "type": "FloatList",
+            "id": 972,
+            "options": {
+              "proto3_optional": true
+            }
+          }
+        }
+      },
+      "CfgEnergyStrategyOperateMode": {
+        "oneofs": {
+          "_operateSelfPoweredOpen": {
+            "oneof": [
+              "operateSelfPoweredOpen"
+            ]
+          },
+          "_operateScheduledOpen": {
+            "oneof": [
+              "operateScheduledOpen"
+            ]
+          },
+          "_operateTouModeOpen": {
+            "oneof": [
+              "operateTouModeOpen"
+            ]
+          }
+        },
+        "fields": {
+          "operateSelfPoweredOpen": {
+            "type": "int32",
+            "id": 1,
+            "protoName": "operate_self_powered_open",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "operateScheduledOpen": {
+            "type": "int32",
+            "id": 2,
+            "protoName": "operate_scheduled_open",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "operateTouModeOpen": {
+            "type": "int32",
+            "id": 3,
+            "protoName": "operate_tou_mode_open",
+            "options": {
+              "proto3_optional": true
+            }
+          }
+        }
+      },
+      "set_dp3": {
+        "oneofs": {
+          "_cfgPowerOff": {
+            "oneof": [
+              "cfgPowerOff"
+            ]
+          },
+          "_cfgUtcTime": {
+            "oneof": [
+              "cfgUtcTime"
+            ]
+          },
+          "_cfgUtcTimezone": {
+            "oneof": [
+              "cfgUtcTimezone"
+            ]
+          },
+          "_enBeep": {
+            "oneof": [
+              "enBeep"
+            ]
+          },
+          "_acStandbyTime": {
+            "oneof": [
+              "acStandbyTime"
+            ]
+          },
+          "_dcStandbyTime": {
+            "oneof": [
+              "dcStandbyTime"
+            ]
+          },
+          "_screenOffTime": {
+            "oneof": [
+              "screenOffTime"
+            ]
+          },
+          "_devStandbyTime": {
+            "oneof": [
+              "devStandbyTime"
+            ]
+          },
+          "_lcdLight": {
+            "oneof": [
+              "lcdLight"
+            ]
+          },
+          "_cfgDc12vOutOpen": {
+            "oneof": [
+              "cfgDc12vOutOpen"
+            ]
+          },
+          "_cfgUsbOpen": {
+            "oneof": [
+              "cfgUsbOpen"
+            ]
+          },
+          "_xboostEn": {
+            "oneof": [
+              "xboostEn"
+            ]
+          },
+          "_cmsMaxChgSoc": {
+            "oneof": [
+              "cmsMaxChgSoc"
+            ]
+          },
+          "_cmsMinDsgSoc": {
+            "oneof": [
+              "cmsMinDsgSoc"
+            ]
+          },
+          "_plugInInfoAcInChgPowMax": {
+            "oneof": [
+              "plugInInfoAcInChgPowMax"
+            ]
+          },
+          "_cmsOilSelfStart": {
+            "oneof": [
+              "cmsOilSelfStart"
+            ]
+          },
+          "_cmsOilOnSoc": {
+            "oneof": [
+              "cmsOilOnSoc"
+            ]
+          },
+          "_cmsOilOffSoc": {
+            "oneof": [
+              "cmsOilOffSoc"
+            ]
+          },
+          "_cfgAcOutOpen": {
+            "oneof": [
+              "cfgAcOutOpen"
+            ]
+          },
+          "_cfgLedMode": {
+            "oneof": [
+              "cfgLedMode"
+            ]
+          },
+          "_plugInInfoAcInChgMode": {
+            "oneof": [
+              "plugInInfoAcInChgMode"
+            ]
+          },
+          "_cfgUtcTimezoneId": {
+            "oneof": [
+              "cfgUtcTimezoneId"
+            ]
+          },
+          "_cfgUtcSetMode": {
+            "oneof": [
+              "cfgUtcSetMode"
+            ]
+          },
+          "_energyStrategyOperateMode": {
+            "oneof": [
+              "energyStrategyOperateMode"
+            ]
+          }
+        },
+        "fields": {
+          "cfgPowerOff": {
+            "type": "int32",
+            "id": 3,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cfgUtcTime": {
+            "type": "uint32",
+            "id": 6,
+            "protoName": "cfg_utc_time",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cfgUtcTimezone": {
+            "type": "int32",
+            "id": 7,
+            "protoName": "cfg_utc_timezone",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "enBeep": {
+            "type": "int32",
+            "id": 9,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "acStandbyTime": {
+            "type": "int32",
+            "id": 10,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "dcStandbyTime": {
+            "type": "int32",
+            "id": 11,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "screenOffTime": {
+            "type": "int32",
+            "id": 12,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "devStandbyTime": {
+            "type": "int32",
+            "id": 13,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "lcdLight": {
+            "type": "int32",
+            "id": 14,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cfgDc12vOutOpen": {
+            "type": "int32",
+            "id": 18,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cfgUsbOpen": {
+            "type": "int32",
+            "id": 19,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "xboostEn": {
+            "type": "int32",
+            "id": 25,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cmsMaxChgSoc": {
+            "type": "int32",
+            "id": 33,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cmsMinDsgSoc": {
+            "type": "int32",
+            "id": 34,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoAcInChgPowMax": {
+            "type": "uint32",
+            "id": 54,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cmsOilSelfStart": {
+            "type": "uint32",
+            "id": 58,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cmsOilOnSoc": {
+            "type": "uint32",
+            "id": 59,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cmsOilOffSoc": {
+            "type": "uint32",
+            "id": 60,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cfgAcOutOpen": {
+            "type": "int32",
+            "id": 76,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cfgLedMode": {
+            "type": "uint32",
+            "id": 89,
+            "protoName": "cfg_led_mode",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoAcInChgMode": {
+            "type": "int32",
+            "id": 125,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cfgUtcTimezoneId": {
+            "type": "string",
+            "id": 135,
+            "protoName": "cfg_utc_timezone_id",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cfgUtcSetMode": {
+            "type": "bool",
+            "id": 136,
+            "protoName": "cfg_utc_set_mode",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "energyStrategyOperateMode": {
+            "type": ".CfgEnergyStrategyOperateMode",
+            "id": 106,
+            "protoName": "energy_strategy_operate_mode",
+            "options": {
+              "proto3_optional": true
+            }
+          }
+        }
+      },
+      "setReply_dp3": {
+        "oneofs": {
+          "_actionId": {
+            "oneof": [
+              "actionId"
+            ]
+          },
+          "_configOk": {
+            "oneof": [
+              "configOk"
+            ]
+          },
+          "_cfgUtcTime": {
+            "oneof": [
+              "cfgUtcTime"
+            ]
+          },
+          "_cfgUtcTimezone": {
+            "oneof": [
+              "cfgUtcTimezone"
+            ]
+          },
+          "_enBeep": {
+            "oneof": [
+              "enBeep"
+            ]
+          },
+          "_acStandbyTime": {
+            "oneof": [
+              "acStandbyTime"
+            ]
+          },
+          "_dcStandbyTime": {
+            "oneof": [
+              "dcStandbyTime"
+            ]
+          },
+          "_screenOffTime": {
+            "oneof": [
+              "screenOffTime"
+            ]
+          },
+          "_devStandbyTime": {
+            "oneof": [
+              "devStandbyTime"
+            ]
+          },
+          "_lcdLight": {
+            "oneof": [
+              "lcdLight"
+            ]
+          },
+          "_cfgDc12vOutOpen": {
+            "oneof": [
+              "cfgDc12vOutOpen"
+            ]
+          },
+          "_cfgUsbOpen": {
+            "oneof": [
+              "cfgUsbOpen"
+            ]
+          },
+          "_xboostEn": {
+            "oneof": [
+              "xboostEn"
+            ]
+          },
+          "_cmsMaxChgSoc": {
+            "oneof": [
+              "cmsMaxChgSoc"
+            ]
+          },
+          "_cmsMinDsgSoc": {
+            "oneof": [
+              "cmsMinDsgSoc"
+            ]
+          },
+          "_plugInInfoAcInChgPowMax": {
+            "oneof": [
+              "plugInInfoAcInChgPowMax"
+            ]
+          },
+          "_cmsOilSelfStart": {
+            "oneof": [
+              "cmsOilSelfStart"
+            ]
+          },
+          "_cmsOilOnSoc": {
+            "oneof": [
+              "cmsOilOnSoc"
+            ]
+          },
+          "_cmsOilOffSoc": {
+            "oneof": [
+              "cmsOilOffSoc"
+            ]
+          },
+          "_cfgAcOutOpen": {
+            "oneof": [
+              "cfgAcOutOpen"
+            ]
+          },
+          "_cfgLedMode": {
+            "oneof": [
+              "cfgLedMode"
+            ]
+          },
+          "_plugInInfoAcInChgMode": {
+            "oneof": [
+              "plugInInfoAcInChgMode"
+            ]
+          },
+          "_cfgUtcTimezoneId": {
+            "oneof": [
+              "cfgUtcTimezoneId"
+            ]
+          },
+          "_cfgUtcSetMode": {
+            "oneof": [
+              "cfgUtcSetMode"
+            ]
+          },
+          "_energyStrategyOperateMode": {
+            "oneof": [
+              "energyStrategyOperateMode"
+            ]
+          }
+        },
+        "fields": {
+          "actionId": {
+            "type": "int32",
+            "id": 1,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "configOk": {
+            "type": "bool",
+            "id": 2,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cfgUtcTime": {
+            "type": "uint32",
+            "id": 6,
+            "protoName": "cfg_utc_time",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cfgUtcTimezone": {
+            "type": "int32",
+            "id": 7,
+            "protoName": "cfg_utc_timezone",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "enBeep": {
+            "type": "int32",
+            "id": 9,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "acStandbyTime": {
+            "type": "int32",
+            "id": 10,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "dcStandbyTime": {
+            "type": "int32",
+            "id": 11,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "screenOffTime": {
+            "type": "int32",
+            "id": 12,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "devStandbyTime": {
+            "type": "int32",
+            "id": 13,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "lcdLight": {
+            "type": "int32",
+            "id": 14,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cfgDc12vOutOpen": {
+            "type": "int32",
+            "id": 18,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cfgUsbOpen": {
+            "type": "int32",
+            "id": 19,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "xboostEn": {
+            "type": "int32",
+            "id": 25,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cmsMaxChgSoc": {
+            "type": "int32",
+            "id": 33,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cmsMinDsgSoc": {
+            "type": "int32",
+            "id": 34,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoAcInChgPowMax": {
+            "type": "uint32",
+            "id": 54,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cmsOilSelfStart": {
+            "type": "uint32",
+            "id": 58,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cmsOilOnSoc": {
+            "type": "uint32",
+            "id": 59,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cmsOilOffSoc": {
+            "type": "uint32",
+            "id": 60,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cfgAcOutOpen": {
+            "type": "int32",
+            "id": 76,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cfgLedMode": {
+            "type": "uint32",
+            "id": 89,
+            "protoName": "cfg_led_mode",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "plugInInfoAcInChgMode": {
+            "type": "uint32",
+            "id": 125,
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cfgUtcTimezoneId": {
+            "type": "string",
+            "id": 135,
+            "protoName": "cfg_utc_timezone_id",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "cfgUtcSetMode": {
+            "type": "bool",
+            "id": 136,
+            "protoName": "cfg_utc_set_mode",
+            "options": {
+              "proto3_optional": true
+            }
+          },
+          "energyStrategyOperateMode": {
+            "type": ".CfgEnergyStrategyOperateMode",
+            "id": 106,
+            "protoName": "energy_strategy_operate_mode",
+            "options": {
+              "proto3_optional": true
+            }
+          }
+        }
+      }
+    }
+  },
+  "messages": {
+    "32/2": {
+      "type": "CMSHeartBeatReport",
+      "alias": "cms",
+      "merge": "nested"
+    },
+    "32/50": {
+      "type": "BMSHeartBeatReport",
+      "alias": "bms",
+      "perPack": true
+    },
+    "50/2": {
+      "type": "AppRuquestBpEuLawDataAck",
+      "alias": "passport",
+      "perPack": true
+    },
+    "50/98": {
+      "type": "AppRuquestBpEuLawData"
+    },
+    "254/17": {
+      "type": "set_dp3"
+    },
+    "254/18": {
+      "type": "setReply_dp3"
+    },
+    "254/19": {
+      "type": "ConfigRead"
+    },
+    "254/20": {
+      "type": "ConfigReadAck"
+    },
+    "254/21": {
+      "type": "DisplayPropertyUpload",
+      "alias": "display"
+    },
+    "254/22": {
+      "type": "RuntimePropertyUpload",
+      "alias": "runtime"
+    }
+  },
+  "packs": {
+    "keyField": "num",
+    "list": "bms"
+  },
+  "grid": {
+    "flag": {
+      "from": "display.plugInInfoAcInFlag",
+      "equals": 1
+    },
+    "voltage": {
+      "from": "runtime.plugInInfoAcInVol",
+      "min": 100
+    }
+  },
+  "telemetry": {
+    "socPct": {
+      "from": [
+        "display.cmsBattSoc",
+        "cms.v1p0.f32LcdShowSoc",
+        "display.bmsBattSoc"
+      ],
+      "round": 2
+    },
+    "wattsIn": {
+      "from": "display.powInSumW"
+    },
+    "wattsOut": {
+      "from": "display.powOutSumW"
+    },
+    "acInVoltageV": {
+      "from": "runtime.plugInInfoAcInVol",
+      "round": 1,
+      "freshAfterGridChange": true
+    },
+    "acInFreqHz": {
+      "from": "display.plugInInfoAcInFeq",
+      "zeroIsNull": true
+    },
+    "acOutFreqHz": {
+      "from": [
+        "display.acOutFreq",
+        "runtime.plugInInfoAcOutFreq"
+      ]
+    },
+    "extra": {
+      "ac_in_amp_a": {
+        "from": "runtime.plugInInfoAcInAmp",
+        "round": 2
+      },
+      "ac_out_voltage_v": {
+        "from": "runtime.plugInInfoAcOutVol",
+        "round": 1
+      },
+      "ac_out_amp_a": {
+        "from": "runtime.plugInInfoAcOutAmp",
+        "round": 2
+      },
+      "ac_in_w": {
+        "from": "display.powGetAcIn"
+      },
+      "ac_out_w": {
+        "any": [
+          {
+            "from": "display.powGetAcOut"
+          },
+          {
+            "from": "display.unknown972",
+            "op": "neg_clamp_floats",
+            "round": 1,
+            "index": 2
+          }
+        ],
+        "skipZero": true
+      },
+      "out_ports_w": {
+        "from": "display.unknown972",
+        "op": "neg_clamp_floats",
+        "round": 1
+      },
+      "pv_w": {
+        "from": "display.powGetPv"
+      },
+      "pv2_w": {
+        "from": "display.powGetPv2"
+      },
+      "dc12v_w": {
+        "from": "display.powGet_12v"
+      },
+      "usb_w": {
+        "from": [
+          "display.powGetQcusb1",
+          "display.powGetQcusb2",
+          "display.powGetTypec1",
+          "display.powGetTypec2"
+        ],
+        "op": "sum"
+      },
+      "batt_voltage_v": {
+        "from": "runtime.cmsBattVol",
+        "divide": 1000,
+        "round": 3
+      },
+      "batt_current_a": {
+        "from": "runtime.cmsBattAmp",
+        "divide": 1000,
+        "round": 3
+      },
+      "temp_pcs_ac_c": {
+        "from": "runtime.tempPcsAc",
+        "round": 1
+      },
+      "temp_pcs_dc_c": {
+        "from": "runtime.tempPcsDc",
+        "round": 1
+      },
+      "temp_pv_c": {
+        "from": "runtime.tempPv",
+        "round": 1
+      },
+      "temp_pv2_c": {
+        "from": "runtime.tempPv2",
+        "round": 1
+      },
+      "temps_aux_c": {
+        "from": "runtime.unknown95",
+        "op": "floats",
+        "round": 1
+      },
+      "temp_aux_max_c": {
+        "from": "runtime.unknown95",
+        "op": "floats",
+        "round": 1,
+        "reduce": "max"
+      },
+      "pv_v": {
+        "from": "runtime.plugInInfoPvVol",
+        "round": 2
+      },
+      "pv_a": {
+        "from": "runtime.plugInInfoPvAmp",
+        "round": 2
+      },
+      "pv2_v": {
+        "from": "runtime.plugInInfoPv2Vol",
+        "round": 2
+      },
+      "pv2_a": {
+        "from": "runtime.plugInInfoPv2Amp",
+        "round": 2
+      },
+      "batt_w": {
+        "op": "packs_sum_all",
+        "pack": {
+          "from": [
+            "bms.vol",
+            "bms.amp"
+          ],
+          "op": "product",
+          "divide": 1000000
+        },
+        "round": 1
+      },
+      "loss_w": {
+        "op": "diff",
+        "ref": [
+          "wattsIn",
+          "wattsOut",
+          "extra.batt_w"
+        ],
+        "round": 1
+      },
+      "chg_dsg_state": {
+        "from": [
+          "display.cmsChgDsgState",
+          "cms.v1p3.sysChgDsgState"
+        ]
+      },
+      "chg_line_flag": {
+        "from": "cms.v1p3.chgLinePlugInFlag"
+      },
+      "chg_req_v": {
+        "from": "cms.v1p0.chgVol",
+        "divide": 1000,
+        "round": 3
+      },
+      "chg_req_a": {
+        "from": "cms.v1p0.chgAmp",
+        "divide": 1000,
+        "round": 3
+      },
+      "fan_level": {
+        "from": [
+          "display.pcsFanLevel",
+          "cms.v1p0.fanLevel"
+        ]
+      },
+      "chg_remain_min": {
+        "from": [
+          "display.cmsChgRemTime",
+          "cms.v1p0.chgRemainTime"
+        ]
+      },
+      "dsg_remain_min": {
+        "from": [
+          "display.cmsDsgRemTime",
+          "cms.v1p0.dsgRemainTime"
+        ]
+      },
+      "max_chg_soc_pct": {
+        "from": "display.cmsMaxChgSoc"
+      },
+      "min_dsg_soc_pct": {
+        "from": "display.cmsMinDsgSoc"
+      },
+      "ac_in_chg_max_w": {
+        "from": "display.plugInInfoAcInChgPowMax"
+      },
+      "err_code": {
+        "from": "display.errcode"
+      }
+    }
+  },
+  "pack": {
+    "socPct": {
+      "from": [
+        "bms.f32ShowSoc",
+        "bms.soc"
+      ],
+      "round": 2
+    },
+    "sohPct": {
+      "from": "bms.soh"
+    },
+    "cycles": {
+      "from": "bms.cycles"
+    },
+    "cellVoltagesMv": {
+      "from": "bms.cellVol",
+      "op": "array"
+    },
+    "cellTempsC": {
+      "from": "bms.cellTemp",
+      "op": "array"
+    },
+    "minMosTempC": {
+      "from": "bms.minMosTemp"
+    },
+    "maxMosTempC": {
+      "from": "bms.maxMosTemp"
+    },
+    "balanceState": {
+      "from": "bms.balanceState"
+    },
+    "extra": {
+      "voltage_mv": {
+        "from": "bms.vol"
+      },
+      "current_ma": {
+        "from": "bms.amp"
+      },
+      "power_w": {
+        "from": [
+          "bms.vol",
+          "bms.amp"
+        ],
+        "op": "product",
+        "divide": 1000000,
+        "round": 1
+      },
+      "temp_c": {
+        "from": "bms.temp"
+      },
+      "cell_min_mv": {
+        "from": "bms.minCellVol"
+      },
+      "cell_max_mv": {
+        "from": "bms.maxCellVol"
+      },
+      "remain_cap_mah": {
+        "from": "bms.remainCap"
+      },
+      "remain_wh": {
+        "from": [
+          "bms.remainCap",
+          "bms.vol"
+        ],
+        "op": "product",
+        "divide": 1000000,
+        "round": 1
+      },
+      "full_cap_mah": {
+        "from": "bms.fullCap"
+      },
+      "design_cap_mah": {
+        "from": "bms.designCap"
+      },
+      "real_soh_pct": {
+        "from": "bms.realSoh",
+        "round": 2
+      },
+      "calendar_soh_pct": {
+        "from": "bms.calendarSoh",
+        "round": 2
+      },
+      "cycle_soh_pct": {
+        "from": "bms.cycleSoh",
+        "round": 2
+      },
+      "mos_temps_c": {
+        "from": "bms.mosTemp",
+        "op": "array"
+      },
+      "cur_sensor_temps_c": {
+        "from": "bms.curSensorTemp",
+        "op": "array"
+      },
+      "cur_sensor_temp_c": {
+        "from": "bms.maxCurSensorTemp"
+      },
+      "aux_temps_c": {
+        "from": "bms.unknown87",
+        "op": "int8s"
+      },
+      "aux_temp_max_c": {
+        "from": "bms.unknown87",
+        "op": "int8s",
+        "reduce": "max"
+      },
+      "mos_state": {
+        "from": "bms.mosState"
+      },
+      "input_w": {
+        "from": "bms.inputWatts"
+      },
+      "output_w": {
+        "from": "bms.outputWatts"
+      },
+      "remain_min": {
+        "from": "bms.remainTime"
+      },
+      "max_vol_diff_mv": {
+        "from": "bms.maxVolDiff"
+      },
+      "chg_dsg_state": {
+        "from": "bms.chgDsgState"
+      },
+      "accu_chg_wh": {
+        "from": "bms.accuChgEnergy"
+      },
+      "accu_dsg_wh": {
+        "from": "bms.accuDsgEnergy"
+      },
+      "accu_chg_mah": {
+        "from": "bms.accuChgCap"
+      },
+      "accu_dsg_mah": {
+        "from": "bms.accuDsgCap"
+      },
+      "target_soc_pct": {
+        "from": "bms.targetSoc",
+        "round": 2
+      },
+      "launch_ts": {
+        "from": "passport.bpLaunchDate"
+      },
+      "ohm_res": {
+        "from": "passport.bpOhmRes"
+      },
+      "power_capability": {
+        "from": "passport.bpPowerCapability",
+        "round": 2
+      },
+      "rated_round_trip_eff_pct": {
+        "from": "passport.bpRoundTripEff"
+      },
+      "self_dsg_rate_pct": {
+        "from": "passport.bpSelfDsgRate"
+      },
+      "deep_dsg_count": {
+        "from": "passport.deepDsgCnt"
+      },
+      "high_temp_chg_time": {
+        "from": "passport.highTempChgTime"
+      },
+      "high_temp_use_time": {
+        "from": "passport.highTempUseTime"
+      },
+      "low_temp_chg_time": {
+        "from": "passport.lowTempChgTime"
+      },
+      "low_temp_use_time": {
+        "from": "passport.lowTempUseTime"
+      },
+      "err_code": {
+        "from": "bms.errCode"
+      },
+      "bms_fault": {
+        "from": "bms.bmsFault"
+      }
+    }
+  }
+}

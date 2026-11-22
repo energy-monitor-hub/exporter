@@ -1,0 +1,139 @@
+name: exporter-image
+
+# Exporter image (Dockerfile, target prod) for linux/amd64 + linux/arm64.
+#   push to main:   build, push ghcr.io/<owner>/<repo>:main and :sha-<commit>, attest build
+#                   provenance, report the size, delete old versions (3 at most: :main + the
+#                   2 previous :sha-*)
+#   tag vX.Y.Z:     build, push :vX.Y.Z (kept, never cleaned up), attest build provenance; the
+#                   summary shows the digest and the entry for releases/releases.json
+# Provenance: a signed GitHub attestation (Sigstore) that this image digest was built by this
+# workflow from this commit. Check it with
+#   gh attestation verify oci://ghcr.io/<owner>/<repo>@<digest> --repo <owner>/<repo>
+#   pull request:   build only
+# Layer cache: GitHub Actions cache (10 GB, not counted as ghcr storage).
+# Every action by commit SHA, every image (binfmt, buildkit) by tag + digest.
+
+on:
+  push:
+    branches: [main]
+    # Release tags (path filters do not apply to tags). Must match package.json's version.
+    tags: ['v[0-9]+.[0-9]+.[0-9]+']
+    paths: &paths
+      - 'Dockerfile'
+      - '.dockerignore'
+      - '.npmrc'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'tsconfig.json'
+      - 'src/**'
+      - '.github/workflows/exporter-image.yml'
+      - '.github/scripts/image-size.sh'
+  pull_request:
+    paths: *paths
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: exporter-image-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  IMAGE: ghcr.io/${{ github.repository }}
+  PUSH: ${{ github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')) }}
+  RELEASE: ${{ startsWith(github.ref, 'refs/tags/v') }}
+
+jobs:
+  image:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      packages: write # push to ghcr.io and delete old versions, with GITHUB_TOKEN
+      id-token: write # Sigstore certificate for the provenance attestation
+      attestations: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: docker/setup-qemu-action@99012661954931238ded8c8b007157a8430204e1 # v4.4.0
+        with:
+          image: tonistiigi/binfmt:qemu-v10.2.3-68@sha256:400a4873b838d1b89194d982c45e5fb3cda4593fbfd7e08a02e76b03b21166f0
+          platforms: arm64
+      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+        with:
+          driver-opts: image=moby/buildkit:v0.35.0@sha256:aa632b921ef07411d2cb77292cd34213d4f7b384001d6fceef1e1f25bf9752bb
+      - if: env.PUSH == 'true'
+        uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Tag
+        id: tag
+        run: |
+          echo "sha=sha-${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+          if [ "$RELEASE" = "true" ]; then
+            version="$(node -p 'require("./package.json").version')"
+            if [ "v$version" != "$GITHUB_REF_NAME" ]; then
+              echo "::error::tag $GITHUB_REF_NAME does not match package.json version $version"
+              exit 1
+            fi
+            { echo 'tags<<EOF'; echo "$IMAGE:$GITHUB_REF_NAME"; echo 'EOF'; } >> "$GITHUB_OUTPUT"
+          else
+            { echo 'tags<<EOF'; echo "$IMAGE:main"; echo "$IMAGE:sha-${GITHUB_SHA::7}"; echo 'EOF'; } >> "$GITHUB_OUTPUT"
+          fi
+      - uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+        id: build
+        with:
+          context: .
+          target: prod
+          platforms: linux/amd64,linux/arm64
+          push: ${{ env.PUSH == 'true' }}
+          # BuildKit's own provenance stays off: the signed GitHub attestation below replaces it
+          # and keeps the image index free of extra "unknown/unknown" entries.
+          provenance: false
+          tags: ${{ steps.tag.outputs.tags }}
+          labels: |
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+            org.opencontainers.image.revision=${{ github.sha }}
+          cache-from: type=gha,scope=exporter
+          cache-to: ${{ env.PUSH == 'true' && 'type=gha,scope=exporter,mode=max' || '' }}
+      - name: Build provenance attestation
+        if: env.PUSH == 'true'
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-name: ${{ env.IMAGE }}
+          subject-digest: ${{ steps.build.outputs.digest }}
+          # Stored in GitHub's attestation store, not as extra tags in ghcr (keeps the 3-version cleanup simple)
+          push-to-registry: false
+      - name: Release entry
+        if: env.RELEASE == 'true'
+        env:
+          DIGEST: ${{ steps.build.outputs.digest }}
+        run: |
+          {
+            echo "### $IMAGE:$GITHUB_REF_NAME"
+            echo
+            echo "Digest: \`$DIGEST\`. Add this to \`releases/releases.json\` (channel beta now, stable after the quarantine, docs/UPDATES.md):"
+            echo
+            echo '```json'
+            jq -n --arg v "${GITHUB_REF_NAME#v}" --arg d "$DIGEST" --arg at "$(date -u +%Y-%m-%dT%H:%M:%S.000Z)" \
+              --arg m "$(node -p 'require("./package.json").dbContract.minMigration')" \
+              '{version: $v, digest: $d, channel: "beta", published_at: $at, min_db_migration: $m, notes: "", revoked: false}'
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Size
+        if: env.PUSH == 'true' && env.RELEASE != 'true'
+        run: bash .github/scripts/image-size.sh "$IMAGE" "${{ steps.tag.outputs.sha }}" | tee -a "$GITHUB_STEP_SUMMARY"
+      - name: Delete old versions
+        if: env.PUSH == 'true' && env.RELEASE != 'true'
+        uses: dataaxiom/ghcr-cleanup-action@d52806a0dc70b430571a37da1fde39733ffd640f # v1.2.2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          package: ${{ github.event.repository.name }}
+          exclude-tags: main,v*
+          keep-n-tagged: 2 # plus the :main one = 3 versions
+          delete-untagged: true
+          delete-partial-images: true
+          validate: true
