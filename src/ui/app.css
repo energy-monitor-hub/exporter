@@ -103,7 +103,9 @@ h2 {
 
 main {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  /* two status cards per row on a desktop, one on a phone: four in a row left
+     the values a few letters wide */
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr));
   gap: 16px;
 }
 
@@ -113,6 +115,7 @@ main {
   border-radius: 12px;
   padding: 16px;
   min-width: 0;
+  container-type: inline-size;
 }
 
 .card.wide {
@@ -142,8 +145,22 @@ dt {
 dd {
   margin: 0;
   text-align: right;
-  overflow-wrap: anywhere;
+  /* wrap between words; break inside one only when it alone is too long */
+  overflow-wrap: break-word;
   font-variant-numeric: tabular-nums;
+}
+
+/* a narrow card puts each value under its label instead of squeezing it */
+@container (max-width: 280px) {
+  dl {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  dd {
+    text-align: left;
+    margin-bottom: 6px;
+  }
 }
 
 .muted {
