@@ -66,8 +66,9 @@ jobs:
           (cd build/sea && (sha256sum "$file" 2>/dev/null || shasum -a 256 "$file") > "$file.sha256")
           echo "file=build/sea/$file" >> "$GITHUB_OUTPUT"
           ls -l build/sea
+      # Attestations need a public repository (or GitHub Enterprise Cloud): skipped while private.
       - name: Build provenance attestation
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: startsWith(github.ref, 'refs/tags/v') && !github.event.repository.private
         uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
         with:
           subject-path: ${{ steps.out.outputs.file }}
