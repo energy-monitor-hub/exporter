@@ -146,7 +146,7 @@ The exporter serves a simple status page itself: **http://127.0.0.1:9101/** (the
 - the write queue (how many rows are waiting, the last error), the grid and an open outage;
 - the latest values (charge, input/output, AC, packs and cells) and a few recent outages from Supabase.
 
-The page is plain HTML + JS in `src/ui/` (no build, no dependencies), with data from `GET /api/status`. The UI is in English; the "UK" button switches it to Ukrainian. Logging in from the page registers a separate OAuth client (a different redirect address than `login` on `:9102`), so the dashboard's "Exporters" page may show one more row; you can revoke the old one.
+The page is plain HTML + JS in `src/ui/` (no build, no dependencies), with data from `GET /api/status`. Its colors, type and spacing come from the shared design tokens (`src/ui/tokens.css`, [docs/DESIGN.md](docs/DESIGN.md)). The UI is in English; the "UK" button switches it to Ukrainian. Logging in from the page registers a separate OAuth client (a different redirect address than `login` on `:9102`), so the dashboard's "Exporters" page may show one more row; you can revoke the old one.
 
 The page only answers on `localhost` / IP addresses (DNS rebinding protection); add any other host name to `UI_ALLOWED_HOSTS`. If the port is published somewhere other than `127.0.0.1:9101`, set `UI_URL`. Natively the exporter listens on `127.0.0.1` only; `LISTEN_HOST=0.0.0.0` opens the page to your LAN (the Docker image already listens on `0.0.0.0` inside the container, and compose publishes the port on `127.0.0.1`).
 
@@ -212,7 +212,7 @@ releases/       releases.json: the release list the status page checks (signed t
 test/           vitest, fixtures/ (recorded MQTT, serials masked)
 deploy/         docker-compose.yml (prod), docker-compose.dev.yml (watch)
 packaging/      service installers for the single-file binaries
-docs/           DB_CONTRACT.md, DECODER.md, DECODER_PACKS.md, DATA_CATALOG.md, UPDATES.md, NATIVE.md; uk/ — Ukrainian
+docs/           DB_CONTRACT.md, DECODER.md, DECODER_PACKS.md, DATA_CATALOG.md, UPDATES.md, NATIVE.md, DESIGN.md; uk/ — Ukrainian
 .github/        CI, image (ghcr.io) and binaries, with build provenance
 scripts/        build-sea.mjs (binaries), check-deps.mjs (exact versions + quarantine)
 ```

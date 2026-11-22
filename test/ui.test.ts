@@ -59,6 +59,7 @@ describe('status page server', () => {
     expect(await res.text()).toContain('/app.js');
     expect((await fetch(`${base}/app.js`)).status).toBe(200);
     expect((await fetch(`${base}/app.css`)).status).toBe(200);
+    expect((await fetch(`${base}/tokens.css`)).status).toBe(200);
   });
 
   it('serves the status JSON', async () => {

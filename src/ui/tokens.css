@@ -1,0 +1,187 @@
+/*
+ * Energy Monitor Hub design tokens (docs/DESIGN.md).
+ *
+ * The single source of truth for colors, type, spacing and corners, shared by the exporter's
+ * status page (served as /tokens.css) and the dashboard (a copy in its web/src/design/,
+ * kept identical by `make design-sync` there). Plain CSS custom properties, no build step.
+ *
+ * Names are chosen not to collide with Tailwind's theme variables (--text-*, --radius-*,
+ * --font-*) or shadcn/ui's (--card, --muted, --border, --primary...): the dashboard maps
+ * shadcn onto these.
+ *
+ * Dark follows the OS unless data-theme on <html> forces light or dark. The dark values are
+ * written twice (media query and [data-theme='dark']): keep both blocks the same.
+ */
+:root {
+  color-scheme: light;
+
+  /* Brand */
+  --brand: #2a78d6;
+  --brand-strong: #1d5fb0;
+  --brand-fg: #ffffff;
+  --brand-wash: rgba(42, 120, 214, 0.1);
+
+  /* Neutrals: page, raised surfaces, text, lines */
+  --page: #f7f7f5;
+  --surface-1: #ffffff;
+  --surface-2: #f0efec;
+  --text-primary: #141413;
+  --text-secondary: #52514e;
+  --text-muted: #7c7a74;
+  --line: rgba(20, 20, 19, 0.1);
+  --line-strong: rgba(20, 20, 19, 0.18);
+
+  /* States: a strong color for icons, lines and dots, and a soft pair for badges and banners */
+  --good: #1a9a3a;
+  --good-bg: #e5f4e8;
+  --good-fg: #146c2e;
+  --warning: #c98a00;
+  --warning-bg: #fbf0d5;
+  --warning-fg: #7a5200;
+  --critical: #d03b3b;
+  --critical-bg: #fbe6e6;
+  --critical-fg: #a32424;
+  --info-bg: rgba(42, 120, 214, 0.1);
+  --info-fg: #1d5aa6;
+  --idle-bg: #efeeeb;
+  --idle-fg: #52514e;
+
+  /* Charts: series in this order, grid and axes, outage shading, diverging scale */
+  --series-1: #2a78d6;
+  --series-2: #eb6834;
+  --series-3: #1baf7a;
+  --series-4: #8a5cd6;
+  --series-5: #c98a00;
+  --series-6: #d6458f;
+  --series-dim: #cfcdc5;
+  --grid: #e5e4de;
+  --axis: #c3c2b7;
+  --outage: rgba(137, 135, 129, 0.14);
+  --div-low: #2a78d6;
+  --div-mid: #f0efec;
+  --div-high: #e34948;
+
+  /* Type: system fonts only, no web font downloads */
+  --font-ui: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-code: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --fs-xs: 12px;
+  --fs-sm: 13px;
+  --fs-base: 14px;
+  --fs-md: 15px;
+  --fs-lg: 18px;
+  --fs-xl: 22px;
+  --fs-stat: 28px;
+  --lh-tight: 1.2;
+  --lh-normal: 1.45;
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+
+  /* Spacing: a 4px scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+
+  /* Corners and elevation */
+  --corner-sm: 6px;
+  --corner-md: 8px;
+  --corner-lg: 12px;
+  --corner-pill: 999px;
+  --shadow-1: 0 1px 2px rgba(20, 20, 19, 0.06);
+  --shadow-2: 0 4px 16px rgba(20, 20, 19, 0.12);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --brand: #3f8ce8;
+    --brand-strong: #6aa6ee;
+    --brand-fg: #ffffff;
+    --brand-wash: rgba(63, 140, 232, 0.16);
+    --page: #0e0e0d;
+    --surface-1: #1a1a19;
+    --surface-2: #2a2a28;
+    --text-primary: #f0efec;
+    --text-secondary: #c3c2b7;
+    --text-muted: #8f8d86;
+    --line: rgba(255, 255, 255, 0.1);
+    --line-strong: rgba(255, 255, 255, 0.18);
+    --good: #3cb862;
+    --good-bg: #13301d;
+    --good-fg: #84dba0;
+    --warning: #d99a1a;
+    --warning-bg: #33270b;
+    --warning-fg: #f2c55c;
+    --critical: #e66767;
+    --critical-bg: #3a1616;
+    --critical-fg: #ff9e9e;
+    --info-bg: rgba(63, 140, 232, 0.16);
+    --info-fg: #93bff4;
+    --idle-bg: #2a2a28;
+    --idle-fg: #c3c2b7;
+    --series-1: #3987e5;
+    --series-2: #d95926;
+    --series-3: #199e70;
+    --series-4: #9d74e3;
+    --series-5: #d99a1a;
+    --series-6: #e05a9d;
+    --series-dim: #474743;
+    --grid: #2a2a28;
+    --axis: #383835;
+    --outage: rgba(195, 194, 183, 0.1);
+    --div-low: #3987e5;
+    --div-mid: #383835;
+    --div-high: #e66767;
+    --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --shadow-2: 0 4px 16px rgba(0, 0, 0, 0.5);
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --brand: #3f8ce8;
+  --brand-strong: #6aa6ee;
+  --brand-fg: #ffffff;
+  --brand-wash: rgba(63, 140, 232, 0.16);
+  --page: #0e0e0d;
+  --surface-1: #1a1a19;
+  --surface-2: #2a2a28;
+  --text-primary: #f0efec;
+  --text-secondary: #c3c2b7;
+  --text-muted: #8f8d86;
+  --line: rgba(255, 255, 255, 0.1);
+  --line-strong: rgba(255, 255, 255, 0.18);
+  --good: #3cb862;
+  --good-bg: #13301d;
+  --good-fg: #84dba0;
+  --warning: #d99a1a;
+  --warning-bg: #33270b;
+  --warning-fg: #f2c55c;
+  --critical: #e66767;
+  --critical-bg: #3a1616;
+  --critical-fg: #ff9e9e;
+  --info-bg: rgba(63, 140, 232, 0.16);
+  --info-fg: #93bff4;
+  --idle-bg: #2a2a28;
+  --idle-fg: #c3c2b7;
+  --series-1: #3987e5;
+  --series-2: #d95926;
+  --series-3: #199e70;
+  --series-4: #9d74e3;
+  --series-5: #d99a1a;
+  --series-6: #e05a9d;
+  --series-dim: #474743;
+  --grid: #2a2a28;
+  --axis: #383835;
+  --outage: rgba(195, 194, 183, 0.1);
+  --div-low: #3987e5;
+  --div-mid: #383835;
+  --div-high: #e66767;
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-2: 0 4px 16px rgba(0, 0, 0, 0.5);
+}

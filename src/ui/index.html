@@ -5,12 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light dark" />
     <title>Exporter status</title>
+    <link rel="stylesheet" href="/tokens.css" />
     <link rel="stylesheet" href="/app.css" />
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M9 1 3 9h4l-1 6 6-8H8z' fill='%23d97706'/%3E%3C/svg%3E" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 2.5 27.7 9.25v13.5L16 29.5 4.3 22.75V9.25Z' fill='%232a78d6' stroke='%232a78d6' stroke-width='3' stroke-linejoin='round'/%3E%3Cpath d='M17.6 8 11 17.4h4.6L14.4 24 21 14.6h-4.6Z' fill='%23fff'/%3E%3C/svg%3E" />
   </head>
   <body>
     <header>
       <div>
+        <div class="brand">
+          <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+            <path class="brand-mark-hex" d="M16 2.5 27.7 9.25v13.5L16 29.5 4.3 22.75V9.25Z" />
+            <path class="brand-mark-bolt" d="M17.6 8 11 17.4h4.6L14.4 24 21 14.6h-4.6Z" />
+          </svg>
+          <span class="brand-name">Energy Monitor <span>Hub</span></span>
+        </div>
         <h1 data-i18n="title">Exporter status</h1>
         <p class="muted" id="device">…</p>
       </div>

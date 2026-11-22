@@ -20,7 +20,7 @@ export function selfCheck(mode: string): number {
   }
   try {
     lookupType('BMSHeartBeatReport');
-    for (const f of ['index.html', 'app.js', 'app.css']) {
+    for (const f of ['index.html', 'app.js', 'app.css', 'tokens.css']) {
       if (!readAsset(`ui/${f}`, () => new URL(`./ui/${f}`, import.meta.url))) throw new Error(`ui/${f} is missing`);
     }
     console.log(`ok ${exporterVersion()} ${process.platform}-${process.arch}${inExecutable() ? ' (single executable)' : ''}`);

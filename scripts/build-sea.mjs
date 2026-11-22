@@ -47,6 +47,7 @@ writeFileSync(
         'ui/index.html': asset('src/ui/index.html'),
         'ui/app.js': asset('src/ui/app.js'),
         'ui/app.css': asset('src/ui/app.css'),
+        'ui/tokens.css': asset('src/ui/tokens.css'),
       },
     },
     null,
