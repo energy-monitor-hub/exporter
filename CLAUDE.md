@@ -29,4 +29,5 @@ Everything that gets installed has an exact version. Never `latest`, `^`, `~`, `
 ## Images and releases
 
 - `exporter-image.yml`: `ghcr.io/<owner>/<repo>:main` + `:sha-<commit>` on main (3 versions kept), `:vX.Y.Z` on tags (kept), each digest with a build provenance attestation. `exporter-binaries.yml`: single-file binaries, attested and attached to the release on tags.
+- Release checklist (details in docs/UPDATES.md): (1) PR bumping `package.json` + lockfile version, merged before any tag; (2) the maintainer tags `vX.Y.Z` on that merge commit (sessions can't push tags; a wrong tag must be deleted, not only its release); (3) check the `exporter-image` tag run, take the digest from its summary, confirm the attestation (`gh api repos/<owner>/<repo>/attestations/<digest>`); (4) PR adding the `releases/releases.json` entry, channel `beta`; (5) the dashboard bumps the submodule so its deploy signs it; (6) `stable` after the 7-day quarantine.
 - `releases/releases.json` and `decoders/` are data; the dashboard's deploy signs and publishes them (docs/UPDATES.md, docs/DECODER_PACKS.md).

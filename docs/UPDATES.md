@@ -32,8 +32,11 @@ A digest never changes, so a pinned exporter stays exactly as it is until you ch
 
 ## Releasing (maintainer)
 
-1. Bump `version` in `package.json`, merge to `main`.
-2. Tag the merge commit `vX.Y.Z` and push the tag. `exporter-image.yml` checks the tag against
+1. Bump `version` in `package.json` (and the lockfile: `npm version X.Y.Z --no-git-tag-version`),
+   merge to `main`. Do this first: a tag on a commit with another version fails the image build.
+2. Tag the merge commit `vX.Y.Z` and push the tag (or create the GitHub release with a new tag on
+   `main`). To redo a wrong tag, delete the **tag** too, not only the release: a release published
+   again on an existing tag reuses it and builds nothing. `exporter-image.yml` checks the tag against
    `package.json`, builds amd64 + arm64 with **SLSA build provenance**, pushes
    `exporter:vX.Y.Z` (release tags are never cleaned up) and prints the digest and a ready
    `releases.json` entry in the run summary.

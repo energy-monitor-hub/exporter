@@ -1,6 +1,15 @@
 {
   "releases": [
     {
+      "version": "0.1.1",
+      "digest": "sha256:2a18e83d9c649cd3b83b0aed008848ec1c5473d04511e0038cc7cbf7b505db6a",
+      "channel": "beta",
+      "published_at": "2026-11-22T21:52:57.000Z",
+      "min_db_migration": "20261122172000",
+      "notes": "Status page: readable layout on narrow cards, shared design tokens; setup endpoints stay local when running natively.",
+      "revoked": false
+    },
+    {
       "version": "0.1.0",
       "digest": "sha256:e45e8545f5e0afc63c61774555762a859c27b32f9fa0720568b9e5f0b705f6f2",
       "channel": "beta",
