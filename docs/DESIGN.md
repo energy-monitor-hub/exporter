@@ -65,4 +65,4 @@ Each pattern exists in both interfaces with the same look.
 
 - Name: **Energy Monitor Hub**, brand and device agnostic.
 - Mark: a hexagon (a battery cell, a hub) with a lightning bolt, filled with `--brand`; the bolt is `--brand-fg`. It works from 16 px (favicon) up.
-- Accent: blue (`#2a78d6` light, `#3f8ce8` dark). It reads well in both themes and is not a state color, so it is never mistaken for "good" or "warning". The `/design` page can preview other candidates.
+- Accent: blue (`#2671cc` light, `#3f8ce8` dark; white text on it in light, dark ink in dark, both above 4.5:1). It reads well in both themes and is not a state color, so it is never mistaken for "good" or "warning". The `/design` page can preview other candidates.
