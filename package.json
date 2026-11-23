@@ -1,6 +1,6 @@
 {
   "name": "energy-monitor-hub-exporter",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "private": true,
   "description": "Local telemetry exporter for EcoFlow stations (private MQTT, protobuf) -> your Supabase. Credentials stay on your machine.",
   "type": "module",
