@@ -10,7 +10,8 @@ export interface Sink {
 
 /**
  * Supabase writer, as the signed-in user (RLS: own devices only). Samples are upserted with ignoreDuplicates on their primary
- * key, outages are upserted / updated by (device_id, started_at), so re-sending is harmless.
+ * key, outages are upserted / updated by (device_id, started_at), gaps are upserted with
+ * ignoreDuplicates on (device_id, started_at), so re-sending is harmless.
  */
 export class SupabaseSink implements Sink {
   private readonly devices = new Map<string, string>();
@@ -33,6 +34,9 @@ export class SupabaseSink implements Sink {
         i = j;
       } else if (op.kind === 'state') {
         await this.sendState(op);
+        i++;
+      } else if (op.kind === 'gap') {
+        await this.sendGap(op);
         i++;
       } else {
         await this.sendOutage(op);
@@ -67,12 +71,26 @@ export class SupabaseSink implements Sink {
     if (error) throw new Error(`device_state: ${error.message}`);
   }
 
+  private async sendGap(op: Extract<Op, { kind: 'gap' }>): Promise<void> {
+    const device_id = await this.deviceId(op.sn);
+    const { error } = await this.db
+      .from('exporter_gaps')
+      .upsert(
+        { device_id, started_at: op.started_at, ended_at: op.ended_at, reason: op.reason, slept_s: op.slept_s },
+        { onConflict: 'device_id,started_at', ignoreDuplicates: true },
+      );
+    if (error) throw new Error(`exporter_gaps: ${error.message}`);
+  }
+
   private async sendOutage(op: Extract<Op, { kind: 'outage_start' | 'outage_end' }>): Promise<void> {
     const device_id = await this.deviceId(op.sn);
     if (op.kind === 'outage_start') {
       const { error } = await this.db
         .from('outages')
-        .upsert({ device_id, started_at: op.started_at, soc_start_pct: op.soc_start_pct }, { onConflict: 'device_id,started_at', ignoreDuplicates: true });
+        .upsert(
+          { device_id, started_at: op.started_at, soc_start_pct: op.soc_start_pct, ...(op.start_latest_at ? { start_latest_at: op.start_latest_at } : {}) },
+          { onConflict: 'device_id,started_at', ignoreDuplicates: true },
+        );
       if (error) throw new Error(`outages (start): ${error.message}`);
       return;
     }
@@ -84,6 +102,11 @@ export class SupabaseSink implements Sink {
         ended_at: op.ended_at,
         soc_end_pct: op.soc_end_pct,
         energy_out_wh: op.energy_out_wh,
+        // Ops queued by older versions lack these: leave the row's values alone.
+        ...(op.soc_start_pct !== undefined ? { soc_start_pct: op.soc_start_pct } : {}),
+        ...(op.start_latest_at !== undefined ? { start_latest_at: op.start_latest_at } : {}),
+        ...(op.end_earliest_at !== undefined ? { end_earliest_at: op.end_earliest_at } : {}),
+        ...(op.inferred ? { inferred: true } : {}),
       },
       { onConflict: 'device_id,started_at' },
     );

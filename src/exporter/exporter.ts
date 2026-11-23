@@ -2,6 +2,7 @@ import type { DeviceAdapter, Reading } from '../model/types.js';
 import type { Op, PackRow, TelemetryRow } from './ops.js';
 import type { Outbox } from './outbox.js';
 import { OutageTracker } from './outage.js';
+import type { SuspendLog } from './suspend.js';
 
 export interface ExporterOptions {
   sn: string;
@@ -9,6 +10,8 @@ export interface ExporterOptions {
   staleAfterMs?: number;
   /** How often the full device state (public.device_state) is written. Default 60 s. */
   stateIntervalMs?: number;
+  /** Tells a gap while the host slept from one while the exporter ran without data. */
+  suspends?: SuspendLog;
 }
 
 /**
@@ -27,7 +30,7 @@ export class Exporter {
     private readonly outbox: Outbox,
     private readonly opts: ExporterOptions,
   ) {
-    this.outages = new OutageTracker(opts.sn, outbox);
+    this.outages = new OutageTracker(opts.sn, outbox, opts.suspends);
     this.staleAfterMs = opts.staleAfterMs ?? 3 * 60_000;
   }
 
@@ -38,10 +41,9 @@ export class Exporter {
   onMessage(payload: Uint8Array, at: Date): void {
     const before = this.adapter.lastMessageAt;
     const events = this.adapter.apply(payload, at);
-    const ops: Op[] = [];
-    for (const e of events) ops.push(...this.outages.onEvent(e, this.adapter.reading()?.telemetry.socPct ?? null));
-    if (this.adapter.lastMessageAt !== before) this.outages.seen(at, this.adapter.gridPresent);
-    this.outbox.push(ops);
+    if (this.adapter.lastMessageAt === before && events.length === 0) return;
+    const soc = () => this.adapter.reading()?.telemetry.socPct ?? null;
+    this.outbox.push(this.outages.message(at, events, this.adapter.gridPresent, soc));
   }
 
   /** Write one snapshot at `now`. Returns false if there is nothing fresh to write. */
@@ -53,8 +55,8 @@ export class Exporter {
     // ts is the primary key: two samples in the same millisecond would collide.
     if (this.lastSampleAt && now.getTime() <= this.lastSampleAt.getTime()) return false;
     this.lastSampleAt = now;
-    this.outages.sample(now, reading.telemetry.wattsOut);
-    const ops = toOps(this.opts.sn, now.toISOString(), reading);
+    const ops = this.outages.sample(now, reading.telemetry.wattsOut, reading.telemetry.socPct, reading.telemetry.gridPresent);
+    ops.push(...toOps(this.opts.sn, now.toISOString(), reading));
     const every = this.opts.stateIntervalMs ?? 60_000;
     if (this.adapter.state && (!this.lastStateAt || now.getTime() - this.lastStateAt.getTime() >= every)) {
       const state = this.adapter.state();

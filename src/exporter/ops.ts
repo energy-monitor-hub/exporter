@@ -1,3 +1,4 @@
+import type { GapReason } from '../db/types.js';
 import type { DeviceState, Extra } from '../model/types.js';
 
 /** Rows as they go to Supabase, minus device_id (resolved from `sn` when sending). */
@@ -36,7 +37,12 @@ export type Op =
   | { kind: 'pack'; sn: string; row: PackRow }
   /** Every decoded field, upserted into public.device_state (one row per device). */
   | { kind: 'state'; sn: string; updated_at: string; state: DeviceState }
-  | { kind: 'outage_start'; sn: string; started_at: string; soc_start_pct: number | null }
+  /** `start_latest_at`: set when the exporter was blind at the moment (start is a window). */
+  | { kind: 'outage_start'; sn: string; started_at: string; soc_start_pct: number | null; start_latest_at?: string }
+  /**
+   * Closes (or writes whole) an outage. The optional fields are missing in ops queued by
+   * older versions; then they are left as they are in the row.
+   */
   | {
       kind: 'outage_end';
       sn: string;
@@ -44,4 +50,11 @@ export type Op =
       ended_at: string;
       soc_end_pct: number | null;
       energy_out_wh: number | null;
-    };
+      soc_start_pct?: number | null;
+      start_latest_at?: string | null;
+      end_earliest_at?: string | null;
+      /** Not seen: inferred from a battery drop across a gap. */
+      inferred?: boolean;
+    }
+  /** A stretch without data from the device, written once data is back. */
+  | { kind: 'gap'; sn: string; started_at: string; ended_at: string; reason: GapReason; slept_s: number | null };

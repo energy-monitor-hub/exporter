@@ -30,7 +30,8 @@
 |---|---|---|---|
 | `telemetry_raw` | upsert, `ignoreDuplicates` | `device_id, ts, soc_pct, watts_in, watts_out, ac_in_voltage_v, ac_in_freq_hz, ac_out_freq_hz, grid_present, extra (jsonb)` та інші колонки з `src/db/types.ts` (`TelemetryRawInsert`) | `(device_id, ts)` |
 | `pack_raw` | upsert, `ignoreDuplicates` | `device_id, pack, ts, soc_pct, soh_pct, cycles, cell_voltages_mv int[], cell_temps_c int[], min_mos_temp_c, max_mos_temp_c, balance_state, extra (jsonb)` (`PackRawInsert`); індекс масиву = номер комірки, `pack` 0 = основний блок | `(device_id, pack, ts)` |
-| `outages` | upsert на початку, оновлення в кінці; select (сторінка стану) | `device_id, started_at, ended_at, soc_start_pct, soc_end_pct, energy_out_wh` (`OutageRow`) | `(device_id, started_at)` |
+| `outages` | upsert на початку, оновлення в кінці; select (сторінка стану) | `device_id, started_at, ended_at, soc_start_pct, soc_end_pct, energy_out_wh` (`OutageRow`); з `20261123080000` також `start_latest_at, end_earliest_at, inferred` (вікна початку / кінця, коли експортер був сліпий) | `(device_id, started_at)` |
+| `exporter_gaps` | upsert, `ignoreDuplicates` (з `20261123080000`) | `device_id, started_at, ended_at, reason` (`sleep` / `offline` / `stopped`), `slept_s` (`ExporterGapRow`) | `(device_id, started_at)` |
 | `device_state` | upsert | `device_id, updated_at, state (jsonb)` | `(device_id)` |
 | `consents` | select, insert | `purpose` (`model_census` / `raw_sample_upload`), `text_version, text_sha256, source` (`exporter`), `device_id`; читає `withdrawn_at` | немає |
 

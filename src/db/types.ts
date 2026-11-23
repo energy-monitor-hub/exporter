@@ -104,6 +104,25 @@ export interface OutageRow {
   soc_start_pct: number | null;
   soc_end_pct: number | null;
   energy_out_wh: number | null;
+  /** Latest possible start; null when started_at is exact (the exporter saw the moment). */
+  start_latest_at: string | null;
+  /** Earliest possible end; null when ended_at is exact. */
+  end_earliest_at: string | null;
+  /** Not seen at all: inferred from a battery drop while the exporter was blind. */
+  inferred: boolean;
+}
+
+/** Why the exporter had no data from the device for a while. */
+export type GapReason = 'sleep' | 'offline' | 'stopped';
+
+/** public.exporter_gaps: a stretch the exporter could not see the device. */
+export interface ExporterGapRow {
+  device_id: string;
+  started_at: string;
+  ended_at: string;
+  reason: GapReason;
+  /** Seconds the host was suspended within the gap (null when unknown). */
+  slept_s: number | null;
 }
 
 /** Row of public.telemetry_series(device, from, to, bucket_s): bucketed averages for the dashboard. */

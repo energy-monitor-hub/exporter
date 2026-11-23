@@ -115,6 +115,8 @@ const STRINGS = {
     absent: 'Absent',
     unknown: 'Unknown',
     ongoing: 'ongoing',
+    inferred: 'not seen: inferred from a battery drop while the exporter was asleep or offline',
+    approx: 'The exporter was asleep or offline at that moment: the time is somewhere in this window.',
     never: 'never',
     ago: '{0} ago',
     updated: 'Updated {0}',
@@ -276,6 +278,8 @@ const STRINGS = {
     absent: 'Немає',
     unknown: 'Невідомо',
     ongoing: 'триває',
+    inferred: 'не бачили: виведено з падіння заряду, поки експортер спав чи був без зв’язку',
+    approx: 'У цей момент експортер спав або був без зв’язку: час десь у цьому вікні.',
     never: 'ще не було',
     ago: '{0} тому',
     updated: 'Оновлено {0}',
@@ -481,8 +485,15 @@ function render(s) {
   // grid
   const g = s.grid.present;
   badge($('grid-badge'), g === true ? 'ok' : g === false ? 'bad' : 'idle', t(g === true ? 'present' : g === false ? 'absent' : 'unknown'));
-  $('outage-since').textContent = s.grid.openOutageSince ? time(s.grid.openOutageSince) : '—';
-  $('outage-for').textContent = s.grid.openOutageSince ? duration(now - Date.parse(s.grid.openOutageSince)) : '—';
+  const since = s.grid.openOutageSince;
+  const latest = s.grid.openOutageSinceLatest;
+  $('outage-since').textContent = since ? (latest ? `${time(since)} – ${time(latest)}` : time(since)) : '—';
+  $('outage-since').title = latest ? t('approx') : '';
+  $('outage-for').textContent = !since
+    ? '—'
+    : latest
+      ? `${duration(now - Date.parse(latest))}–${duration(now - Date.parse(since))}`
+      : duration(now - Date.parse(since));
 
   // latest values
   const r = s.reading;
@@ -525,9 +536,17 @@ function render(s) {
     ...rows.map((row) => {
       const tr = document.createElement('tr');
       const end = row.ended_at ? Date.parse(row.ended_at) : now;
-      const dur = duration(end - Date.parse(row.started_at)) + (row.ended_at ? '' : ` (${t('ongoing')})`);
+      // Where the exporter was blind the times are a window: a range of durations, "≈" start.
+      const approx = row.inferred || row.start_latest_at !== null || row.end_earliest_at !== null;
+      const longest = end - Date.parse(row.started_at);
+      const known = (row.end_earliest_at ? Date.parse(row.end_earliest_at) : end) - Date.parse(row.start_latest_at ?? row.started_at);
+      const dur =
+        (row.inferred ? `≤ ${duration(longest)}` : approx ? `${duration(Math.max(0, known))}–${duration(longest)}` : duration(longest)) +
+        (row.ended_at ? '' : ` (${t('ongoing')})`);
       const soc = row.soc_start_pct === null ? '—' : `${num(row.soc_start_pct)} → ${row.soc_end_pct === null ? '…' : num(row.soc_end_pct)} %`;
-      tr.append(cell(time(row.started_at)), cell(dur), cell(soc, 'num'), cell(row.energy_out_wh === null ? '—' : `${num(row.energy_out_wh)} Wh`, 'num'));
+      const start = cell((approx ? '≈ ' : '') + time(row.started_at));
+      if (approx) start.title = row.inferred ? t('inferred') : t('approx');
+      tr.append(start, cell(dur), cell(soc, 'num'), cell(row.energy_out_wh === null ? '—' : `${num(row.energy_out_wh)} Wh`, 'num'));
       return tr;
     }),
   );

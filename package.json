@@ -52,6 +52,6 @@
     "url": "https://github.com/energy-monitor-hub/exporter.git"
   },
   "dbContract": {
-    "minMigration": "20261122172000"
+    "minMigration": "20261123080000"
   }
 }

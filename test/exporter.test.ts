@@ -7,6 +7,8 @@ import type { Op } from '../src/exporter/ops.js';
 import { OutageTracker } from '../src/exporter/outage.js';
 import { Outbox } from '../src/exporter/outbox.js';
 import { SupabaseSink, type Sink } from '../src/exporter/sink.js';
+import { SuspendDetector } from '../src/exporter/suspend.js';
+import type { DeviceEvent } from '../src/model/types.js';
 import { loadSession } from './helpers/fixtures.js';
 
 const quiet = { info: () => {}, warn: () => {}, error: () => {} };
@@ -81,6 +83,23 @@ describe('Exporter on the live recording', () => {
     const start = ops(outbox).find((o) => o.kind === 'outage_start') as Extract<Op, { kind: 'outage_start' }>;
     expect(start.started_at < '2026-11-21T18:40:40').toBe(true);
     expect(start.started_at > '2026-11-21T18:40:30').toBe(true);
+    // ...and only knows it happened before it was seen gone
+    expect(start.start_latest_at).toBe('2026-11-21T18:44:34.149Z');
+    const gap = ops(outbox).find((o) => o.kind === 'gap' && o.ended_at === '2026-11-21T18:44:34.149Z');
+    expect(gap).toMatchObject({ reason: 'offline', slept_s: null });
+  });
+
+  it('records the gaps of the recording without inventing outages', () => {
+    const outbox = new Outbox(':memory:');
+    replay(outbox);
+    const gaps = ops(outbox).filter((o) => o.kind === 'gap');
+    expect(gaps.map((g) => g.started_at)).toEqual([
+      '2026-11-21T17:14:01.013Z',
+      '2026-11-21T17:49:52.749Z',
+      '2026-11-21T18:12:55.562Z',
+      '2026-11-21T18:42:29.410Z',
+    ]);
+    expect(ops(outbox).filter((o) => o.kind.startsWith('outage'))).toHaveLength(2);
   });
 
   it('does not write samples from stale data', () => {
@@ -109,6 +128,8 @@ describe('OutageTracker', () => {
       ended_at: '2026-01-01T10:06:00.000Z',
       soc_end_pct: 70,
       energy_out_wh: 10, // 100 W × 6 min
+      start_latest_at: null,
+      end_earliest_at: null,
     });
     expect(new OutageTracker('SN', outbox).current).toBeUndefined();
   });
@@ -118,6 +139,117 @@ describe('OutageTracker', () => {
     expect(t.onEvent({ type: 'grid', present: false, at: new Date(0), initial: true }, 50)).toHaveLength(1);
     expect(t.onEvent({ type: 'grid', present: true, at: new Date(1000), initial: true }, 50)).toHaveLength(1);
     expect(t.onEvent({ type: 'grid', present: true, at: new Date(2000), initial: false }, 50)).toHaveLength(0);
+  });
+});
+
+describe('OutageTracker gaps', () => {
+  const T = (min: number) => new Date(Date.UTC(2026, 0, 1, 10, 0) + min * 60_000);
+  const grid = (present: boolean, at: Date): DeviceEvent => ({ type: 'grid', present, at, initial: false });
+  const sleptAll = { sleptWithin: (a: number, b: number) => b - a };
+  const sleptNone = { sleptWithin: () => 0 };
+
+  it('marks a gap while the host slept, and gives a missed start a window', () => {
+    const t = new OutageTracker('SN', new Outbox(':memory:'), sleptAll);
+    t.message(T(0), [grid(true, T(0))], true, () => 80);
+    t.message(T(1), [], true, () => 80);
+    const ops = t.message(T(61), [grid(false, T(61))], false, () => 60);
+    expect(ops).toEqual([
+      { kind: 'gap', sn: 'SN', started_at: T(1).toISOString(), ended_at: T(61).toISOString(), reason: 'sleep', slept_s: 3600 },
+      { kind: 'outage_start', sn: 'SN', started_at: T(1).toISOString(), soc_start_pct: 60, start_latest_at: T(61).toISOString() },
+    ]);
+    expect(t.current?.startLatestAt).toBe(T(61).toISOString());
+  });
+
+  it('gives an end seen only after a gap a window', () => {
+    const t = new OutageTracker('SN', new Outbox(':memory:'), sleptNone);
+    t.message(T(0), [grid(false, T(0))], false, () => 80);
+    t.message(T(5), [], false, () => 75);
+    const ops = t.message(T(65), [grid(true, T(65))], true, () => 50);
+    expect(ops[0]).toMatchObject({ kind: 'gap', reason: 'offline', slept_s: 0 });
+    expect(ops[1]).toMatchObject({
+      kind: 'outage_end',
+      started_at: T(0).toISOString(),
+      start_latest_at: null,
+      end_earliest_at: T(5).toISOString(),
+      ended_at: T(65).toISOString(),
+    });
+  });
+
+  it('a grid change well after a gap is exact', () => {
+    const t = new OutageTracker('SN', new Outbox(':memory:'), sleptNone);
+    t.message(T(0), [], true, () => 80);
+    t.message(T(10), [], true, () => 80);
+    t.message(T(11), [], true, () => 80);
+    const ops = t.message(T(12), [grid(false, T(12))], false, () => 80);
+    expect(ops).toEqual([{ kind: 'outage_start', sn: 'SN', started_at: T(12).toISOString(), soc_start_pct: 80 }]);
+  });
+
+  it('infers an outage nobody saw from a battery drop across a gap', () => {
+    const t = new OutageTracker('SN', new Outbox(':memory:'), sleptAll);
+    t.message(T(0), [grid(true, T(0))], true, () => 90);
+    expect(t.message(T(180), [], true, () => 90)).toMatchObject([{ kind: 'gap', reason: 'sleep' }]);
+    expect(t.sample(T(180), 50, 90, true)).toEqual([]); // SoC not confirmed yet
+    expect(t.sample(T(181), 50, 70, true)).toEqual([
+      {
+        kind: 'outage_end',
+        sn: 'SN',
+        started_at: T(0).toISOString(),
+        ended_at: T(180).toISOString(),
+        soc_start_pct: 90,
+        soc_end_pct: 70,
+        energy_out_wh: null,
+        start_latest_at: T(180).toISOString(),
+        end_earliest_at: T(0).toISOString(),
+        inferred: true,
+      },
+    ]);
+    expect(t.sample(T(182), 50, 70, true)).toEqual([]); // once
+  });
+
+  it('does not infer an outage from standby drain or a seen grid change', () => {
+    const a = new OutageTracker('SN', new Outbox(':memory:'), sleptAll);
+    a.message(T(0), [], true, () => 90);
+    a.message(T(600), [], true, () => 88); // 10 h, -2 %
+    expect(a.sample(T(601), 5, 87.5, true)).toEqual([]);
+
+    const b = new OutageTracker('SN', new Outbox(':memory:'), sleptAll);
+    b.message(T(0), [grid(true, T(0))], true, () => 90);
+    b.message(T(60), [grid(false, T(60))], false, () => 60);
+    expect(b.sample(T(61), 50, 60, false)).toEqual([]);
+  });
+
+  it('counts the time the exporter was not running as a stopped gap', () => {
+    const outbox = new Outbox(':memory:');
+    const a = new OutageTracker('SN', outbox, sleptNone);
+    a.message(T(0), [grid(false, T(0))], false, () => 80);
+    const b = new OutageTracker('SN', outbox, sleptNone); // restart 2 h later
+    const ops = b.message(T(120), [{ type: 'grid', present: true, at: T(120), initial: true }], true, () => 40);
+    expect(ops[0]).toMatchObject({ kind: 'gap', reason: 'stopped', slept_s: null, started_at: T(0).toISOString() });
+    expect(ops[1]).toMatchObject({ kind: 'outage_end', end_earliest_at: T(0).toISOString(), ended_at: T(120).toISOString() });
+    // "last seen" is per device
+    expect(new OutageTracker('OTHER', outbox).message(T(240), [], true, () => 40)).toEqual([]);
+  });
+});
+
+describe('SuspendDetector', () => {
+  it('notices a tick that came late and the wall clock running ahead of the monotonic one', () => {
+    let wall = 0;
+    let mono = 0;
+    const d = new SuspendDetector({ tickMs: 5_000, slackMs: 20_000, clocks: { wall: () => wall, mono: () => mono } });
+    const step = (w: number, m: number) => {
+      wall += w;
+      mono += m;
+      d.tick();
+    };
+    step(5_000, 5_000);
+    step(5_500, 5_500); // a bit late: nothing
+    expect(d.recent).toEqual([]);
+    step(3_605_000, 5_000); // monotonic clock stood still for an hour (macOS, Linux)
+    expect(d.recent).toEqual([{ from: 15_500, to: 3_615_500 }]);
+    step(605_000, 605_000); // VM whose monotonic clock kept going: the timer fired late
+    expect(d.recent[1]).toEqual({ from: 3_620_500, to: 4_220_500 }); // one tick of it was lived
+    expect(d.sleptWithin(0, 3_615_500)).toBe(3_600_000);
+    expect(d.sleptWithin(3_000_000, 3_700_000)).toBe(615_500 + 79_500);
   });
 });
 
@@ -186,6 +318,36 @@ describe('SupabaseSink', () => {
     ]);
     expect(calls[1]!.opts).toEqual({ onConflict: 'device_id,ts', ignoreDuplicates: true });
     expect(calls[2]!.opts).toEqual({ onConflict: 'device_id,started_at' });
+    // an op queued by an older version leaves the new columns alone
+    expect(calls[2]!.rows).toEqual({ device_id: 'dev-1', started_at: 's', ended_at: 'e', soc_end_pct: 5, energy_out_wh: 1 });
+  });
+
+  it('writes gaps and outage windows', async () => {
+    const calls: { table: string; rows: unknown; opts: unknown }[] = [];
+    const db = {
+      rpc: async () => ({ data: 'dev-1', error: null }),
+      from: (table: string) => ({
+        upsert: async (rows: unknown, opts: unknown) => {
+          calls.push({ table, rows, opts });
+          return { error: null };
+        },
+      }),
+    } as unknown as SupabaseClient;
+    const sink = new SupabaseSink(db, () => ({ vendor: 'v', model: 'm' }));
+    await sink.send([
+      { kind: 'gap', sn: 'SN', started_at: 'a', ended_at: 'b', reason: 'sleep', slept_s: 60 },
+      { kind: 'outage_start', sn: 'SN', started_at: 'a', soc_start_pct: 9, start_latest_at: 'b' },
+      { kind: 'outage_end', sn: 'SN', started_at: 'a', ended_at: 'd', soc_end_pct: 5, energy_out_wh: null, soc_start_pct: 9, start_latest_at: 'b', end_earliest_at: 'c', inferred: true },
+    ]);
+    expect(calls).toEqual([
+      { table: 'exporter_gaps', rows: { device_id: 'dev-1', started_at: 'a', ended_at: 'b', reason: 'sleep', slept_s: 60 }, opts: { onConflict: 'device_id,started_at', ignoreDuplicates: true } },
+      { table: 'outages', rows: { device_id: 'dev-1', started_at: 'a', soc_start_pct: 9, start_latest_at: 'b' }, opts: { onConflict: 'device_id,started_at', ignoreDuplicates: true } },
+      {
+        table: 'outages',
+        rows: { device_id: 'dev-1', started_at: 'a', ended_at: 'd', soc_end_pct: 5, energy_out_wh: null, soc_start_pct: 9, start_latest_at: 'b', end_earliest_at: 'c', inferred: true },
+        opts: { onConflict: 'device_id,started_at' },
+      },
+    ]);
   });
 
   it('upserts the device state by device_id', async () => {

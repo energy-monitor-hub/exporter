@@ -13,6 +13,9 @@ export interface OutageRow {
   soc_start_pct: number | null;
   soc_end_pct: number | null;
   energy_out_wh: number | null;
+  start_latest_at: string | null;
+  end_earliest_at: string | null;
+  inferred: boolean;
 }
 
 export interface RecentOutages {
@@ -61,7 +64,7 @@ export class OutageHistory {
     try {
       const { data, error } = await this.db
         .from('outages')
-        .select('started_at, ended_at, soc_start_pct, soc_end_pct, energy_out_wh, devices!inner(sn)')
+        .select('started_at, ended_at, soc_start_pct, soc_end_pct, energy_out_wh, start_latest_at, end_earliest_at, inferred, devices!inner(sn)')
         .eq('devices.sn', sn)
         .order('started_at', { ascending: false })
         .limit(this.opts.limit ?? 5);
@@ -72,6 +75,9 @@ export class OutageHistory {
         soc_start_pct: (r.soc_start_pct as number | null) ?? null,
         soc_end_pct: (r.soc_end_pct as number | null) ?? null,
         energy_out_wh: (r.energy_out_wh as number | null) ?? null,
+        start_latest_at: (r.start_latest_at as string | null) ?? null,
+        end_earliest_at: (r.end_earliest_at as string | null) ?? null,
+        inferred: (r.inferred as boolean | null) ?? false,
       }));
       this.cache = { rows, fetchedAt: new Date(now).toISOString() };
     } catch (err) {
@@ -159,7 +165,12 @@ export async function buildStatus(d: StatusDeps) {
     db: { configured: d.dbConfigured, canLogin: d.canLogin, loginPending: d.loginPending },
     auth: auth ?? null,
     queue: d.queue(),
-    grid: { present: a?.gridPresent ?? null, openOutageSince: d.exporter?.outages.current?.startedAt ?? null },
+    grid: {
+      present: a?.gridPresent ?? null,
+      openOutageSince: d.exporter?.outages.current?.startedAt ?? null,
+      // set when the exporter was blind at the moment: the start is somewhere in between
+      openOutageSinceLatest: d.exporter?.outages.current?.startLatestAt ?? null,
+    },
     reading: readingSummary(a?.reading() ?? null),
     // Only ask Supabase while the login works; otherwise every poll would fail the same way.
     outages: d.outages && auth?.state !== 'logged-out' && auth?.state !== 'revoked' ? await d.outages.get() : null,

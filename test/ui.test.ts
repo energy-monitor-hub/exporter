@@ -236,7 +236,9 @@ describe('status summary', () => {
     const db = { from: () => chain } as unknown as SupabaseClient;
     const h = new OutageHistory(db, () => 'SN', { ttlMs: 60_000, now: () => now });
 
-    expect((await h.get()).rows).toEqual([{ started_at: 't0', ended_at: null, soc_start_pct: 90, soc_end_pct: null, energy_out_wh: null }]);
+    expect((await h.get()).rows).toEqual([
+      { started_at: 't0', ended_at: null, soc_start_pct: 90, soc_end_pct: null, energy_out_wh: null, start_latest_at: null, end_earliest_at: null, inferred: false },
+    ]);
     now = 30_000;
     await h.get();
     expect(limit).toHaveBeenCalledOnce();

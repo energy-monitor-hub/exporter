@@ -5,6 +5,7 @@ import { createDbClient } from './db/client.js';
 import { Exporter } from './exporter/exporter.js';
 import { Flusher } from './exporter/flusher.js';
 import { Outbox } from './exporter/outbox.js';
+import { SuspendDetector } from './exporter/suspend.js';
 import { SupabaseSink } from './exporter/sink.js';
 import { beginLogin, type PendingLogin } from './oauth/flow.js';
 import { OAuthSession } from './oauth/session.js';
@@ -37,6 +38,9 @@ const db = session ? createDbClient(config, () => session.getAccessToken()) : un
 if (!db) log.warn('exporter: SUPABASE_URL / SUPABASE_ANON_KEY not set; samples are only queued locally');
 
 const outbox = new Outbox(config.bufferPath);
+// Host sleep (laptop lid): gaps it causes are told apart from gaps while running.
+const suspends = new SuspendDetector();
+suspends.start();
 
 // Signed decoder packs (issue #43): data only, verified against the keys compiled in.
 let packKeys: KeyObject[] = [];
@@ -117,7 +121,7 @@ async function startSource(creds: EcoflowCredentials): Promise<void> {
   activePack = pack ? `${pack.id} v${pack.version}` : undefined;
   if (pack) log.info(`exporter: decoding with pack ${activePack}`);
   const s = createSource(config, creds, log, pack ? new PackAdapter(pack) : undefined);
-  const e = new Exporter(s.adapter, outbox, { sn: s.sn });
+  const e = new Exporter(s.adapter, outbox, { sn: s.sn, suspends });
   descriptors.set(s.sn, s.adapter.descriptor);
   s.onPayload((payload, at, topic) => {
     discovery.observe(payload); // has its own error handling
