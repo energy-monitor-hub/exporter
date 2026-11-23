@@ -1,0 +1,60 @@
+# The exporter without a clone: put this file next to your .env in an empty folder and run
+#   docker compose up -d
+# then open http://127.0.0.1:9101/ (log in, enter the EcoFlow account). New versions install
+# from the status page ("Update to vX.Y.Z"); nothing to edit or run again (docs/UPDATES.md).
+#
+# Coming from `docker run --name ecoflow-exporter ... -v ecoflow-exporter:/data`? Remove that
+# container (`docker rm -f ecoflow-exporter`) and start this: it uses the same data volume.
+#
+# A fork's image: ECOFLOW_IMAGE_REPO=ghcr.io/<you>/<repo> in .env (compose reads that file for
+# the values below too).
+name: ecoflow-exporter
+
+x-image: &image ${ECOFLOW_EXPORTER_IMAGE:-${ECOFLOW_IMAGE_REPO:-ghcr.io/energy-monitor-hub/exporter}:main}
+
+services:
+  exporter:
+    image: *image
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      HEALTH_PORT: "9101"
+      UPDATER_URL: http://updater:9103
+    volumes:
+      # queue, login token, encrypted credentials, decoder packs
+      - data:/data
+    ports:
+      # this computer only
+      - "127.0.0.1:9101:9101"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:9101/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+
+  # Installs releases from the signed list when the status page asks (see deploy/docker-compose.yml
+  # for what it may and may not do). Not wanted: ECOFLOW_UPDATER=0.
+  updater:
+    image: *image
+    command: ["node", "dist/updater/main.js"]
+    user: "0:0"
+    scale: ${ECOFLOW_UPDATER:-1}
+    environment:
+      UPDATER_STATE_DIR: /state
+      UPDATER_ATTESTATION: ${UPDATER_ATTESTATION:-require}
+    volumes:
+      - ${DOCKER_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock
+      - updater:/state
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    restart: unless-stopped
+
+volumes:
+  data:
+    # the volume `docker run -v ecoflow-exporter:/data` used, so moving over keeps everything
+    name: ecoflow-exporter
+  updater:
+    name: ecoflow-exporter-updater

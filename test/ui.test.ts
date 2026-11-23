@@ -2,7 +2,7 @@ import { mkdtempSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import type { AddressInfo } from 'node:net';
-import type { Server } from 'node:http';
+import { request, type Server } from 'node:http';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import type { FetchFn } from '../src/oauth/client.js';
@@ -35,6 +35,10 @@ describe('status page server', () => {
     reconnect: vi.fn(),
     saveCredentials: vi.fn(async () => undefined),
     forgetCredentials: vi.fn(async () => undefined),
+    update: {
+      request: vi.fn(async (_v: string) => undefined),
+      setAuto: vi.fn(async (_e: boolean) => undefined),
+    },
     discovery: {
       status: vi.fn(async () => ({ available: false })),
       act: vi.fn(async (_action: string, _body: Record<string, unknown>) => ({ result: 'sent' }) as unknown),
@@ -111,6 +115,27 @@ describe('status page server', () => {
     expect(isLoopbackHost('192.168.1.5:9101')).toBe(false);
     expect(isLoopbackHost('[::1]:9101')).toBe(true);
     expect(isLoopbackHost('127.0.0.1:9101')).toBe(true);
+  });
+
+  it('starts an update only from this computer, with a plain version', async () => {
+    // fetch() ignores a Host header: send the request by hand
+    const post = (path: string, host: string, body: unknown) =>
+      new Promise<{ status: number }>((resolve, reject) => {
+        const req = request(`${base}${path}`, { method: 'POST', headers: { 'x-exporter-ui': '1', host, 'content-type': 'application/json' } }, (res) => {
+          res.resume();
+          res.on('end', () => resolve({ status: res.statusCode ?? 0 }));
+        });
+        req.on('error', reject);
+        req.end(JSON.stringify(body));
+      });
+    expect((await post('/api/update', '127.0.0.1:9101', { version: '0.2.0' })).status).toBe(202);
+    expect(ui.update.request).toHaveBeenCalledWith('0.2.0');
+    expect((await post('/api/update', '192.168.1.5:9101', { version: '0.2.0' })).status).toBe(403);
+    expect((await post('/api/update', '127.0.0.1:9101', { version: 'ghcr.io/evil/image@sha256:00' })).status).toBe(400);
+    expect(ui.update.request).toHaveBeenCalledOnce();
+    expect((await post('/api/update/auto', 'localhost', { enabled: true })).status).toBe(200);
+    expect(ui.update.setAuto).toHaveBeenCalledWith(true);
+    expect((await fetch(`${base}/api/update`, { method: 'POST', body: '{"version":"0.2.0"}' })).status).toBe(403); // no UI header
   });
 
   it('tells loopback peers from LAN peers (a Host header alone can be forged)', () => {

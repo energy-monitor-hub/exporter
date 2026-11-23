@@ -6,14 +6,17 @@ COMPOSE := docker compose -f deploy/docker-compose.yml
 COMPOSE_DEV := $(COMPOSE) -f deploy/docker-compose.dev.yml
 
 .DEFAULT_GOAL := help
-.PHONY: help exporter-update login dev logs stop record test typecheck deps-check deps-outdated
+.PHONY: help exporter-update updater-logs login dev logs stop record test typecheck deps-check deps-outdated
 
 help: ## Show this help
 	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*## "}; {printf "  make %-16s %s\n", $$1, $$2}'
 
-exporter-update: ## Pull the newest image from ghcr.io and (re)start the exporter in the background
-	$(COMPOSE) pull exporter
-	$(COMPOSE) up -d exporter
+exporter-update: ## Pull the image from ghcr.io and (re)start the exporter and its updater (releases: the status page's Update button)
+	$(COMPOSE) pull exporter updater
+	$(COMPOSE) up -d exporter updater
+
+updater-logs: ## Follow the updater's logs (one-click updates, docs/UPDATES.md)
+	$(COMPOSE) logs -f updater
 
 login: ## One-off exporter login in a terminal (the status page's "Log in" button does the same)
 	$(COMPOSE) run --rm --service-ports login

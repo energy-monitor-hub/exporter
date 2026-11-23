@@ -73,7 +73,14 @@ The dashboard's **Exporters** page (`/exporters`) has the steps with this instan
    EXPORTER_RELEASES_URL=https://<your-site>/releases/releases.json
    ```
 
-2. Start the prebuilt image (amd64 and arm64) from that folder:
+2. Put [`deploy/compose.yaml`](deploy/compose.yaml) next to it and start the prebuilt image (amd64 and arm64):
+
+   ```bash
+   curl -fsSLO https://raw.githubusercontent.com/<owner>/<repo>/main/deploy/compose.yaml
+   docker compose up -d
+   ```
+
+   This starts the exporter and its updater, so new versions install from the status page with one click ([docs/UPDATES.md](docs/UPDATES.md)). Plain `docker run` works too, without the button:
 
    ```bash
    docker run -d --name ecoflow-exporter --restart unless-stopped \
@@ -85,7 +92,7 @@ The dashboard's **Exporters** page (`/exporters`) has the steps with this instan
 3. Open the status page **http://127.0.0.1:9101/** on that machine, press **Log in**, sign in to the dashboard and approve the request.
 4. On the same page, fill in the **EcoFlow account** card (app e-mail and password, station serial number). Data starts flowing.
 
-Everything the exporter keeps lives in the one `/data` volume: the write queue, the login token, the encrypted EcoFlow credentials (the key stays in Supabase) and cached decoder packs. To update: `docker pull` the image, `docker rm -f ecoflow-exporter`, and run step 2 again; the status page tells you when a new version is out. If the ghcr package is private, `docker login ghcr.io` first (see "Exporter image in ghcr.io").
+Everything the exporter keeps lives in the one `/data` volume: the write queue, the login token, the encrypted EcoFlow credentials (the key stays in Supabase) and cached decoder packs. To update: press **Update to vX.Y.Z** on the status page when it offers one (with `docker run`: `docker pull` the image, `docker rm -f ecoflow-exporter`, and run it again; or switch to the compose file, which keeps the same data volume). If the ghcr package is private, `docker login ghcr.io` first (see "Exporter image in ghcr.io").
 
 ### With docker compose (from a clone)
 
@@ -96,7 +103,7 @@ docker compose -f deploy/docker-compose.yml pull
 docker compose -f deploy/docker-compose.yml up -d
 ```
 
-To update to the latest `main`: `make exporter-update` again. To use your fork's image, `export ECOFLOW_IMAGE_REPO=ghcr.io/<you>/<repo>` (or put it in `deploy/.env`). `up -d --build` builds the image locally from the current code instead.
+This starts the updater too: the status page installs releases with one click. To update to the latest `main` instead: `make exporter-update` again. To use your fork's image, `export ECOFLOW_IMAGE_REPO=ghcr.io/<you>/<repo>` (or put it in `deploy/.env`). `up -d --build` builds the image locally from the current code instead.
 
 In `.env` set `SUPABASE_URL=https://<project-ref>.supabase.co` and `SUPABASE_ANON_KEY` of your cloud project (public, the same one the dashboard uses; its Exporters page shows it). The exporter doesn't need the `service_role` key.
 
@@ -167,7 +174,7 @@ The server decides whether it needs the sample (models already supported, or wit
 - **Watchdog**: if the connection is "alive" but no messages arrive for `MQTT_SILENCE_TIMEOUT_S` (180 s), the exporter signs in again with fresh credentials.
 - `/healthz` (for the container health check) shows the MQTT state, the last message, the grid, an open outage and the queue; it answers 503 if nothing came from the station for 10 minutes.
 - **Decoder packs**: new models and decoder fixes as signed data, never code, fetched from the dashboard's hosting when `DECODER_INDEX_URL` is set. See [docs/DECODER_PACKS.md](docs/DECODER_PACKS.md).
-- **Updates**: the status page shows when a newer exporter is out (signed release list, image pinned by digest); it never updates itself. See [docs/UPDATES.md](docs/UPDATES.md).
+- **Updates**: the status page shows when a newer exporter is out (signed release list, image pinned by digest) and installs it with one click through a separate updater container, which checks the build provenance and rolls back if the new version does not start; the exporter never gets the Docker socket. See [docs/UPDATES.md](docs/UPDATES.md).
 - **Without Docker**: one executable per OS (Linux, macOS, Windows) with a service installer. See [docs/NATIVE.md](docs/NATIVE.md).
 
 ## Exporter image in ghcr.io
@@ -206,7 +213,7 @@ Everything that gets installed has an exact version; there is no `latest` or `^`
 ## Layout
 
 ```
-src/            index.ts (start), server.ts + status.ts + ui/ (status page, /healthz), decode/ (protobuf → state), model/ (common model), exporter/ (samples, outages, buffer, writes), mqtt/, auth/ (EcoFlow login), oauth/ (Supabase login), secrets/, sources/, packs/ (signed decoder packs), update/, discovery/ (census, samples), proto/, db/
+src/            index.ts (start), server.ts + status.ts + ui/ (status page, /healthz), decode/ (protobuf → state), model/ (common model), exporter/ (samples, outages, buffer, writes), mqtt/, auth/ (EcoFlow login), oauth/ (Supabase login), secrets/, sources/, packs/ (signed decoder packs), update/ (release check), updater/ (the updater container), discovery/ (census, samples), proto/, db/
 decoders/       decoder packs (data, signed and published by the dashboard's deploy)
 releases/       releases.json: the release list the status page checks (signed the same way)
 test/           vitest, fixtures/ (recorded MQTT, serials masked)

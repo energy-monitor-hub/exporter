@@ -22,6 +22,7 @@ import { PackAdapter } from './packs/interpreter.js';
 import { PackUpdater } from './packs/updater.js';
 import { publicKeys } from './packs/verify.js';
 import { UpdateChecker } from './update/checker.js';
+import { UpdaterClient } from './update/updater-client.js';
 import { exporterVersion as readVersion, selfCheck } from './selfcheck.js';
 
 // `--version` and `--self-check` (installers and CI check the single executable with these).
@@ -81,7 +82,8 @@ function firstPackCheck(): void {
 setTimeout(firstPackCheck, 30_000).unref();
 setInterval(() => void checkPacks(), 24 * 3600_000).unref();
 
-// New exporter versions (issue #44): shown on the status page, never installed by itself.
+// New exporter versions (issue #44): shown on the status page; installed by the separate
+// updater container (src/updater/) when the user presses the button, never by the exporter.
 const updates = new UpdateChecker({
   manifestUrl: config.exporterReleasesUrl,
   mode: config.exporterUpdates,
@@ -92,6 +94,7 @@ const updates = new UpdateChecker({
 });
 setTimeout(() => void updates.check(), 60_000).unref();
 setInterval(() => void updates.check(), 24 * 3600_000).unref();
+const updater = config.updaterUrl ? new UpdaterClient({ url: config.updaterUrl }) : undefined;
 
 /**
  * The device side runs only once credentials are known: from .env at once, or from the
@@ -205,6 +208,8 @@ const server = createHttpServer({
     const last = source?.adapter.lastMessageAt;
     return {
       ok: last !== undefined && Date.now() - last.getTime() < STALE_MS,
+      // the updater checks that a new exporter came up with the version it installed
+      version: exporterVersion,
       dbConfigured: db !== undefined,
       auth: session?.state,
       setup: setup.status().state,
@@ -217,13 +222,13 @@ const server = createHttpServer({
     };
   },
   ui: {
-    status: () =>
+    status: async () =>
       buildStatus({
         source,
         exporter,
         setup: setup.status(),
         decoders: { ...packs.status(), active: activePack ?? null },
-        updates: updates.status(),
+        updates: { ...updates.status(), updater: updater ? await updater.status() : { available: false } },
         queue,
         session,
         dbConfigured: db !== undefined,
@@ -258,6 +263,14 @@ const server = createHttpServer({
             void flusher?.flush().catch(() => undefined);
             // Stored credentials can be opened now (the key comes with the login).
             void setup.unlock();
+          },
+        }
+      : {}),
+    ...(updater
+      ? {
+          update: {
+            request: (version: string) => updater.request(version),
+            setAuto: (enabled: boolean) => updater.setAuto(enabled),
           },
         }
       : {}),

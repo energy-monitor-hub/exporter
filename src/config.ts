@@ -47,11 +47,13 @@ export interface Config {
   decoderPublicKeys: string[];
   /** Last good index and packs (data volume). */
   decoderCacheDir: string;
-  /** New exporter versions (issue #44): off or notify (the exporter never replaces itself). */
+  /** New exporter versions (issue #44): off or notify. Installing them is the updater's job (src/updater/). */
   exporterUpdates: 'off' | 'notify';
   /** https URL of the signed releases.json; no check without it. */
   exporterReleasesUrl: string | undefined;
   exporterChannel: 'stable' | 'beta';
+  /** The updater container (src/updater/), set by compose; without it updates are manual. */
+  updaterUrl: string | undefined;
 }
 
 function oneOf<T extends string>(env: NodeJS.ProcessEnv, name: string, allowed: readonly T[], fallback: T): T {
@@ -111,5 +113,6 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
     exporterUpdates: oneOf(env, 'EXPORTER_UPDATES', ['off', 'notify'] as const, 'notify'),
     exporterReleasesUrl: env.EXPORTER_RELEASES_URL || undefined,
     exporterChannel: oneOf(env, 'EXPORTER_CHANNEL', ['stable', 'beta'] as const, 'stable'),
+    updaterUrl: env.UPDATER_URL || undefined,
   };
 }

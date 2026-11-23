@@ -73,7 +73,14 @@ npm run build && npm start
    EXPORTER_RELEASES_URL=https://<your-site>/releases/releases.json
    ```
 
-2. У цій папці запусти готовий образ (amd64 і arm64):
+2. Поклади поруч [`deploy/compose.yaml`](deploy/compose.yaml) і запусти готовий образ (amd64 і arm64):
+
+   ```bash
+   curl -fsSLO https://raw.githubusercontent.com/<owner>/<repo>/main/deploy/compose.yaml
+   docker compose up -d
+   ```
+
+   Так запускаються експортер і його оновлювач, тож нові версії встановлюються зі сторінки стану одним натиском ([docs/uk/UPDATES.md](docs/uk/UPDATES.md)). Звичайний `docker run` теж працює, але без кнопки:
 
    ```bash
    docker run -d --name ecoflow-exporter --restart unless-stopped \
@@ -85,7 +92,7 @@ npm run build && npm start
 3. На тій самій машині відкрий сторінку стану **http://127.0.0.1:9101/**, натисни **Log in**, увійди в дашборд і підтвердь запит.
 4. На тій самій сторінці заповни картку **EcoFlow account** (e-mail і пароль застосунку, серійний номер станції). Дані підуть самі.
 
-Усе, що зберігає експортер, лежить в одному томі `/data`: черга записів, токен входу, зашифровані облікові дані EcoFlow (ключ лишається в Supabase) і кеш пакетів декодерів. Оновлення: `docker pull` образу, `docker rm -f ecoflow-exporter` і знову крок 2; про нову версію скаже сторінка стану. Якщо пакет у ghcr приватний, спершу `docker login ghcr.io` (див. «Образ експортера в ghcr.io»).
+Усе, що зберігає експортер, лежить в одному томі `/data`: черга записів, токен входу, зашифровані облікові дані EcoFlow (ключ лишається в Supabase) і кеш пакетів декодерів. Оновлення: натисни **Оновити до vX.Y.Z** на сторінці стану, коли вона це пропонує (з `docker run`: `docker pull` образу, `docker rm -f ecoflow-exporter` і запустити знову; або перейти на файл compose, він бере той самий том даних). Якщо пакет у ghcr приватний, спершу `docker login ghcr.io` (див. «Образ експортера в ghcr.io»).
 
 ### Через docker compose (з клону)
 
@@ -96,7 +103,7 @@ docker compose -f deploy/docker-compose.yml pull
 docker compose -f deploy/docker-compose.yml up -d
 ```
 
-Оновити до свіжого `main`: знову `make exporter-update`. Образ свого форку: `export ECOFLOW_IMAGE_REPO=ghcr.io/<ти>/<repo>` (або в `deploy/.env`). `up -d --build` натомість збирає образ локально з поточного коду.
+Так запускається й оновлювач: сторінка стану встановлює релізи одним натиском. Оновити натомість до свіжого `main`: знову `make exporter-update`. Образ свого форку: `export ECOFLOW_IMAGE_REPO=ghcr.io/<ти>/<repo>` (або в `deploy/.env`). `up -d --build` натомість збирає образ локально з поточного коду.
 
 У `.env` тоді `SUPABASE_URL=https://<project-ref>.supabase.co` і `SUPABASE_ANON_KEY` твого хмарного проєкту (публічний, той самий, що в дашборді; його показує сторінка «Експортери»). Ключ `service_role` експортеру не потрібен.
 
@@ -167,7 +174,7 @@ docker compose -f deploy/docker-compose.yml -f deploy/docker-compose.dev.yml run
 - **Watchdog**: якщо з'єднання «живе», але повідомлень немає `MQTT_SILENCE_TIMEOUT_S` (180 с), експортер перелогінюється зі свіжими кредами.
 - `/healthz` (для health check контейнера) показує стан MQTT, останнє повідомлення, мережу, відкрите відключення і чергу; відповідає 503, якщо від станції нічого не було 10 хв.
 - **Пакети декодерів**: нові моделі й виправлення декодера як підписані дані, ніколи не код, з хостингу дашборду, якщо задано `DECODER_INDEX_URL`. Див. [docs/uk/DECODER_PACKS.md](docs/uk/DECODER_PACKS.md).
-- **Оновлення**: сторінка стану показує, коли вийшов новіший експортер (підписаний список релізів, образ закріплений за digest); сам себе він не оновлює. Див. [docs/uk/UPDATES.md](docs/uk/UPDATES.md).
+- **Оновлення**: сторінка стану показує, коли вийшов новіший експортер (підписаний список релізів, образ закріплений за digest), і встановлює його одним натиском через окремий контейнер-оновлювач, який перевіряє походження збірки і відкочує, якщо нова версія не запустилася; сокет Docker експортер не отримує ніколи. Див. [docs/uk/UPDATES.md](docs/uk/UPDATES.md).
 - **Без Docker**: один виконуваний файл для кожної ОС (Linux, macOS, Windows) з інсталятором служби. Див. [docs/uk/NATIVE.md](docs/uk/NATIVE.md).
 
 ## Образ експортера в ghcr.io
@@ -206,7 +213,7 @@ make dev                 # docker compose watch: src/ синхронізуєть
 ## Структура
 
 ```
-src/            index.ts (старт), server.ts + status.ts + ui/ (сторінка стану, /healthz), decode/ (protobuf → стан), model/ (спільна модель), exporter/ (семпли, відключення, буфер, запис), mqtt/, auth/ (вхід EcoFlow), oauth/ (вхід Supabase), secrets/, sources/, packs/ (підписані пакети декодера), update/, discovery/ (перепис, зразки), proto/, db/
+src/            index.ts (старт), server.ts + status.ts + ui/ (сторінка стану, /healthz), decode/ (protobuf → стан), model/ (спільна модель), exporter/ (семпли, відключення, буфер, запис), mqtt/, auth/ (вхід EcoFlow), oauth/ (вхід Supabase), secrets/, sources/, packs/ (підписані пакети декодера), update/ (перевірка релізів), updater/ (контейнер-оновлювач), discovery/ (перепис, зразки), proto/, db/
 decoders/       пакети декодера (дані; підписує й публікує деплой дашборда)
 releases/       releases.json: список релізів, який перевіряє сторінка стану (підписується так само)
 test/           vitest, fixtures/ (записаний MQTT, серійники замасковані)

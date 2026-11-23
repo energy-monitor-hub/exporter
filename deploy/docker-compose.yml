@@ -6,8 +6,8 @@ name: ecoflow
 # Settings: .env in the repository root (next to .env.example).
 # Defaults to this repository's image; ECOFLOW_IMAGE_REPO=ghcr.io/<owner>/<repo> (shell or
 # deploy/.env) takes a fork's. `up --build` builds it locally instead.
-# ECOFLOW_EXPORTER_IMAGE pins an exact release instead of :main, e.g. the
-# `<image>@sha256:<digest>` the status page shows when an update is out (docs/UPDATES.md).
+# ECOFLOW_EXPORTER_IMAGE pins the image compose starts with instead of :main. Later versions
+# come through the updater service below: the status page's "Update" button (docs/UPDATES.md).
 x-exporter-image: &exporter-image ${ECOFLOW_EXPORTER_IMAGE:-${ECOFLOW_IMAGE_REPO:-ghcr.io/energy-monitor-hub/exporter}:main}
 
 services:
@@ -21,6 +21,9 @@ services:
         required: false
     environment:
       HEALTH_PORT: "9101"
+      # The updater service below (one-click updates on the status page). Without it the page
+      # shows how to update by hand.
+      UPDATER_URL: http://updater:9103
     volumes:
       # All of the exporter's state, despite the volume's name: write queue (buffer.sqlite),
       # OAuth tokens (oauth.json), encrypted EcoFlow credentials (credentials.json; the key
@@ -36,6 +39,34 @@ services:
       interval: 30s
       timeout: 5s
       retries: 3
+    restart: unless-stopped
+
+  # Installs exporter releases when the status page asks (or by itself in auto mode, stable
+  # only): only digests from the signed release list, with their GitHub build provenance
+  # checked; recreates the exporter and rolls back if the new one does not come up.
+  # It holds the Docker socket (root-equivalent on this machine), so it is kept apart from the
+  # exporter: no published port, answers only the exporter container, no .env (it reads the
+  # release URL from the exporter container's settings), read-only, no capabilities.
+  # Not wanted? `docker compose -f deploy/docker-compose.yml up -d exporter` starts the exporter
+  # alone, or set ECOFLOW_UPDATER=0 (shell or deploy/.env).
+  updater:
+    image: *exporter-image
+    command: ["node", "dist/updater/main.js"]
+    # the Docker socket belongs to root
+    user: "0:0"
+    scale: ${ECOFLOW_UPDATER:-1}
+    environment:
+      UPDATER_STATE_DIR: /state
+      # require (default) or off: check the image's GitHub build provenance before starting it
+      UPDATER_ATTESTATION: ${UPDATER_ATTESTATION:-require}
+    volumes:
+      # rootless Docker or Podman: DOCKER_SOCKET=/run/user/<uid>/docker.sock (shell or deploy/.env)
+      - ${DOCKER_SOCKET:-/var/run/docker.sock}:/var/run/docker.sock
+      # installed version, auto mode, Sigstore trust root cache
+      - updater:/state
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
     restart: unless-stopped
 
   # One-off exporter login (OAuth, approve it on the dashboard):
@@ -64,3 +95,4 @@ services:
 
 volumes:
   buffer:
+  updater:

@@ -40,6 +40,22 @@ const STRINGS = {
     updateAvailable: 'Exporter {0} is available. Docker: pull the new image and recreate the container (or pin {1}). Without Docker: install the new file from the releases. {2}',
     updateRevoked: 'This exporter version was withdrawn (a serious problem): update it now (new image or new file from the releases).',
     updateCurrent: 'up to date',
+    updateOneClick: 'Exporter {0} is available. {1}',
+    updateRevokedOneClick: 'This exporter version was withdrawn (a serious problem): update it now.',
+    updateTo: 'Update to {0}',
+    updateConfirm: 'Update the exporter to {0}? It restarts and takes new samples again in about a minute. If the new version does not start, the current one comes back by itself.',
+    updateAuto: 'Install stable updates automatically',
+    updateNotConfigured: 'The updater is running, but EXPORTER_RELEASES_URL is not set in .env (the dashboard’s Exporters page shows the value).',
+    'phase-verifying': 'Updating to {0}: checking the signature and the build provenance…',
+    'phase-pulling': 'Updating to {0}: downloading…',
+    'phase-starting': 'Updating to {0}: restarting the exporter…',
+    'phase-checking': 'Updating to {0}: checking that the new version works…',
+    'phase-rolling-back': 'Update to {0} did not work: bringing back the previous version…',
+    updateDone: 'Updated to {0}.',
+    updateRolledBack: 'Update to {0} did not work ({1}). The previous version is running again.',
+    updateFailed: 'Update to {0} failed: {1}',
+    updateRestarting: 'The exporter is restarting for the update…',
+    updaterError: 'The updater is not answering: {0}',
     decoderBuiltin: 'built-in',
     decoderPack: 'downloaded, {0}',
     decoderOff: 'Decoder updates are off (DECODER_UPDATES=off): the built-in decoder is used.',
@@ -185,6 +201,22 @@ const STRINGS = {
     updateAvailable: 'Доступний експортер {0}. Docker: завантаж новий образ і перестворь контейнер (або закріпи {1}). Без Docker: встанови новий файл із релізів. {2}',
     updateRevoked: 'Цю версію експортера відкликано (серйозна проблема): онови її зараз (новий образ або новий файл із релізів).',
     updateCurrent: 'актуальна',
+    updateOneClick: 'Доступний експортер {0}. {1}',
+    updateRevokedOneClick: 'Цю версію експортера відкликано (серйозна проблема): онови її зараз.',
+    updateTo: 'Оновити до {0}',
+    updateConfirm: 'Оновити експортер до {0}? Він перезапуститься і приблизно за хвилину знову збиратиме дані. Якщо нова версія не запуститься, поточна повернеться сама.',
+    updateAuto: 'Встановлювати стабільні оновлення автоматично',
+    updateNotConfigured: 'Оновлювач працює, але в .env немає EXPORTER_RELEASES_URL (значення показує сторінка «Експортери» на дашборді).',
+    'phase-verifying': 'Оновлення до {0}: перевіряю підпис і походження образу…',
+    'phase-pulling': 'Оновлення до {0}: завантажую…',
+    'phase-starting': 'Оновлення до {0}: перезапускаю експортер…',
+    'phase-checking': 'Оновлення до {0}: перевіряю, що нова версія працює…',
+    'phase-rolling-back': 'Оновлення до {0} не вдалося: повертаю попередню версію…',
+    updateDone: 'Оновлено до {0}.',
+    updateRolledBack: 'Оновлення до {0} не вдалося ({1}). Знову працює попередня версія.',
+    updateFailed: 'Оновлення до {0} не вдалося: {1}',
+    updateRestarting: 'Експортер перезапускається для оновлення…',
+    updaterError: 'Оновлювач не відповідає: {0}',
     decoderBuiltin: 'вбудований',
     decoderPack: 'завантажений, {0}',
     decoderOff: 'Оновлення декодера вимкнено (DECODER_UPDATES=off): працює вбудований.',
@@ -416,7 +448,7 @@ function render(s) {
   $('last-sample').textContent = ago(s.sampling.lastSampleAt, now);
   $('uptime').textContent = duration(now - Date.parse(s.startedAt));
   renderDecoders(s.decoders, now);
-  renderUpdates(s.updates);
+  renderUpdates(s.updates, now);
 
   // login
   const state = s.db.configured ? (s.auth?.state ?? 'logged-out') : 'not-configured';
@@ -503,16 +535,65 @@ function render(s) {
 }
 
 let updateBanner = '';
-function renderUpdates(u) {
+/** Version the page was loaded with: a different one after an update reloads the page (new UI files). */
+let loadedVersion;
+/** An update is running: a short outage of the page is the restart, not a failure. */
+let updating = false;
+const RUNNING_PHASES = ['verifying', 'pulling', 'starting', 'checking', 'rolling-back'];
+const DAY_MS = 24 * 3600_000;
+
+function renderUpdates(u, now) {
   if (!u) return;
+  if (loadedVersion === undefined) loadedVersion = u.current;
+  else if (u.current !== loadedVersion) {
+    location.reload();
+    return;
+  }
   const fresh = u.configured && !u.latest && !u.revoked && u.checkedAt ? ` (${t('updateCurrent')})` : '';
   $('version').textContent = `${u.current}${fresh}`;
-  const text = u.revoked ? t('updateRevoked') : u.latest ? t('updateAvailable', u.latest.version, u.latest.image, u.latest.notes) : '';
+
+  const up = u.updater && u.updater.available ? u.updater : undefined;
+  const job = up && up.job;
+  const running = Boolean(job && RUNNING_PHASES.includes(job.phase));
+  updating = running;
+  // one click when the updater container runs next to the exporter, instructions otherwise
+  const text = u.revoked
+    ? t(up ? 'updateRevokedOneClick' : 'updateRevoked')
+    : u.latest
+      ? up
+        ? t('updateOneClick', u.latest.version, u.latest.notes)
+        : t('updateAvailable', u.latest.version, u.latest.image, u.latest.notes)
+      : '';
   // Shown once per change, so the banner does not fight with other messages on every refresh.
   if (text !== updateBanner) {
     updateBanner = text;
     if (text) showBanner(text, Boolean(u.revoked));
   }
+
+  $('update-box').hidden = !up;
+  if (!up) return;
+  let note = '';
+  if (job && running) note = t(`phase-${job.phase}`, job.version);
+  else if (job && job.finishedAt && now - Date.parse(job.finishedAt) < DAY_MS) {
+    if (job.phase === 'done') note = t('updateDone', job.version);
+    else if (job.phase === 'rolled-back') note = t('updateRolledBack', job.version, job.error ?? '');
+    else if (job.phase === 'failed') note = t('updateFailed', job.version, job.error ?? '');
+  }
+  if (!up.configured) note = [t('updateNotConfigured'), note].filter(Boolean).join(' ');
+  else if (up.error && !running) note = [note, t('decoderError', up.error)].filter(Boolean).join(' ');
+  $('update-text').textContent = note;
+  $('update-text').className = `small${job && !running && (job.phase === 'failed' || job.phase === 'rolled-back') ? ' error' : ''}`;
+  $('update-text').hidden = !note;
+
+  const btn = $('update-install');
+  btn.hidden = !u.latest || running || !up.configured;
+  btn.disabled = running;
+  if (u.latest) {
+    btn.textContent = t('updateTo', u.latest.version);
+    btn.dataset.version = u.latest.version;
+  }
+  $('update-auto-row').hidden = !up.configured;
+  $('update-auto').checked = Boolean(up.auto);
 }
 
 function renderDecoders(d, now) {
@@ -575,7 +656,7 @@ async function refresh() {
     offline = false;
   } catch {
     offline = true;
-    showBanner(t('offline'), true);
+    showBanner(t(updating ? 'updateRestarting' : 'offline'), !updating);
   }
   void refreshDiscovery();
 }
@@ -774,6 +855,33 @@ $('sample-record').addEventListener('click', (e) => void discAction('record', { 
 $('sample-stop').addEventListener('click', (e) => void discAction('stop', {}, e.currentTarget));
 $('sample-discard').addEventListener('click', (e) => void discAction('discard', {}, e.currentTarget));
 $('sample-send').addEventListener('click', (e) => void discAction('send', {}, e.currentTarget));
+
+$('update-install').addEventListener('click', async (e) => {
+  const btn = e.currentTarget;
+  const version = btn.dataset.version;
+  if (!version || !window.confirm(t('updateConfirm', version))) return;
+  btn.disabled = true;
+  try {
+    await post('/api/update', { version });
+    updating = true;
+    await refresh();
+  } catch (err) {
+    showBanner(t('updateFailed', version, err.message), true);
+    btn.disabled = false;
+  }
+});
+$('update-auto').addEventListener('change', async (e) => {
+  const box = e.currentTarget;
+  box.disabled = true;
+  try {
+    await post('/api/update/auto', { enabled: box.checked });
+  } catch (err) {
+    box.checked = !box.checked;
+    showBanner(err.message, true);
+  } finally {
+    box.disabled = false;
+  }
+});
 
 // Back from the consent page (GET /callback redirects here).
 const params = new URLSearchParams(location.search);

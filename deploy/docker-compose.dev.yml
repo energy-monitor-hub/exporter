@@ -12,6 +12,8 @@ services:
     build:
       target: dev
     restart: "no"
+    environment:
+      UPDATER_URL: ""
     develop:
       watch:
         - action: sync
@@ -25,6 +27,10 @@ services:
           path: ../tsconfig.json
         - action: rebuild
           path: ../Dockerfile
+
+  # a dev exporter is built from source: nothing to install
+  updater:
+    profiles: ["updater"]
 
   # docker compose -f deploy/docker-compose.yml -f deploy/docker-compose.dev.yml run --rm --service-ports login
   login:

@@ -29,9 +29,9 @@ export interface UpdateStatus {
 }
 
 /**
- * Tells the user when a newer exporter is out (issue #44). Notify only: the exporter never
- * replaces itself (that would need the Docker socket, i.e. root on the host). The update is
- * `make exporter-update`, or pinning the image to the digest shown. The request carries no
+ * Tells the user when a newer exporter is out (issue #44). The exporter never replaces itself
+ * (that needs the Docker socket, i.e. root on the host): the separate updater container does,
+ * when the user asks for it on the status page (src/updater/). The request carries no
  * identifiers.
  */
 export class UpdateChecker {
@@ -76,29 +76,53 @@ export class UpdateChecker {
     const now = (this.o.now ?? Date.now)();
     this.checkedAt = new Date(now).toISOString();
     try {
-      const body = await this.get(this.o.manifestUrl, MAX_RELEASES_BYTES);
-      const sig = Buffer.from(await this.get(`${this.o.manifestUrl}.sig`, 1024)).toString('utf8');
-      verifySignature(body, sig, this.o.keys, 'release list');
-      const m = releaseManifestSchema.parse(JSON.parse(Buffer.from(body).toString('utf8')));
-      if (Date.parse(m.expires_at) <= now) throw new Error('the published release list has expired');
-      if (this.manifest && m.sequence < this.manifest.sequence) throw new Error('refused an older release list');
-      this.manifest = m;
+      this.manifest = await fetchReleaseManifest({
+        url: this.o.manifestUrl,
+        keys: this.o.keys,
+        now,
+        ...(this.manifest ? { minSequence: this.manifest.sequence } : {}),
+        ...(this.o.fetch ? { fetch: this.o.fetch } : {}),
+      });
       this.error = undefined;
       const s = this.status();
-      if (s.revoked) this.o.log.warn(`update: exporter ${this.o.currentVersion} was revoked; update now (make exporter-update)`);
+      if (s.revoked) this.o.log.warn(`update: exporter ${this.o.currentVersion} was revoked; update now`);
       else if (s.latest) this.o.log.info(`update: exporter ${s.latest.version} is available (${s.latest.image})`);
     } catch (err) {
       this.error = (err as Error).message;
       this.o.log.warn(`update: ${this.error}`);
     }
   }
+}
 
-  private async get(url: string, limit: number): Promise<Uint8Array> {
-    if (!url.startsWith('https://') && !/^http:\/\/(127\.0\.0\.1|localhost)[:/]/.test(url)) throw new Error('release list is fetched over https only');
-    const res = await (this.o.fetch ?? fetch)(url, { signal: AbortSignal.timeout(15_000), redirect: 'error' });
-    if (!res.ok) throw new Error(`${new URL(url).pathname}: HTTP ${res.status}`);
-    const buf = new Uint8Array(await res.arrayBuffer());
-    if (buf.length > limit) throw new Error(`${new URL(url).pathname}: too large`);
-    return buf;
-  }
+export interface FetchManifestOptions {
+  url: string;
+  keys: readonly KeyObject[];
+  now: number;
+  /** Refuse a list older than one already seen (replay of an old, validly signed list). */
+  minSequence?: number;
+  fetch?: typeof fetch;
+}
+
+/**
+ * releases.json and its detached signature: the signature over the exact bytes against the
+ * trusted keys, then the schema, the expiry and the sequence. Used by the exporter (notify)
+ * and by the updater (src/updater/), which installs only digests from a list that passed this.
+ */
+export async function fetchReleaseManifest(o: FetchManifestOptions): Promise<ReleaseManifest> {
+  const body = await get(o, o.url, MAX_RELEASES_BYTES);
+  const sig = Buffer.from(await get(o, `${o.url}.sig`, 1024)).toString('utf8');
+  verifySignature(body, sig, o.keys, 'release list');
+  const m = releaseManifestSchema.parse(JSON.parse(Buffer.from(body).toString('utf8')));
+  if (Date.parse(m.expires_at) <= o.now) throw new Error('the published release list has expired');
+  if (o.minSequence !== undefined && m.sequence < o.minSequence) throw new Error('refused an older release list');
+  return m;
+}
+
+async function get(o: FetchManifestOptions, url: string, limit: number): Promise<Uint8Array> {
+  if (!url.startsWith('https://') && !/^http:\/\/(127\.0\.0\.1|localhost)[:/]/.test(url)) throw new Error('release list is fetched over https only');
+  const res = await (o.fetch ?? fetch)(url, { signal: AbortSignal.timeout(15_000), redirect: 'error' });
+  if (!res.ok) throw new Error(`${new URL(url).pathname}: HTTP ${res.status}`);
+  const buf = new Uint8Array(await res.arrayBuffer());
+  if (buf.length > limit) throw new Error(`${new URL(url).pathname}: too large`);
+  return buf;
 }

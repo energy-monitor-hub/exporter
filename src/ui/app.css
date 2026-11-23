@@ -402,6 +402,10 @@ h3 {
   margin: 0;
 }
 
+.update-auto {
+  margin-top: 10px;
+}
+
 #disc-card .actions {
   align-items: center;
 }

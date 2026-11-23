@@ -23,6 +23,12 @@ export interface UiApi {
   saveCredentials?(body: unknown): Promise<void>;
   /** Setup page: stop, delete the stored credentials and their key. */
   forgetCredentials?(): Promise<void>;
+  /** Exporter updates through the updater container (src/updater/). Loopback only. */
+  update?: {
+    /** Install this version (one the signed release list offers); the updater checks it. */
+    request(version: string): Promise<void>;
+    setAuto(enabled: boolean): Promise<void>;
+  };
   /** Unknown models: census and opt-in samples (src/discovery/). Loopback only. */
   discovery?: {
     status(): Promise<unknown>;
@@ -238,6 +244,24 @@ export function createHttpServer(opts: ServerOptions): Server {
           const body = await readJson(req).catch(() => ({}));
           const result = await ui.discovery.act(path.slice('/api/discovery/'.length), (body && typeof body === 'object' ? body : {}) as Record<string, unknown>);
           json(res, 200, result ?? { ok: true });
+          return;
+        }
+        if ((path === '/api/update' || path === '/api/update/auto') && ui.update) {
+          // Restarts the exporter with another image: only from the computer it runs on.
+          if (!fromThisComputer(req)) {
+            json(res, 403, { error: 'updates can only be started from this computer (open the page via 127.0.0.1)' });
+            return;
+          }
+          const body = (await readJson(req)) as { version?: unknown; enabled?: unknown };
+          if (path === '/api/update') {
+            if (typeof body.version !== 'string' || !/^\d+\.\d+\.\d+$/.test(body.version)) throw new Error('version is required');
+            await ui.update.request(body.version);
+            json(res, 202, { ok: true });
+          } else {
+            if (typeof body.enabled !== 'boolean') throw new Error('enabled must be true or false');
+            await ui.update.setAuto(body.enabled);
+            json(res, 200, { ok: true });
+          }
           return;
         }
         if (path === '/api/reconnect' && ui.reconnect) {
