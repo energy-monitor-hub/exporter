@@ -157,6 +157,8 @@ The page is plain HTML + JS in `src/ui/` (no build, no dependencies), with data 
 
 The page only answers on `localhost` / IP addresses (DNS rebinding protection); add any other host name to `UI_ALLOWED_HOSTS`. If the port is published somewhere other than `127.0.0.1:9101`, set `UI_URL`. Natively the exporter listens on `127.0.0.1` only; `LISTEN_HOST=0.0.0.0` opens the page to your LAN (the Docker image already listens on `0.0.0.0` inside the container, and compose publishes the port on `127.0.0.1`).
 
+A local domain for the container works the same way, e.g. OrbStack's `https://exporter.ecoflow.orb.local` (`<service>.<compose project>.orb.local`): `UI_ALLOWED_HOSTS=exporter.ecoflow.orb.local`, then recreate the container (`docker compose up -d`; a restart does not pick up `.env` changes). Through such a name the page shows the status and can start "Log in"; the credentials form, sharing a sample and updates still answer only on `127.0.0.1`. Keep `UI_URL` on `127.0.0.1`: the dashboard's consent page sends the login back only to a loopback address (a phishing guard), so after the consent the browser lands on `127.0.0.1`.
+
 ### Helping support a new model
 
 If the exporter does not understand your station well (the status page shows the share of messages it decodes), the card **"Help support your model"** on the status page lets you share, each with its own consent shown right there:
