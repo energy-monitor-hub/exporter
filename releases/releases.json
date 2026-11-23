@@ -1,6 +1,15 @@
 {
   "releases": [
     {
+      "version": "0.2.0",
+      "digest": "sha256:62fd14b42d306593df9f35edcd07451a92d6066d4022be753077a8c4749ac72d",
+      "channel": "beta",
+      "published_at": "2026-11-23T06:39:26.000Z",
+      "min_db_migration": "20261122172000",
+      "notes": "One-click updates: the status page installs new releases through the updater container (signature and build provenance checked, automatic rollback). Design token contrast fixes.",
+      "revoked": false
+    },
+    {
       "version": "0.1.1",
       "digest": "sha256:2a18e83d9c649cd3b83b0aed008848ec1c5473d04511e0038cc7cbf7b505db6a",
       "channel": "beta",
