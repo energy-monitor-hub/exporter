@@ -138,6 +138,11 @@ describe('status page server', () => {
     expect((await fetch(`${base}/api/update`, { method: 'POST', body: '{"version":"0.2.0"}' })).status).toBe(403); // no UI header
   });
 
+  it('has no endpoint to change where data goes', async () => {
+    const res = await fetch(`${base}/api/settings`, { method: 'POST', headers: { 'x-exporter-ui': '1' }, body: '{"dashboardUrl":"https://evil.example"}' });
+    expect(res.status).toBe(404);
+  });
+
   it('tells loopback peers from LAN peers (a Host header alone can be forged)', () => {
     expect(isLoopbackAddress('127.0.0.1')).toBe(true);
     expect(isLoopbackAddress('::1')).toBe(true);

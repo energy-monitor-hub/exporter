@@ -1,6 +1,7 @@
-# The exporter without a clone: put this file next to your .env in an empty folder and run
+# The exporter without a clone: put this file in an empty folder and run
 #   docker compose up -d
-# then open http://127.0.0.1:9101/ (log in, enter the EcoFlow account). New versions install
+# then open http://127.0.0.1:9101/ (log in, enter the EcoFlow account). No .env needed: it
+# connects to the project's dashboard. An optional .env next to this file is read too. New versions install
 # from the status page ("Update to vX.Y.Z"); nothing to edit or run again (docs/UPDATES.md).
 #
 # Coming from `docker run --name ecoflow-exporter ... -v ecoflow-exporter:/data`? Remove that

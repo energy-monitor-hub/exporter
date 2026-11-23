@@ -40,8 +40,9 @@ powershell -ExecutionPolicy Bypass -File packaging\install-windows.ps1 .\ecoflow
 | macOS | `~/Library/Application Support/ecoflow-exporter` | `exporter.log` у цій теці | `install-macos.sh --uninstall` |
 | Windows | `%LOCALAPPDATA%\ecoflow-exporter` | Історія Планувальника завдань | `install-windows.ps1 -Uninstall` |
 
-Видалення лишає теку з даними; видали її сам, щоб прибрати токен і облікові дані. Впиши
-`SUPABASE_URL` і `SUPABASE_ANON_KEY` у `.env` там (див. `.env.example`).
+Видалення лишає теку з даними; видали її сам, щоб прибрати токен і облікові дані. `.env` не
+потрібен: експортер підключається до дашборду проєкту. Налаштування, які таки хочеш у файлі,
+клади в `.env` там (див. `.env.example`).
 
 На Linux `sudo loginctl enable-linger $USER` лишає службу працювати, коли ти вийшов із системи.
 На Windows завдання стартує при вході; для машини, що має збирати дані без входу користувача,

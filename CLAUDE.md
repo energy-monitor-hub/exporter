@@ -12,7 +12,7 @@ The dashboard (web app, `supabase/migrations/`, hosting) is a separate repositor
 
 ## Public repo (always)
 
-- No personal accounts or setup in the repo: no owner's GitHub login in instructions, no emails, Supabase project refs, Firebase / GCP project ids or site URLs, local paths, machine names. Use placeholders (`<project-ref>`, `<you>`), env vars, values derived at runtime (`${{ github.repository }}`), or `example.*` in tests and fixtures. The only allowed upstream reference is this repository's own location (`github.com/energy-monitor-hub/exporter`, its ghcr image) as an overridable default, e.g. `ECOFLOW_IMAGE_REPO`.
+- No personal accounts or setup in the repo: no owner's GitHub login in instructions, no emails, Supabase project refs, Firebase / GCP project ids or site URLs, local paths, machine names. Use placeholders (`<project-ref>`, `<you>`), env vars, values derived at runtime (`${{ github.repository }}`), or `example.*` in tests and fixtures. The only allowed upstream references are this repository's own location (`github.com/energy-monitor-hub/exporter`, its ghcr image) and the project's hosted dashboard (`DEFAULT_DASHBOARD_URL` in `src/destinations.ts`; its Supabase project and key come from its `exporter.json` at runtime, never from the repo), each as an overridable default, e.g. `ECOFLOW_IMAGE_REPO`, `DASHBOARD_URL`.
 - Docs: English is primary (`README.md`, `docs/*.md`, `SECURITY.md`); Ukrainian is a separate translation next to each (`README.uk.md`, `docs/uk/*.md`, `SECURITY.uk.md`). Change both in the same PR, or say in the PR that the translation lags.
 - Code comments, logs, errors and CLI prompts are English. The status page (`src/ui/`) has English and Ukrainian strings.
 

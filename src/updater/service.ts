@@ -201,7 +201,7 @@ export class UpdaterService {
 
   private start(version: string, auto: boolean): void {
     if (this.running) throw new Error(`an update to ${this.state.job?.version ?? 'another version'} is already running`);
-    if (!this.configured) throw new Error('updates are not set up (EXPORTER_RELEASES_URL)');
+    if (!this.configured) throw new Error('updates are not set up (no release list or trusted key)');
     this.state.job = { version, phase: 'verifying', auto, startedAt: new Date(this.now()).toISOString() };
     this.save();
     this.running = this.install(version, auto).finally(() => (this.running = undefined));

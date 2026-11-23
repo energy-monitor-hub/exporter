@@ -91,7 +91,7 @@ export class CredentialSetup {
       return;
     }
     if (!db || !session) {
-      this.current = { state: 'error', reason: 'SUPABASE_URL / SUPABASE_ANON_KEY are not set: stored credentials cannot be opened', canEdit: false };
+      this.current = { state: 'error', reason: 'the dashboard has not answered yet: stored credentials cannot be opened', canEdit: false };
       return;
     }
     const clientId = session.state.clientId;
@@ -123,7 +123,7 @@ export class CredentialSetup {
   async save(input: unknown): Promise<void> {
     if (this.d.fromEnv) throw new Error('credentials come from .env; remove them there to use this page');
     const { db, session, file } = this.d;
-    if (!db || !session) throw new Error('SUPABASE_URL / SUPABASE_ANON_KEY are not set');
+    if (!db || !session) throw new Error('the dashboard has not answered yet (no Supabase project): try again in a minute');
     const clientId = session.state.clientId;
     if (session.state.state !== 'ok' || !clientId) throw new Error('log in first: the encryption key is kept with your exporter login');
     let creds: EcoflowCredentials;

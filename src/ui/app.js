@@ -5,6 +5,15 @@
 const STRINGS = {
   en: {
     title: 'Exporter status',
+    dest: 'Where data goes',
+    destHint: 'Besides EcoFlow, the exporter talks only to these addresses. Supabase and its public key come from the dashboard (exporter.json).',
+    destDashboard: 'Dashboard',
+    destSupabase: 'Supabase',
+    destDecoders: 'Decoder packs',
+    destReleases: 'Release list',
+    destFromEnv: '(.env)',
+    destEnvDashboard: 'Set in .env (DASHBOARD_URL, SUPABASE_URL): development only.',
+    destNotReached: 'The dashboard has not answered yet: {0}',
     setup: 'EcoFlow account',
     setupEnv: 'From .env',
     setupNeeded: 'Not set up',
@@ -45,7 +54,7 @@ const STRINGS = {
     updateTo: 'Update to {0}',
     updateConfirm: 'Update the exporter to {0}? It restarts and takes new samples again in about a minute. If the new version does not start, the current one comes back by itself.',
     updateAuto: 'Install stable updates automatically',
-    updateNotConfigured: 'The updater is running, but EXPORTER_RELEASES_URL is not set in .env (the dashboard’s Exporters page shows the value).',
+    updateNotConfigured: 'The updater is running, but has no release list or trusted key (EXPORTER_RELEASES_URL / DECODER_PUBLIC_KEYS in .env).',
     'phase-verifying': 'Updating to {0}: checking the signature and the build provenance…',
     'phase-pulling': 'Updating to {0}: downloading…',
     'phase-starting': 'Updating to {0}: restarting the exporter…',
@@ -59,7 +68,7 @@ const STRINGS = {
     decoderBuiltin: 'built-in',
     decoderPack: 'downloaded, {0}',
     decoderOff: 'Decoder updates are off (DECODER_UPDATES=off): the built-in decoder is used.',
-    decoderNotConfigured: 'Decoder updates are not set up: add DECODER_INDEX_URL to .env (the dashboard’s Exporters page shows the value).',
+    decoderNotConfigured: 'Decoder updates are not set up: no trusted key (DECODER_PUBLIC_KEYS in .env).',
     decoderAuto: 'Decoder updates install themselves.',
     decoderNotify: 'Decoder updates are only reported, not installed (DECODER_UPDATES=notify).',
     decoderChecked: 'Update list published {0}, last checked {1}.',
@@ -107,7 +116,7 @@ const STRINGS = {
     hintLoggedOut: 'Log in and approve this exporter on the dashboard. Rows wait in the local queue until then.',
     hintRevoked: 'Access was revoked on the dashboard (or expired). Log in again; queued rows are kept.',
     hintError: 'The last token refresh failed. The exporter keeps retrying.',
-    hintNotConfigured: 'SUPABASE_URL / SUPABASE_ANON_KEY are not set: rows are only queued locally.',
+    hintNotConfigured: 'The dashboard has not answered yet (see Where data goes below): rows are only queued locally.',
     empty: 'Empty',
     waiting: 'Waiting',
     failing: 'Failing',
@@ -167,6 +176,15 @@ const STRINGS = {
     discWithdrawHint: 'To withdraw a consent or delete what was sent, open "My data" on the dashboard.',
   },
   uk: {
+    dest: 'Куди йдуть дані',
+    destHint: 'Крім EcoFlow, експортер звертається лише до цих адрес. Supabase і його публічний ключ беруться з дашборду (exporter.json).',
+    destDashboard: 'Дашборд',
+    destSupabase: 'Supabase',
+    destDecoders: 'Пакети декодерів',
+    destReleases: 'Список релізів',
+    destFromEnv: '(.env)',
+    destEnvDashboard: 'Задано в .env (DASHBOARD_URL, SUPABASE_URL): лише для розробки.',
+    destNotReached: 'Дашборд ще не відповів: {0}',
     title: 'Стан експортера',
     setup: 'Акаунт EcoFlow',
     setupEnv: 'З .env',
@@ -208,7 +226,7 @@ const STRINGS = {
     updateTo: 'Оновити до {0}',
     updateConfirm: 'Оновити експортер до {0}? Він перезапуститься і приблизно за хвилину знову збиратиме дані. Якщо нова версія не запуститься, поточна повернеться сама.',
     updateAuto: 'Встановлювати стабільні оновлення автоматично',
-    updateNotConfigured: 'Оновлювач працює, але в .env немає EXPORTER_RELEASES_URL (значення показує сторінка «Експортери» на дашборді).',
+    updateNotConfigured: 'Оновлювач працює, але не має списку релізів чи довіреного ключа (EXPORTER_RELEASES_URL / DECODER_PUBLIC_KEYS у .env).',
     'phase-verifying': 'Оновлення до {0}: перевіряю підпис і походження образу…',
     'phase-pulling': 'Оновлення до {0}: завантажую…',
     'phase-starting': 'Оновлення до {0}: перезапускаю експортер…',
@@ -222,7 +240,7 @@ const STRINGS = {
     decoderBuiltin: 'вбудований',
     decoderPack: 'завантажений, {0}',
     decoderOff: 'Оновлення декодера вимкнено (DECODER_UPDATES=off): працює вбудований.',
-    decoderNotConfigured: 'Оновлення декодера не налаштовано: додай DECODER_INDEX_URL у .env (значення є на сторінці «Експортери» дашборду).',
+    decoderNotConfigured: 'Оновлення декодера не налаштовано: немає довіреного ключа (DECODER_PUBLIC_KEYS у .env).',
     decoderAuto: 'Оновлення декодера встановлюються самі.',
     decoderNotify: 'Про оновлення декодера лише повідомляється, без встановлення (DECODER_UPDATES=notify).',
     decoderChecked: 'Список оновлень опубліковано {0}, перевірено {1}.',
@@ -270,7 +288,7 @@ const STRINGS = {
     hintLoggedOut: 'Увійди й підтверди цей експортер на дашборді. Доти рядки чекають у локальній черзі.',
     hintRevoked: 'Доступ відкликано на дашборді (або він сплив). Увійди ще раз, рядки в черзі збережені.',
     hintError: 'Останнє оновлення токена не вдалося. Експортер пробує ще.',
-    hintNotConfigured: 'Не задано SUPABASE_URL / SUPABASE_ANON_KEY: рядки лише чекають у локальній черзі.',
+    hintNotConfigured: 'Дашборд ще не відповів (див. «Куди йдуть дані» нижче): рядки лише чекають у локальній черзі.',
     empty: 'Порожня',
     waiting: 'Чекає',
     failing: 'Помилка',
@@ -453,6 +471,7 @@ function render(s) {
   $('uptime').textContent = duration(now - Date.parse(s.startedAt));
   renderDecoders(s.decoders, now);
   renderUpdates(s.updates, now);
+  renderDestinations(s.destinations);
 
   // login
   const state = s.db.configured ? (s.auth?.state ?? 'logged-out') : 'not-configured';
@@ -628,6 +647,20 @@ function renderDecoders(d, now) {
     if (d.error) notes.push(t('decoderError', d.error));
   }
   $('decoder-note').textContent = notes.join(' ');
+}
+
+function renderDestinations(d) {
+  $('dest-card').hidden = !d;
+  if (!d) return;
+  const env = d.dashboardSource === 'env' || d.supabaseSource === 'env';
+  $('dest-dashboard').textContent = `${d.dashboardUrl}${d.dashboardSource === 'env' ? ` ${t('destFromEnv')}` : ''}`;
+  $('dest-supabase').textContent = d.supabaseUrl ? `${d.supabaseUrl}${d.supabaseSource === 'env' ? ` ${t('destFromEnv')}` : ''}` : '—';
+  $('dest-decoders').textContent = d.decoderIndexUrl;
+  $('dest-releases').textContent = d.releasesUrl;
+  setError($('dest-error'), d.error ? t('destNotReached', d.error) : '');
+  if (d.error) $('dest').open = true;
+  $('dest-env').textContent = env ? t('destEnvDashboard') : '';
+  $('dest-env').hidden = !env;
 }
 
 function renderSetup(s) {

@@ -135,6 +135,8 @@ export interface StatusDeps {
   decoders?: unknown;
   /** New exporter versions (src/update/). */
   updates?: unknown;
+  /** Dashboard, Supabase, decoder and release addresses in effect (src/destinations.ts). */
+  destinations?: unknown;
   queue: () => FlusherStatus | { pending: number };
   session: OAuthSession | undefined;
   dbConfigured: boolean;
@@ -159,6 +161,7 @@ export async function buildStatus(d: StatusDeps) {
     setup: d.setup,
     ...(d.decoders !== undefined ? { decoders: d.decoders } : {}),
     ...(d.updates !== undefined ? { updates: d.updates } : {}),
+    ...(d.destinations !== undefined ? { destinations: d.destinations } : {}),
     device: d.source && a ? { sn: maskSn(d.source.sn), ...a.descriptor } : null,
     source: { connected: d.source?.isConnected ?? false, lastMessageAt: a?.lastMessageAt?.toISOString() ?? null },
     sampling: { intervalS: d.sampleIntervalS, lastSampleAt: d.exporter?.lastSample?.toISOString() ?? null },

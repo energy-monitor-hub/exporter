@@ -60,7 +60,9 @@ Set up once, as the operator:
    `main`, add the secret `DECODER_SIGNING_KEY` = the private key. Clear the terminal.
 3. Put the public key into `TRUSTED_KEYS` in `src/packs/verify.ts` (pull request), so it is
    compiled into the next exporter image.
-4. Set `DECODER_INDEX_URL=https://<your-site>/decoders/index.json` for the exporters.
+4. Exporters take `<dashboard>/decoders/index.json` of the dashboard they are connected to (the
+   project's by default, `DASHBOARD_URL` otherwise);
+   `DECODER_INDEX_URL` overrides it.
 
 Rotating the key: generate a new pair, add the new public key next to the old one in
 `TRUSTED_KEYS`, release the exporter, wait until users updated, then swap the secret and remove
@@ -74,7 +76,7 @@ comma separated).
 ## What the exporter does
 
 - `DECODER_UPDATES=auto` (default), `notify` (show what is available, keep decoding with what it
-  has) or `off`. Without `DECODER_INDEX_URL` and a trusted key nothing is fetched.
+  has) or `off`. Without a trusted key nothing is fetched.
 - About 30 s after start and then every 24 h: fetch `index.json` and `index.json.sig` (https only,
   no redirects, size limits), check the signature, refuse an expired index or one with a lower
   `sequence` than the cached one (rollback), choose the pack locally (exact product code first,

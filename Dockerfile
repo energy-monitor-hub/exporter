@@ -12,6 +12,8 @@ ENV OAUTH_TOKEN_PATH=/data/oauth.json
 ENV CREDENTIALS_PATH=/data/credentials.json
 # Signed decoder packs: last good index and packs (docs/DECODER_PACKS.md)
 ENV DECODER_CACHE_DIR=/data/decoders
+# The dashboard's last exporter.json (which Supabase project to write to), for restarts offline
+ENV DASHBOARD_CACHE_PATH=/data/dashboard.json
 # node:sqlite is still flagged experimental in Node 22; the warning is noise.
 ENV NODE_OPTIONS=--disable-warning=ExperimentalWarning
 # Listen on all interfaces inside the container; compose publishes the ports on the host's

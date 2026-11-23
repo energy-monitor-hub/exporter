@@ -32,7 +32,7 @@ services:
     ports:
       - "127.0.0.1:9101:9101"
     extra_hosts:
-      # lets SUPABASE_URL=http://host.docker.internal:54321 reach a local Supabase on Linux too
+      # lets SUPABASE_URL=http://host.docker.internal:54321 (a local Supabase) work on Linux too
       - "host.docker.internal:host-gateway"
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://127.0.0.1:9101/healthz"]

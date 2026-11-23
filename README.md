@@ -17,7 +17,7 @@ Read the code paths yourself; these are the only places your secrets travel:
 | Station serial number | MQTT topics at EcoFlow, `devices.sn` in your Supabase | `.env` or `credentials.json` |
 | Dashboard login | OAuth 2.1 + PKCE against your Supabase Auth; the exporter never sees your dashboard password | `/data/oauth.json` (`0600`) |
 
-Nothing is sent to the authors of this project. The exporter talks to exactly three kinds of hosts: EcoFlow (login API and MQTT broker), your Supabase project, and, only if you set the URLs, your dashboard site for signed decoder packs and the release list (plain GET requests with no identifiers). Model census and sample uploads (below) are off until you consent on the status page, and go to your own Supabase.
+Nothing is sent to the authors of this project. The exporter talks to exactly three kinds of hosts: EcoFlow (login API and MQTT broker), the Supabase project of your dashboard, and the dashboard site itself for its `exporter.json` (which Supabase project and public anon key to use), signed decoder packs and the release list (plain GET requests with no identifiers). Out of the box the dashboard is the project's hosted one (`https://energy-monitor-hub.web.app`, `src/destinations.ts`); the status page's **Where data goes** card shows every address in use (read-only). Model census and sample uploads (below) are off until you consent on the status page, and go to your own Supabase.
 
 ## Verify what you run
 
@@ -64,16 +64,7 @@ npm run build && npm start
 
 The dashboard's **Exporters** page (`/exporters`) has the steps with this instance's values filled in, so a new user only copies and pastes. Without the dashboard, the same by hand:
 
-1. In an empty folder, create `.env`:
-
-   ```bash
-   SUPABASE_URL=https://<project-ref>.supabase.co
-   SUPABASE_ANON_KEY=<anon key>          # public, the same one the dashboard uses
-   DECODER_INDEX_URL=https://<your-site>/decoders/index.json
-   EXPORTER_RELEASES_URL=https://<your-site>/releases/releases.json
-   ```
-
-2. Put [`deploy/compose.yaml`](deploy/compose.yaml) next to it and start the prebuilt image (amd64 and arm64):
+1. In an empty folder, put [`deploy/compose.yaml`](deploy/compose.yaml) and start the prebuilt image (amd64 and arm64). Nothing to configure: it connects to the project's dashboard.
 
    ```bash
    curl -fsSLO https://raw.githubusercontent.com/<owner>/<repo>/main/deploy/compose.yaml
@@ -84,15 +75,17 @@ The dashboard's **Exporters** page (`/exporters`) has the steps with this instan
 
    ```bash
    docker run -d --name ecoflow-exporter --restart unless-stopped \
-     --env-file .env -p 127.0.0.1:9101:9101 -v ecoflow-exporter:/data \
+     -p 127.0.0.1:9101:9101 -v ecoflow-exporter:/data \
      ghcr.io/<owner>/<repo>:main
    ```
 
-   Without Docker, install the single-file binary from the GitHub release instead and put the same `.env` into its data folder ([docs/NATIVE.md](docs/NATIVE.md)).
-3. Open the status page **http://127.0.0.1:9101/** on that machine, press **Log in**, sign in to the dashboard and approve the request.
-4. On the same page, fill in the **EcoFlow account** card (app e-mail and password, station serial number). Data starts flowing.
+   Without Docker, install the single-file binary from the GitHub release instead ([docs/NATIVE.md](docs/NATIVE.md)).
+2. Open the status page **http://127.0.0.1:9101/** on that machine, press **Log in**, sign in to the dashboard and approve the request.
+3. On the same page, fill in the **EcoFlow account** card (app e-mail and password, station serial number). Data starts flowing.
 
-Everything the exporter keeps lives in the one `/data` volume: the write queue, the login token, the encrypted EcoFlow credentials (the key stays in Supabase) and cached decoder packs. To update: press **Update to vX.Y.Z** on the status page when it offers one (with `docker run`: `docker pull` the image, `docker rm -f ecoflow-exporter`, and run it again; or switch to the compose file, which keeps the same data volume). If the ghcr package is private, `docker login ghcr.io` first (see "Exporter image in ghcr.io").
+Everything the exporter keeps lives in the one `/data` volume: the write queue, the login token, the encrypted EcoFlow credentials (the key stays in Supabase), the dashboard's last `exporter.json` and cached decoder packs.
+
+**Other destinations (development):** the exporter reads `<dashboard>/exporter.json` (published by the dashboard's build) for its Supabase project and anon key, and takes decoder packs and the release list from the same site. `.env` can point it elsewhere: `DASHBOARD_URL=<site>` moves all of them, and `SUPABASE_URL` + `SUPABASE_ANON_KEY`, `DECODER_INDEX_URL` and `EXPORTER_RELEASES_URL` override each one on its own (a local Supabase, for example). The status page shows these addresses but cannot change them. Moving to another Supabase project means logging in again and entering the EcoFlow account again (the old login and the key of the stored credentials belong to the old project). To update: press **Update to vX.Y.Z** on the status page when it offers one (with `docker run`: `docker pull` the image, `docker rm -f ecoflow-exporter`, and run it again; or switch to the compose file, which keeps the same data volume). If the ghcr package is private, `docker login ghcr.io` first (see "Exporter image in ghcr.io").
 
 ### With docker compose (from a clone)
 
@@ -105,7 +98,7 @@ docker compose -f deploy/docker-compose.yml up -d
 
 This starts the updater too: the status page installs releases with one click. To update to the latest `main` instead: `make exporter-update` again. To use your fork's image, `export ECOFLOW_IMAGE_REPO=ghcr.io/<you>/<repo>` (or put it in `deploy/.env`). `up -d --build` builds the image locally from the current code instead.
 
-In `.env` set `SUPABASE_URL=https://<project-ref>.supabase.co` and `SUPABASE_ANON_KEY` of your cloud project (public, the same one the dashboard uses; its Exporters page shows it). The exporter doesn't need the `service_role` key.
+No `.env` is needed; for other destinations while developing, see above. The exporter never needs the `service_role` key.
 
 ### Exporter login
 
@@ -176,7 +169,7 @@ The server decides whether it needs the sample (models already supported, or wit
 - **Blind stretches** (`exporter_gaps`): when nothing came from the station for over 2 minutes, the stretch is recorded with its cause: `sleep` (the host was suspended, e.g. a laptop lid; the process notices its clock jumping ahead), `stopped` (the exporter was not running) or `offline` (it ran but got nothing; a real outage usually takes the internet with it). An outage whose start or end fell into such a stretch is stored as a window (`start_latest_at`, `end_earliest_at`), shown with "≈". If the grid was there before and after a stretch but the battery dropped by more than standby drain (3 points + 0.3 per hour), an outage nobody saw is recorded as `inferred`, spanning the stretch.
 - **Watchdog**: if the connection is "alive" but no messages arrive for `MQTT_SILENCE_TIMEOUT_S` (180 s), the exporter signs in again with fresh credentials.
 - `/healthz` (for the container health check) shows the MQTT state, the last message, the grid, an open outage and the queue; it answers 503 if nothing came from the station for 10 minutes.
-- **Decoder packs**: new models and decoder fixes as signed data, never code, fetched from the dashboard's hosting when `DECODER_INDEX_URL` is set. See [docs/DECODER_PACKS.md](docs/DECODER_PACKS.md).
+- **Decoder packs**: new models and decoder fixes as signed data, never code, fetched from the dashboard's hosting (`<dashboard>/decoders/index.json`, or `DECODER_INDEX_URL`). See [docs/DECODER_PACKS.md](docs/DECODER_PACKS.md).
 - **Updates**: the status page shows when a newer exporter is out (signed release list, image pinned by digest) and installs it with one click through a separate updater container, which checks the build provenance and rolls back if the new version does not start; the exporter never gets the Docker socket. See [docs/UPDATES.md](docs/UPDATES.md).
 - **Without Docker**: one executable per OS (Linux, macOS, Windows) with a service installer. See [docs/NATIVE.md](docs/NATIVE.md).
 
@@ -194,7 +187,7 @@ GitHub Actions (`.github/workflows/exporter-image.yml`) builds the exporter imag
 ## Development
 
 ```bash
-cp .env.example .env     # ECOFLOW_USERNAME, ECOFLOW_PASSWORD, DEVICE_SN, SUPABASE_URL, SUPABASE_ANON_KEY
+cp .env.example .env     # local Supabase (SUPABASE_URL, SUPABASE_ANON_KEY); EcoFlow account optional
 npm ci
 make test                # vitest
 make typecheck

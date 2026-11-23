@@ -409,3 +409,39 @@ h3 {
 #disc-card .actions {
   align-items: center;
 }
+
+/* "Where data goes": folded by default, read-only */
+#dest > summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#dest > summary::-webkit-details-marker {
+  display: none;
+}
+
+#dest > summary::before {
+  content: "▸";
+  color: var(--text-secondary);
+  transition: transform 0.15s;
+}
+
+#dest[open] > summary::before {
+  transform: rotate(90deg);
+}
+
+#dest[open] > summary {
+  margin-bottom: 12px;
+}
+
+#dest dd {
+  overflow-wrap: anywhere;
+}
+
+
+#dest > summary + p {
+  margin: 0 0 12px;
+}

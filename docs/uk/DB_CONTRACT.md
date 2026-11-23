@@ -8,7 +8,7 @@
 
 ## Як він підключається
 
-- `SUPABASE_URL` + `SUPABASE_ANON_KEY` (публічний за задумом) і **власний токен користувача**, ніколи не `service_role`.
+- URL Supabase + anon-ключ (публічний за задумом) і **власний токен користувача**, ніколи не `service_role`. URL і ключ беруться з `exporter.json` дашборду (`{"supabaseUrl": "https://…", "supabaseAnonKey": "…"}`, його публікує збірка поруч з `index.html`) або з `SUPABASE_URL` + `SUPABASE_ANON_KEY` у `.env`.
 - Токен видає **OAuth 2.1 сервер** Supabase Auth (`/auth/v1/oauth/*`): динамічна реєстрація клієнта, authorization code + PKCE, loopback-redirect (`http://127.0.0.1:<port>/callback`), refresh-токени. Користувач схвалює клієнта на сторінці дашборда `/oauth/consent` і відкликає на `/exporters`.
 - Роль токена — `authenticated`; claim `client_id` ідентифікує експортер (його використовує `exporter_key`).
 - Кожен запис іде під RLS: користувач бачить лише рядки пристроїв з `devices.owner_id = auth.uid()`.

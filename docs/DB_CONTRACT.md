@@ -8,7 +8,7 @@ The exporter talks to a Supabase project it does not own: the schema lives with 
 
 ## How it connects
 
-- `SUPABASE_URL` + `SUPABASE_ANON_KEY` (public by design) and **the user's own access token**, never `service_role`.
+- The Supabase URL + anon key (public by design) and **the user's own access token**, never `service_role`. The URL and key come from the dashboard's `exporter.json` (`{"supabaseUrl": "https://…", "supabaseAnonKey": "…"}`, published by its build next to `index.html`), or from `SUPABASE_URL` + `SUPABASE_ANON_KEY` in `.env`.
 - The token comes from Supabase Auth's **OAuth 2.1 server** (`/auth/v1/oauth/*`): dynamic client registration, authorization code + PKCE, loopback redirect (`http://127.0.0.1:<port>/callback`), refresh tokens. The user approves the client on the dashboard's `/oauth/consent` page and revokes it on `/exporters`.
 - The token's role is `authenticated`; its `client_id` claim identifies the exporter (used by `exporter_key`).
 - Every write is under RLS: a user reaches only rows of devices with `devices.owner_id = auth.uid()`.

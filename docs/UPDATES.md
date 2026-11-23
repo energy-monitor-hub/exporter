@@ -13,8 +13,9 @@ clone) the status page has an **Update to vX.Y.Z** button. Nothing to edit, noth
 
 - The exporter checks the release list: `EXPORTER_UPDATES=notify` (default) or `off`;
   `EXPORTER_CHANNEL=stable` (default) or `beta`;
-  `EXPORTER_RELEASES_URL=https://<your-site>/releases/releases.json`. Without the URL and a trusted
-  key nothing is fetched. About a minute after start and then daily it fetches `releases.json` and
+  the list is `<dashboard>/releases/releases.json` of the project's dashboard, or of `DASHBOARD_URL`,
+  or `EXPORTER_RELEASES_URL` (the updater reads them from the exporter container's environment).
+  Without a trusted key nothing is fetched. About a minute after start and then daily it fetches `releases.json` and
   its signature (Ed25519, the same keys as decoder packs), refuses an expired or older list, and
   compares the versions. The request carries no identifiers; the hosting sees the IP address and
   the time.

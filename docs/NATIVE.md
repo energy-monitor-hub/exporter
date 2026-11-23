@@ -39,8 +39,9 @@ powershell -ExecutionPolicy Bypass -File packaging\install-windows.ps1 .\ecoflow
 | macOS | `~/Library/Application Support/ecoflow-exporter` | `exporter.log` in that folder | `install-macos.sh --uninstall` |
 | Windows | `%LOCALAPPDATA%\ecoflow-exporter` | Task Scheduler history | `install-windows.ps1 -Uninstall` |
 
-Uninstalling keeps the data folder; delete it yourself to remove the token and credentials. Put
-`SUPABASE_URL` and `SUPABASE_ANON_KEY` into the `.env` there (see `.env.example`).
+Uninstalling keeps the data folder; delete it yourself to remove the token and credentials. No
+`.env` is needed: the exporter connects to the project's dashboard. Settings you do want in a
+file go into the `.env` there (see `.env.example`).
 
 On Linux, `sudo loginctl enable-linger $USER` keeps the service running when you are logged out.
 On Windows the task starts at logon; a machine that should collect data without anyone logged in

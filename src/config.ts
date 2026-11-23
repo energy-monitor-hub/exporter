@@ -1,3 +1,4 @@
+import { DEFAULT_DASHBOARD_URL, normalizeDashboardUrl } from './destinations.js';
 import { SOURCES } from './sources/types.js';
 
 export interface Config {
@@ -20,6 +21,15 @@ export interface Config {
   ecoflowUsername: string | undefined;
   ecoflowPassword: string | undefined;
   deviceSn: string | undefined;
+  /**
+   * The dashboard this exporter belongs to (src/destinations.ts): the project's hosted one, or
+   * DASHBOARD_URL (development).
+   */
+  dashboardUrl: string;
+  dashboardUrlFromEnv: boolean;
+  /** The dashboard's last exporter.json (data volume). */
+  dashboardCachePath: string;
+  /** Only from .env; otherwise the dashboard's exporter.json names it (src/destinations.ts). */
   supabaseUrl: string | undefined;
   /** Public anon / publishable key (the `apikey` header); RLS applies, the user comes from the OAuth token. */
   supabaseAnonKey: string | undefined;
@@ -41,7 +51,7 @@ export interface Config {
   quotaEveryS: number;
   /** Signed decoder packs (src/packs/): off, notify (show only) or auto (use them). */
   decoderUpdates: 'off' | 'notify' | 'auto';
-  /** https URL of the published index.json; no updates without it. */
+  /** DECODER_INDEX_URL; without it `<dashboard>/decoders/index.json`. */
   decoderIndexUrl: string | undefined;
   /** Extra Ed25519 public keys (base64 SPKI) besides the ones compiled in (forks). */
   decoderPublicKeys: string[];
@@ -49,8 +59,10 @@ export interface Config {
   decoderCacheDir: string;
   /** New exporter versions (issue #44): off or notify. Installing them is the updater's job (src/updater/). */
   exporterUpdates: 'off' | 'notify';
-  /** https URL of the signed releases.json; no check without it. */
-  exporterReleasesUrl: string | undefined;
+  /**
+   * Signed releases.json: EXPORTER_RELEASES_URL, else `<dashboard>/releases/releases.json`.
+   */
+  exporterReleasesUrl: string;
   exporterChannel: 'stable' | 'beta';
   /** The updater container (src/updater/), set by compose; without it updates are manual. */
   updaterUrl: string | undefined;
@@ -79,6 +91,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
   const source = env.SOURCE || 'ecoflow-mqtt';
   if (!(SOURCES as readonly string[]).includes(source)) throw new Error(`Invalid SOURCE: ${source} (known: ${SOURCES.join(', ')})`);
   const port = int(env, 'HEALTH_PORT', 9101, 1, 65535);
+  const dashboardUrl = env.DASHBOARD_URL ? normalizeDashboardUrl(env.DASHBOARD_URL, { allowHttp: true }) : DEFAULT_DASHBOARD_URL;
   return {
     port,
     listenHost: env.LISTEN_HOST || '127.0.0.1',
@@ -93,6 +106,9 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
     ecoflowUsername: env.ECOFLOW_USERNAME || undefined,
     ecoflowPassword: env.ECOFLOW_PASSWORD || undefined,
     deviceSn: env.DEVICE_SN || undefined,
+    dashboardUrl,
+    dashboardUrlFromEnv: Boolean(env.DASHBOARD_URL),
+    dashboardCachePath: env.DASHBOARD_CACHE_PATH || 'data/dashboard.json',
     supabaseUrl: env.SUPABASE_URL || undefined,
     supabaseAnonKey: env.SUPABASE_ANON_KEY || undefined,
     oauthTokenPath: env.OAUTH_TOKEN_PATH || 'data/oauth.json',
@@ -111,7 +127,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
       .filter(Boolean),
     decoderCacheDir: env.DECODER_CACHE_DIR || 'data/decoders',
     exporterUpdates: oneOf(env, 'EXPORTER_UPDATES', ['off', 'notify'] as const, 'notify'),
-    exporterReleasesUrl: env.EXPORTER_RELEASES_URL || undefined,
+    exporterReleasesUrl: env.EXPORTER_RELEASES_URL || `${dashboardUrl}/releases/releases.json`,
     exporterChannel: oneOf(env, 'EXPORTER_CHANNEL', ['stable', 'beta'] as const, 'stable'),
     updaterUrl: env.UPDATER_URL || undefined,
   };

@@ -235,6 +235,24 @@
           <p class="muted small" id="sample-result"></p>
         </div>
       </section>
+      <section class="card wide" id="dest-card">
+        <details id="dest">
+          <summary><h2 data-i18n="dest">Where data goes</h2></summary>
+          <p class="muted small" data-i18n="destHint">Besides EcoFlow, the exporter talks only to these addresses. Supabase and its public key come from the dashboard (exporter.json).</p>
+          <dl>
+            <dt data-i18n="destDashboard">Dashboard</dt>
+            <dd id="dest-dashboard">—</dd>
+            <dt data-i18n="destSupabase">Supabase</dt>
+            <dd id="dest-supabase">—</dd>
+            <dt data-i18n="destDecoders">Decoder packs</dt>
+            <dd id="dest-decoders">—</dd>
+            <dt data-i18n="destReleases">Release list</dt>
+            <dd id="dest-releases">—</dd>
+          </dl>
+          <p class="error small" id="dest-error" hidden></p>
+          <p class="muted small" id="dest-env" hidden></p>
+        </details>
+      </section>
     </main>
 
     <script src="/app.js" type="module"></script>

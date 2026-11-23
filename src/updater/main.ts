@@ -2,6 +2,7 @@ import { hostname } from 'node:os';
 import { join } from 'node:path';
 import { createServer, request } from 'node:http';
 import { loadConfig } from '../config.js';
+import { DEFAULT_DASHBOARD_URL } from '../destinations.js';
 import { publicKeys } from '../packs/verify.js';
 import { exporterVersion } from '../selfcheck.js';
 import { sigstoreTrustedRoot, verifyProvenance } from './attest.js';
@@ -37,7 +38,7 @@ function settingsFrom(c: ContainerInspect | undefined): UpdateSettings {
     return { releasesUrl: config.exporterReleasesUrl, channel: config.exporterChannel, keys: publicKeys(config.decoderPublicKeys) };
   } catch (err) {
     if (c) log.warn(`updater: the exporter's settings are invalid (${(err as Error).message}); using the defaults`);
-    return { releasesUrl: vars.EXPORTER_RELEASES_URL || undefined, channel: 'stable', keys: publicKeys() };
+    return { releasesUrl: vars.EXPORTER_RELEASES_URL || `${DEFAULT_DASHBOARD_URL}/releases/releases.json`, channel: 'stable', keys: publicKeys() };
   }
 }
 const stateDir = env.UPDATER_STATE_DIR || '/state';
@@ -100,7 +101,7 @@ async function main(): Promise<void> {
     handle(updater, req, res).catch((err: unknown) => send(res, 500, { error: (err as Error).message }));
   });
   server.listen(port, '0.0.0.0', () => log.info(`updater ${exporterVersion()}: project ${project}, waiting for requests from the exporter on :${port}`));
-  if (!updater.configured) log.warn('updater: EXPORTER_RELEASES_URL is not set; nothing to install');
+  if (!updater.configured) log.warn('updater: no release list or trusted key; nothing to install');
   if (attestation === 'off') log.warn('updater: build provenance check is off (UPDATER_ATTESTATION=off)');
 
   setTimeout(() => void updater.tick(), 2 * 60_000).unref();

@@ -10,6 +10,7 @@ import 'dotenv/config';
 import { createServer } from 'node:http';
 import { createInterface } from 'node:readline';
 import { loadConfig } from './config.js';
+import { DashboardCacheFile, resolveDestinations } from './destinations.js';
 import { parseCallback } from './oauth/client.js';
 import { beginLogin } from './oauth/flow.js';
 
@@ -17,8 +18,19 @@ const TIMEOUT_MS = 15 * 60_000;
 
 async function main(): Promise<void> {
   const config = loadConfig();
-  if (!config.supabaseUrl) throw new Error('SUPABASE_URL is not set in .env');
-  const supabaseUrl = config.supabaseUrl;
+  // The same Supabase project the exporter writes to: .env, else the dashboard's exporter.json.
+  const dest = await resolveDestinations(
+    {
+      dashboardUrl: config.dashboardUrl,
+      dashboardUrlFromEnv: config.dashboardUrlFromEnv,
+      supabaseUrl: config.supabaseUrl,
+      supabaseAnonKey: config.supabaseAnonKey,
+      decoderIndexUrlFromEnv: config.decoderIndexUrl,
+    },
+    new DashboardCacheFile(config.dashboardCachePath),
+  );
+  if (!dest.supabaseUrl) throw new Error(`cannot tell which Supabase project to log in to: ${dest.error ?? 'unknown'}`);
+  const supabaseUrl = dest.supabaseUrl;
   const redirectUri = `http://127.0.0.1:${config.oauthCallbackPort}/callback`;
 
   const login = await beginLogin({
