@@ -1,6 +1,15 @@
 {
   "releases": [
     {
+      "version": "0.4.0",
+      "digest": "sha256:416a5177edd3c22ed7de064d3d378717a026f9e97d7586018c028b7075c5dd8a",
+      "channel": "beta",
+      "published_at": "2026-11-23T21:54:24.000Z",
+      "min_db_migration": "20261123080000",
+      "notes": "Runs with no settings: no .env needed. Supabase, decoder packs and the release list come from the project's dashboard (its exporter.json); the status page shows where data goes, read-only.",
+      "revoked": false
+    },
+    {
       "version": "0.3.0",
       "digest": "sha256:4db49f0dab67181d8ce554621819593f82d8a4e04de55f7c8a41192d4d1260c9",
       "channel": "beta",
