@@ -1,8 +1,7 @@
 import { createHash } from 'node:crypto';
 import { gzipSync } from 'node:zlib';
-import { peekHeaders } from '../mqtt/header.js';
-import { decodePayload } from '../decode/envelope.js';
-import { Scrubber, xorKeysOf } from '../record/scrub.js';
+import { Scrubber } from '../record/scrub.js';
+import type { DiscoveryCodec } from '../sources/types.js';
 
 /** Upper limit of one upload (the Storage bucket's file_size_limit). */
 export const MAX_SAMPLE_BYTES = 10 * 1024 * 1024;
@@ -46,15 +45,17 @@ export class SampleRecorder {
   private endsAt = 0;
   private scrubber = new Scrubber();
   private identifiers: string[] = [];
+  private codec: DiscoveryCodec | undefined;
   private result: { file: Buffer; summary: SampleSummary; sha256: string } | undefined;
   state: RecorderState = 'idle';
 
   constructor(private readonly now: () => number = Date.now) {}
 
-  start(minutes: number, identifiers: readonly string[]): void {
+  start(minutes: number, identifiers: readonly string[], codec: DiscoveryCodec): void {
     if (this.state === 'recording') throw new Error('already recording');
     if (!(minutes >= 1 && minutes <= 60)) throw new Error('minutes: 1 to 60');
     this.discard();
+    this.codec = codec;
     this.identifiers = identifiers.filter((s) => s.length >= 4);
     this.scrubber = new Scrubber(this.identifiers.map((value) => ({ value, fill: /^\d+$/.test(value) ? '0' : 'X' })));
     this.startedAt = this.now();
@@ -75,11 +76,7 @@ export class SampleRecorder {
   /** Feed every device payload; ends the recording by itself when the time or size is up. */
   observe(payload: Uint8Array, meta: () => SampleMeta): void {
     if (this.state !== 'recording') return;
-    const headers = peekHeaders(payload);
-    if (headers) {
-      this.scrubber.learnFromHeaders(headers);
-      this.scrubber.learnFromDecoded(decodePayload(payload));
-    }
+    this.codec?.learnIdentifiers(this.scrubber, payload);
     this.messages.push({ at: this.now(), payload: Uint8Array.from(payload) });
     this.rawBytes += payload.length;
     if (this.now() >= this.endsAt || this.rawBytes >= MAX_RAW_BYTES) this.stop(meta());
@@ -88,13 +85,15 @@ export class SampleRecorder {
   /** Ends the recording and builds the compressed, masked sample. */
   stop(meta: SampleMeta): SampleSummary {
     if (this.state !== 'recording') throw new Error('not recording');
+    const codec = this.codec;
+    const xorKeys = (b: Uint8Array) => codec?.xorKeys(b) ?? [];
     // First the identifiers we know (in clear and XOR-ed), then serial-like strings that are
     // still visible anywhere in the bytes (unknown models may carry serials in fields we
     // cannot decode yet). Two passes: a known serial inside a longer run would otherwise
     // stop the run from matching.
     const first = this.messages.map((m) => ({
       t: m.at - this.startedAt,
-      b: this.scrubber.scrubBytes(m.payload, xorKeysOf(peekHeaders(m.payload))).bytes,
+      b: this.scrubber.scrubBytes(m.payload, xorKeys(m.payload)).bytes,
     }));
     const serialLike = new Scrubber();
     for (const m of first) {
@@ -105,7 +104,7 @@ export class SampleRecorder {
     const scrubbed = first.map((m) => ({ t: m.t, b: serialLike.scrubBytes(m.b).bytes }));
     // Verify: no identifier may survive, in clear or XOR-ed form.
     const verify = new Scrubber(this.identifiers.map((value) => ({ value, fill: '#' })));
-    const leaked = scrubbed.some((m) => verify.scrubBytes(m.b, xorKeysOf(peekHeaders(m.b))).replaced > 0);
+    const leaked = scrubbed.some((m) => verify.scrubBytes(m.b, xorKeys(m.b)).replaced > 0);
     const endedAt = this.messages.at(-1)?.at ?? this.now();
     const body = {
       format: 'ecoflow-dashboard/sample/1',
@@ -120,7 +119,7 @@ export class SampleRecorder {
     };
     const file = gzipSync(Buffer.from(JSON.stringify(body), 'utf8'), { level: 9 });
     const ids = new Set<string>();
-    for (const m of this.messages) for (const h of peekHeaders(m.payload) ?? []) ids.add(`${h.cmdFunc}/${h.cmdId}`);
+    for (const m of this.messages) for (const x of codec?.messages(m.payload) ?? []) ids.add(x.id);
     const summary: SampleSummary = {
       messages: this.messages.length,
       durationS: Math.round((endedAt - this.startedAt) / 1000),

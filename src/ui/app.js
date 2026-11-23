@@ -6,7 +6,7 @@ const STRINGS = {
   en: {
     title: 'Exporter status',
     dest: 'Where data goes',
-    destHint: 'Besides EcoFlow, the exporter talks only to these addresses. Supabase and its public key come from the dashboard (exporter.json).',
+    destHint: 'Besides the device (or its vendor’s cloud), the exporter talks only to these addresses. Supabase and its public key come from the dashboard (exporter.json).',
     destDashboard: 'Dashboard',
     destSupabase: 'Supabase',
     destDecoders: 'Decoder packs',
@@ -14,29 +14,21 @@ const STRINGS = {
     destFromEnv: '(.env)',
     destEnvDashboard: 'Set in .env (DASHBOARD_URL, SUPABASE_URL): development only.',
     destNotReached: 'The dashboard has not answered yet: {0}',
-    setup: 'EcoFlow account',
     setupEnv: 'From .env',
     setupNeeded: 'Not set up',
     setupLocked: 'Locked',
     setupReady: 'Saved, encrypted',
     setupError: 'Cannot open',
-    hintSetupEnv: 'The credentials come from .env (ECOFLOW_USERNAME, ECOFLOW_PASSWORD, DEVICE_SN). Remove them there to set them up here instead.',
-    hintSetupNeeded: 'Enter your EcoFlow app account and the station to read.',
+    hintSetupEnv: 'The credentials come from .env ({0}). Remove them there to set them up here instead.',
     hintSetupNeedLogin: 'Log in below first: the encryption key is kept with your exporter login.',
     hintSetupLocked: 'Stored encrypted. They open after the Supabase login: {0}',
     hintSetupReady: 'Stored encrypted on this computer; station {0}. To change them, forget and enter them again.',
     hintSetupError: 'The stored credentials cannot be opened ({0}). Forget them and enter them again.',
-    ecoEmail: 'E-mail of the EcoFlow app account',
-    ecoPassword: 'Password',
-    ecoSn: 'Serial number of the station',
-    ecoHost: 'Server',
-    setupPrivacy:
-      'The password is checked with EcoFlow, then stored only on this computer, encrypted. The key is kept with your exporter login, so revoking this exporter on the dashboard makes a copy of the file useless. The exporter uses EcoFlow’s unofficial app interface with your account, at your own risk.',
     setupSave: 'Check and save',
     setupSaving: 'Checking…',
     setupSaved: 'Saved. Connecting to the station.',
     setupForget: 'Forget credentials',
-    setupForgetConfirm: 'Forget the EcoFlow credentials on this exporter? It stops reading the station until you enter them again.',
+    setupForgetConfirm: 'Forget the device credentials on this exporter? It stops reading the station until you enter them again.',
     setupForgotten: 'Credentials deleted.',
     setupFailed: 'Not saved: {0}',
     noDevice: 'No station yet',
@@ -177,7 +169,7 @@ const STRINGS = {
   },
   uk: {
     dest: 'Куди йдуть дані',
-    destHint: 'Крім EcoFlow, експортер звертається лише до цих адрес. Supabase і його публічний ключ беруться з дашборду (exporter.json).',
+    destHint: 'Крім пристрою (або хмари його виробника), експортер звертається лише до цих адрес. Supabase і його публічний ключ беруться з дашборду (exporter.json).',
     destDashboard: 'Дашборд',
     destSupabase: 'Supabase',
     destDecoders: 'Пакети декодерів',
@@ -186,29 +178,21 @@ const STRINGS = {
     destEnvDashboard: 'Задано в .env (DASHBOARD_URL, SUPABASE_URL): лише для розробки.',
     destNotReached: 'Дашборд ще не відповів: {0}',
     title: 'Стан експортера',
-    setup: 'Акаунт EcoFlow',
     setupEnv: 'З .env',
     setupNeeded: 'Не налаштовано',
     setupLocked: 'Заблоковано',
     setupReady: 'Збережено, зашифровано',
     setupError: 'Не відкривається',
-    hintSetupEnv: 'Облікові дані беруться з .env (ECOFLOW_USERNAME, ECOFLOW_PASSWORD, DEVICE_SN). Прибери їх звідти, щоб налаштувати тут.',
-    hintSetupNeeded: 'Введи акаунт застосунку EcoFlow і станцію, яку читати.',
+    hintSetupEnv: 'Облікові дані беруться з .env ({0}). Прибери їх звідти, щоб налаштувати тут.',
     hintSetupNeedLogin: 'Спершу увійди нижче: ключ шифрування зберігається разом із входом експортера.',
     hintSetupLocked: 'Збережено зашифрованими. Відкриються після входу в Supabase: {0}',
     hintSetupReady: 'Збережено зашифрованими на цьому комп’ютері; станція {0}. Щоб змінити, забудь і введи знову.',
     hintSetupError: 'Збережені дані не відкриваються ({0}). Забудь їх і введи знову.',
-    ecoEmail: 'E-mail акаунта застосунку EcoFlow',
-    ecoPassword: 'Пароль',
-    ecoSn: 'Серійний номер станції',
-    ecoHost: 'Сервер',
-    setupPrivacy:
-      'Пароль перевіряється в EcoFlow, потім зберігається лише на цьому комп’ютері в зашифрованому вигляді. Ключ зберігається разом із входом експортера, тож якщо відкликати цей експортер на дашборді, копія файлу стає непридатною. Експортер використовує неофіційний інтерфейс застосунку EcoFlow з твоїм акаунтом, на твій ризик.',
     setupSave: 'Перевірити і зберегти',
     setupSaving: 'Перевіряю…',
     setupSaved: 'Збережено. Підключаюся до станції.',
     setupForget: 'Забути облікові дані',
-    setupForgetConfirm: 'Забути облікові дані EcoFlow на цьому експортері? Він перестане читати станцію, доки не введеш їх знову.',
+    setupForgetConfirm: 'Забути облікові дані пристрою на цьому експортері? Він перестане читати станцію, доки не введеш їх знову.',
     setupForgotten: 'Облікові дані видалено.',
     setupFailed: 'Не збережено: {0}',
     noDevice: 'Станції ще немає',
@@ -663,11 +647,62 @@ function renderDestinations(d) {
   $('dest-env').hidden = !env;
 }
 
+/** Text in the page's language from a device plugin's `{ en, uk }`. */
+const tx = (texts) => (texts ? (texts[lang] ?? texts.en ?? '') : '');
+
+/** `device|lang` the form was last built for: rebuilt only when that changes, so typing survives refreshes. */
+let setupFormKey = '';
+
+/** Builds the setup form from the device plugin's fields (src/sources/), keeping what was typed. */
+function renderSetupForm(form) {
+  const key = `${form.device}|${lang}`;
+  if (key === setupFormKey) return;
+  setupFormKey = key;
+  const box = $('setup-fields');
+  const typed = {};
+  for (const el of box.querySelectorAll('input, select')) if (el.type !== 'password') typed[el.name] = el.value;
+  box.replaceChildren();
+  for (const f of form.fields) {
+    const label = document.createElement('label');
+    const span = document.createElement('span');
+    span.textContent = tx(f.label);
+    let input;
+    if (f.kind === 'select') {
+      input = document.createElement('select');
+      for (const o of f.options ?? []) {
+        const opt = document.createElement('option');
+        opt.value = o.value;
+        opt.textContent = o.label;
+        input.append(opt);
+      }
+    } else {
+      input = document.createElement('input');
+      input.type = f.kind;
+      if (f.kind === 'text') input.spellcheck = false;
+      if (f.pattern) input.pattern = f.pattern;
+    }
+    input.name = f.name;
+    input.dataset.field = f.name;
+    if (f.required) input.required = true;
+    if (f.maxLength) input.maxLength = f.maxLength;
+    if (f.autocomplete) input.autocomplete = f.autocomplete;
+    if (typed[f.name] !== undefined) input.value = typed[f.name];
+    label.append(span, input);
+    box.append(label);
+  }
+}
+
 function renderSetup(s) {
   const st = s.setup ?? { state: 'env', canEdit: false };
+  const form = st.form;
+  if (form) {
+    $('setup-title').textContent = tx(form.title);
+    $('setup-privacy').textContent = tx(form.privacy);
+    renderSetupForm(form);
+  }
   const view = {
-    env: ['idle', 'setupEnv', t('hintSetupEnv')],
-    'needs-setup': ['warn', 'setupNeeded', t(st.canEdit ? 'hintSetupNeeded' : 'hintSetupNeedLogin')],
+    env: ['idle', 'setupEnv', t('hintSetupEnv', form?.envVars.join(', ') ?? '')],
+    'needs-setup': ['warn', 'setupNeeded', st.canEdit ? tx(form?.hint) : t('hintSetupNeedLogin')],
     locked: ['warn', 'setupLocked', t('hintSetupLocked', st.reason ?? '')],
     ready: ['ok', 'setupReady', t('hintSetupReady', st.sn ?? '')],
     error: ['bad', 'setupError', t('hintSetupError', st.reason ?? '')],
@@ -789,10 +824,14 @@ $('setup-form').addEventListener('submit', async (e) => {
   btn.textContent = t('setupSaving');
   setError($('setup-error'), '');
   try {
-    const body = { username: $('eco-user').value, password: $('eco-pass').value, sn: $('eco-sn').value.trim() };
-    if ($('eco-host').value) body.apiHost = $('eco-host').value;
+    // Every field by name; empty ones are left out (optional fields), the server's schema checks the rest.
+    const body = {};
+    for (const el of $('setup-fields').querySelectorAll('[data-field]')) {
+      const v = el.type === 'password' ? el.value : el.value.trim();
+      if (v !== '') body[el.dataset.field] = v;
+    }
     await post('/api/credentials', body);
-    $('eco-pass').value = '';
+    for (const el of $('setup-fields').querySelectorAll('input[type="password"]')) el.value = '';
     showBanner(t('setupSaved'));
   } catch (err) {
     setError($('setup-error'), t('setupFailed', err.message));

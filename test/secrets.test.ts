@@ -31,20 +31,20 @@ describe('CredentialFile', () => {
   it('writes 0600 without the password in clear text and reads it back', () => {
     const f = new CredentialFile(join(dir, 'a', 'credentials.json'));
     const key = newKey();
-    f.write(key, 'client-1', creds);
+    f.write(key, 'client-1', { device: 'ecoflow-mqtt', credentials: creds });
     const raw = readFileSync(f.path, 'utf8');
     expect(raw).not.toContain('pa55');
     expect(raw).not.toContain('TESTSN0001');
     expect(raw).not.toContain('example.org');
     expect(statSync(f.path).mode & 0o777).toBe(0o600);
     expect(f.clientId()).toBe('client-1');
-    expect(f.read(key, 'client-1')).toEqual(creds);
+    expect(f.read(key, 'client-1')).toEqual({ device: 'ecoflow-mqtt', credentials: creds });
   });
 
   it('refuses a file of another exporter login, and the wrong key', () => {
     const f = new CredentialFile(join(dir, 'b.json'));
     const key = newKey();
-    f.write(key, 'client-1', creds);
+    f.write(key, 'client-1', { device: 'ecoflow-mqtt', credentials: creds });
     expect(() => f.read(key, 'client-2')).toThrow('another exporter login');
     expect(() => f.read(newKey(), 'client-1')).toThrow('cannot decrypt');
   });
@@ -52,15 +52,18 @@ describe('CredentialFile', () => {
   it('cannot be moved to another exporter by editing client_id', () => {
     const f = new CredentialFile(join(dir, 'c.json'));
     const key = newKey();
-    f.write(key, 'client-1', creds);
+    f.write(key, 'client-1', { device: 'ecoflow-mqtt', credentials: creds });
     writeFileSync(f.path, readFileSync(f.path, 'utf8').replace('client-1', 'client-2'));
     expect(() => f.read(key, 'client-2')).toThrow('cannot decrypt');
   });
 
-  it('validates what it stores', () => {
+  it('reads files written before device plugins as EcoFlow, and removes them', () => {
     const f = new CredentialFile(join(dir, 'd.json'));
-    expect(() => f.write(newKey(), 'c', { ...creds, sn: 'bad sn!' })).toThrow();
-    expect(() => f.write(newKey(), 'c', { ...creds, apiHost: 'evil.example.org' })).toThrow();
+    const key = newKey();
+    // the old body: EcoFlow fields only, no `device`
+    const sealed = seal(key, 'ecoflow-dashboard/credentials/1|c', creds);
+    writeFileSync(f.path, JSON.stringify({ format: 'ecoflow-dashboard/credentials/1', client_id: 'c', sealed }));
+    expect(f.read(key, 'c')).toEqual({ device: 'ecoflow-mqtt', credentials: creds });
     f.remove();
     expect(f.exists()).toBe(false);
   });

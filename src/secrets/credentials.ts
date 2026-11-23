@@ -3,22 +3,20 @@ import { dirname } from 'node:path';
 import { z } from 'zod';
 import { open, type Sealed, seal } from './crypto.js';
 
-/** What the setup page stores: the EcoFlow app account and the station to read. */
-export const ecoflowCredentialsSchema = z.object({
-  username: z.string().trim().min(3).max(200),
-  password: z.string().min(1).max(200),
-  sn: z
-    .string()
-    .trim()
-    .regex(/^[A-Za-z0-9]{6,40}$/, 'serial number: 6-40 letters and digits'),
-  apiHost: z
-    .string()
-    .trim()
-    .regex(/^[a-z0-9.-]+\.ecoflow\.com$/, 'API host must be an ecoflow.com host name')
-    .optional(),
-});
+/**
+ * What the setup page stores: the device plugin's id (src/sources/) and its credentials,
+ * still unvalidated (the plugin's own schema checks them). Files written before plugins
+ * existed hold EcoFlow credentials without a `device` field.
+ */
+export interface StoredCredentials {
+  device: string;
+  credentials: Record<string, unknown>;
+}
 
-export type EcoflowCredentials = z.infer<typeof ecoflowCredentialsSchema>;
+/** Plugin of files that predate the `device` field. */
+const LEGACY_DEVICE = 'ecoflow-mqtt';
+
+const bodySchema = z.record(z.string(), z.unknown());
 
 const sealedSchema = z.object({
   v: z.literal(1),
@@ -54,15 +52,17 @@ export class CredentialFile {
     return this.exists() ? this.readFile().client_id : undefined;
   }
 
-  read(key: Uint8Array, clientId: string): EcoflowCredentials {
+  read(key: Uint8Array, clientId: string): StoredCredentials {
     const f = this.readFile();
     if (f.client_id !== clientId) throw new Error('credentials were saved by another exporter login: enter them again');
-    return ecoflowCredentialsSchema.parse(open(key, aad(clientId), f.sealed as Sealed));
+    const { device, ...credentials } = bodySchema.parse(open(key, aad(clientId), f.sealed as Sealed));
+    return { device: typeof device === 'string' ? device : LEGACY_DEVICE, credentials };
   }
 
   /** Atomic write (tmp + rename), 0600. */
-  write(key: Uint8Array, clientId: string, creds: EcoflowCredentials): void {
-    const body = { format: 'ecoflow-dashboard/credentials/1', client_id: clientId, sealed: seal(key, aad(clientId), ecoflowCredentialsSchema.parse(creds)) };
+  /** Flat body (`device` next to the fields), so an older exporter can still read EcoFlow files. */
+  write(key: Uint8Array, clientId: string, stored: StoredCredentials): void {
+    const body = { format: 'ecoflow-dashboard/credentials/1', client_id: clientId, sealed: seal(key, aad(clientId), { ...stored.credentials, device: stored.device }) };
     mkdirSync(dirname(this.path), { recursive: true });
     const tmp = `${this.path}.tmp`;
     writeFileSync(tmp, `${JSON.stringify(body, null, 2)}\n`, { mode: 0o600 });

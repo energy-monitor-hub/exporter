@@ -1,5 +1,5 @@
 import { DEFAULT_DASHBOARD_URL, normalizeDashboardUrl } from './destinations.js';
-import { SOURCES } from './sources/types.js';
+import { SOURCES } from './sources/index.js';
 
 export interface Config {
   port: number;
@@ -15,12 +15,11 @@ export interface Config {
   uiUrl: string;
   /** Extra host names the status page answers to (it always does for localhost and IP addresses). */
   uiAllowedHosts: string[];
-  /** Which device source runs (src/sources). */
-  source: (typeof SOURCES)[number];
-  ecoflowApiHost: string | undefined;
-  ecoflowUsername: string | undefined;
-  ecoflowPassword: string | undefined;
-  deviceSn: string | undefined;
+  /**
+   * Device plugin (src/sources/) the setup page and .env credentials are for. Credentials
+   * stored by the setup page remember their own plugin.
+   */
+  source: string;
   /**
    * The dashboard this exporter belongs to (src/destinations.ts): the project's hosted one, or
    * DASHBOARD_URL (development).
@@ -35,7 +34,7 @@ export interface Config {
   supabaseAnonKey: string | undefined;
   /** Tokens from the exporter login (secret, keep it on the data volume). */
   oauthTokenPath: string;
-  /** EcoFlow credentials from the setup page, encrypted with a key held by Supabase. */
+  /** Device credentials from the setup page, encrypted with a key held by Supabase. */
   credentialsPath: string;
   /** Loopback port the browser comes back to after the consent page. */
   oauthCallbackPort: number;
@@ -89,7 +88,7 @@ function int(env: NodeJS.ProcessEnv, name: string, fallback: number, min: number
 
 export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
   const source = env.SOURCE || 'ecoflow-mqtt';
-  if (!(SOURCES as readonly string[]).includes(source)) throw new Error(`Invalid SOURCE: ${source} (known: ${SOURCES.join(', ')})`);
+  if (!SOURCES.includes(source)) throw new Error(`Invalid SOURCE: ${source} (known: ${SOURCES.join(', ')})`);
   const port = int(env, 'HEALTH_PORT', 9101, 1, 65535);
   const dashboardUrl = env.DASHBOARD_URL ? normalizeDashboardUrl(env.DASHBOARD_URL, { allowHttp: true }) : DEFAULT_DASHBOARD_URL;
   return {
@@ -101,11 +100,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
       .split(',')
       .map((h) => h.trim().toLowerCase())
       .filter(Boolean),
-    source: source as Config['source'],
-    ecoflowApiHost: env.ECOFLOW_API_HOST || undefined,
-    ecoflowUsername: env.ECOFLOW_USERNAME || undefined,
-    ecoflowPassword: env.ECOFLOW_PASSWORD || undefined,
-    deviceSn: env.DEVICE_SN || undefined,
+    source,
     dashboardUrl,
     dashboardUrlFromEnv: Boolean(env.DASHBOARD_URL),
     dashboardCachePath: env.DASHBOARD_CACHE_PATH || 'data/dashboard.json',

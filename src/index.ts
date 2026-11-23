@@ -1,5 +1,4 @@
 import 'dotenv/config';
-import { EcoflowAuthError } from './auth/errors.js';
 import { loadConfig } from './config.js';
 import { createDbClient } from './db/client.js';
 import { Exporter } from './exporter/exporter.js';
@@ -11,14 +10,12 @@ import { beginLogin, type PendingLogin } from './oauth/flow.js';
 import { OAuthSession } from './oauth/session.js';
 import { createHttpServer } from './server.js';
 import { buildStatus, OutageHistory } from './status.js';
-import { createSource, credentialsFromEnv, type Source } from './sources/index.js';
-import { login as ecoflowLogin } from './auth/client.js';
+import { pluginById, type AnyDevicePlugin, type Source } from './sources/index.js';
 import type { DeviceDescriptor } from './model/types.js';
-import { CredentialFile, type EcoflowCredentials } from './secrets/credentials.js';
-import { CredentialSetup } from './setup.js';
+import { CredentialFile } from './secrets/credentials.js';
+import { CredentialSetup, type DeviceSetup } from './setup.js';
 import { DiscoveryService } from './discovery/service.js';
 import type { KeyObject } from 'node:crypto';
-import { productCode } from './discovery/census.js';
 import { PackAdapter } from './packs/interpreter.js';
 import { PackUpdater } from './packs/updater.js';
 import { publicKeys } from './packs/verify.js';
@@ -32,6 +29,8 @@ if (process.argv[2] === '--version' || process.argv[2] === '--self-check') proce
 
 const config = loadConfig();
 const log = console;
+/** The kind of device the setup page and .env credentials are for (SOURCE, src/sources/). */
+const plugin: AnyDevicePlugin = pluginById(config.source)!;
 
 /** Exit code that asks the supervisor (Docker, systemd, launchd, Task Scheduler) to start the exporter again. */
 const RESTART_EXIT_CODE = 75;
@@ -100,13 +99,14 @@ async function main(): Promise<void> {
   /** Daily (and soon after start): a newer pack for this device restarts the source with it. */
   async function checkPacks(): Promise<void> {
     const s = source;
-    if (!s) return;
-    await packs.check('ecoflow', productCode(s.sn));
-    const pack = packs.pick('ecoflow', productCode(s.sn));
+    const d = current;
+    if (!s || !d) return;
+    await packs.check(d.plugin.vendor, s.productCode);
+    const pack = packs.pick(d.plugin.vendor, s.productCode);
     const next = pack ? `${pack.id} v${pack.version}` : undefined;
-    if (next !== activePack && source === s && currentCreds) {
+    if (next !== activePack && source === s && current === d) {
       log.info(`packs: switching the decoder to ${next ?? 'the built-in one'}`);
-      await startSource(currentCreds);
+      await startSource(d);
     }
   }
   // The first check waits for the device to be known (credentials from the setup page can take
@@ -141,21 +141,21 @@ async function main(): Promise<void> {
    * the exporter runs (new credentials) or stopped ("Forget").
    */
   let source: Source | undefined;
-  /** Credentials the source runs with, to restart it when a new decoder pack arrives. */
-  let currentCreds: EcoflowCredentials | undefined;
+  /** Plugin and credentials the source runs with, to restart it when a new decoder pack arrives. */
+  let current: DeviceSetup | undefined;
   /** `<pack id> v<version>`, or undefined for the built-in code adapter. */
   let activePack: string | undefined;
   let exporter: Exporter | undefined;
   /** Descriptor per serial number seen, so queued rows of an earlier device can still be written. */
   const descriptors = new Map<string, DeviceDescriptor>();
 
-  async function startSource(creds: EcoflowCredentials): Promise<void> {
+  async function startSource(d: DeviceSetup): Promise<void> {
     await stopSource();
-    currentCreds = creds;
-    const pack = packs.pick('ecoflow', productCode(creds.sn));
+    current = d;
+    const pack = packs.pick(d.plugin.vendor, d.plugin.productCode(d.credentials));
     activePack = pack ? `${pack.id} v${pack.version}` : undefined;
     if (pack) log.info(`exporter: decoding with pack ${activePack}`);
-    const s = createSource(config, creds, log, pack ? new PackAdapter(pack) : undefined);
+    const s = d.plugin.open(d.credentials, { config, logger: log, adapter: pack ? new PackAdapter(pack) : undefined });
     const e = new Exporter(s.adapter, outbox, { sn: s.sn, suspends });
     descriptors.set(s.sn, s.adapter.descriptor);
     s.onPayload((payload, at, topic) => {
@@ -171,11 +171,7 @@ async function main(): Promise<void> {
     exporter = e;
     outages?.invalidate();
     s.start().catch((err: unknown) => {
-      if (err instanceof EcoflowAuthError) {
-        log.error(`exporter: EcoFlow rejected the login (code ${err.code}): ${err.message}`);
-      } else {
-        log.error(`exporter: ${(err as Error).message}`);
-      }
+      log.error(`exporter: ${d.plugin.describeFatal?.(err) ?? (err as Error).message}`);
       // Credentials from .env cannot change while running: exit, as before. From the setup
       // page the user can fix them, so keep serving the page.
       if (envCreds) process.exit(1);
@@ -192,7 +188,7 @@ async function main(): Promise<void> {
   const flusher = db
     ? new Flusher(
         outbox,
-        new SupabaseSink(db, (sn) => descriptors.get(sn) ?? { vendor: 'ecoflow', model: 'unknown' }),
+        new SupabaseSink(db, (sn) => descriptors.get(sn) ?? { vendor: current?.plugin.vendor ?? plugin.vendor, model: 'unknown' }),
         log,
         { intervalMs: config.sampleIntervalS * 1000 },
       )
@@ -208,15 +204,15 @@ async function main(): Promise<void> {
     log,
   });
 
-  const envCreds = credentialsFromEnv(config);
+  const fromEnv = plugin.fromEnv(process.env);
+  const envCreds: DeviceSetup | undefined = fromEnv ? { plugin, credentials: plugin.credentials.parse(fromEnv) } : undefined;
   const setup = new CredentialSetup({
     file: new CredentialFile(config.credentialsPath),
     db,
     session,
     fromEnv: envCreds !== undefined,
-    verify: async (c) => {
-      await ecoflowLogin({ username: c.username, password: c.password, ...(c.apiHost ? { apiHost: c.apiHost } : {}) });
-    },
+    plugin,
+    pluginById,
     apply: startSource,
     stop: stopSource,
     log,
@@ -341,7 +337,7 @@ async function main(): Promise<void> {
     // locked (no login yet, network down), so a restart after a power cut recovers by itself.
     void setup.unlock();
     setInterval(() => void setup.unlock(), 60_000).unref();
-    if (setup.status().state === 'needs-setup') log.info(`exporter: no EcoFlow credentials yet; set them up on ${config.uiUrl}/`);
+    if (setup.status().state === 'needs-setup') log.info(`exporter: no device credentials yet; set them up on ${config.uiUrl}/`);
   }
 
   cleanup = async () => {

@@ -1,36 +1,17 @@
-import type { Config } from '../config.js';
-import type { Logger } from '../mqtt/client.js';
-import type { EcoflowCredentials } from '../secrets/credentials.js';
-import { EcoflowSource } from './ecoflow.js';
-import type { Source } from './types.js';
+import { ecoflowPlugin } from './ecoflow.js';
+import type { AnyDevicePlugin } from './types.js';
 
-export { SOURCES, type Source } from './types.js';
+export type { AnyDevicePlugin, DeviceCredentials, DevicePlugin, DiscoveryCodec, FormField, Source, SourceContext, Texts } from './types.js';
 
-/** EcoFlow credentials from .env, if all of them are set (they win over the setup page). */
-export function credentialsFromEnv(config: Config): EcoflowCredentials | undefined {
-  if (!config.ecoflowUsername || !config.ecoflowPassword || !config.deviceSn) return undefined;
-  return {
-    username: config.ecoflowUsername,
-    password: config.ecoflowPassword,
-    sn: config.deviceSn,
-    ...(config.ecoflowApiHost ? { apiHost: config.ecoflowApiHost } : {}),
-  };
-}
+/**
+ * Every kind of device this exporter can read. A new brand or protocol adds its plugin here
+ * (docs/DEVICE_PLUGINS.md); nothing else in the exporter names a vendor.
+ */
+export const PLUGINS: readonly AnyDevicePlugin[] = [ecoflowPlugin];
 
-/** Builds the source named by config.source for these credentials (.env or the setup page). */
-export function createSource(config: Config, creds: EcoflowCredentials, logger: Logger, adapter?: Source['adapter']): Source {
-  switch (config.source) {
-    case 'ecoflow-mqtt': {
-      return new EcoflowSource({
-        username: creds.username,
-        password: creds.password,
-        sn: creds.sn,
-        ...(creds.apiHost ? { apiHost: creds.apiHost } : {}),
-        requestQuotasEveryMs: config.quotaEveryS * 1000,
-        silenceTimeoutMs: config.mqttSilenceTimeoutS * 1000,
-        logger,
-        ...(adapter ? { adapter } : {}),
-      });
-    }
-  }
+/** Known plugin ids (SOURCE in .env). */
+export const SOURCES = PLUGINS.map((p) => p.id);
+
+export function pluginById(id: string): AnyDevicePlugin | undefined {
+  return PLUGINS.find((p) => p.id === id);
 }

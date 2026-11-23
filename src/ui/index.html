@@ -34,31 +34,15 @@
     <main>
       <section class="card wide" id="setup-card">
         <div class="card-head">
-          <h2 data-i18n="setup">EcoFlow account</h2>
+          <h2 id="setup-title">Device account</h2>
           <span class="badge" id="setup-badge">…</span>
         </div>
         <p class="muted small" id="setup-hint"></p>
         <p class="error small" id="setup-error" hidden></p>
         <form id="setup-form" hidden autocomplete="on">
-          <div class="fields">
-            <label><span data-i18n="ecoEmail">E-mail of the EcoFlow app account</span>
-              <input id="eco-user" name="username" type="email" autocomplete="username" required maxlength="200" />
-            </label>
-            <label><span data-i18n="ecoPassword">Password</span>
-              <input id="eco-pass" name="password" type="password" autocomplete="current-password" required maxlength="200" />
-            </label>
-            <label><span data-i18n="ecoSn">Serial number of the station</span>
-              <input id="eco-sn" name="sn" type="text" autocomplete="off" required pattern="[A-Za-z0-9]{6,40}" spellcheck="false" />
-            </label>
-            <label><span data-i18n="ecoHost">Server</span>
-              <select id="eco-host" name="apiHost">
-                <option value="">api.ecoflow.com</option>
-                <option value="api-e.ecoflow.com">api-e.ecoflow.com (EU)</option>
-                <option value="api-a.ecoflow.com">api-a.ecoflow.com</option>
-              </select>
-            </label>
-          </div>
-          <p class="muted small" data-i18n="setupPrivacy">The password is checked with EcoFlow, then stored only on this computer, encrypted. The key is kept with your exporter login, so revoking this exporter on the dashboard makes a copy of the file useless. The exporter uses EcoFlow's unofficial app interface with your account, at your own risk.</p>
+          <!-- Built from the device plugin's fields (src/sources/), see renderSetupForm in app.js. -->
+          <div class="fields" id="setup-fields"></div>
+          <p class="muted small" id="setup-privacy"></p>
           <div class="actions">
             <button type="submit" class="primary" id="setup-save" data-i18n="setupSave">Check and save</button>
           </div>

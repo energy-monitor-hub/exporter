@@ -209,13 +209,13 @@ Everything that gets installed has an exact version; there is no `latest` or `^`
 ## Layout
 
 ```
-src/            index.ts (start), server.ts + status.ts + ui/ (status page, /healthz), decode/ (protobuf → state), model/ (common model), exporter/ (samples, outages, buffer, writes), mqtt/, auth/ (EcoFlow login), oauth/ (Supabase login), secrets/, sources/, packs/ (signed decoder packs), update/ (release check), updater/ (the updater container), discovery/ (census, samples), proto/, db/
+src/            index.ts (start), server.ts + status.ts + ui/ (status page, /healthz), decode/ (protobuf → state), model/ (common model), exporter/ (samples, outages, buffer, writes), mqtt/, auth/ (EcoFlow login), oauth/ (Supabase login), secrets/, sources/ (device plugins, docs/DEVICE_PLUGINS.md), packs/ (signed decoder packs), update/ (release check), updater/ (the updater container), discovery/ (census, samples), proto/, db/
 decoders/       decoder packs (data, signed and published by the dashboard's deploy)
 releases/       releases.json: the release list the status page checks (signed the same way)
 test/           vitest, fixtures/ (recorded MQTT, serials masked)
 deploy/         docker-compose.yml (prod), docker-compose.dev.yml (watch)
 packaging/      service installers for the single-file binaries
-docs/           DB_CONTRACT.md, DECODER.md, DECODER_PACKS.md, DATA_CATALOG.md, UPDATES.md, NATIVE.md, DESIGN.md; uk/ — Ukrainian
+docs/           DB_CONTRACT.md, DEVICE_PLUGINS.md, DECODER.md, DECODER_PACKS.md, DATA_CATALOG.md, UPDATES.md, NATIVE.md, DESIGN.md; uk/ — Ukrainian
 .github/        CI, image (ghcr.io) and binaries, with build provenance
 scripts/        build-sea.mjs (binaries), check-deps.mjs (exact versions + quarantine)
 ```

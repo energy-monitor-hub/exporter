@@ -45,5 +45,5 @@ The same model can also be decoded from data: [DECODER_PACKS.md](DECODER_PACKS.m
 ## Common model
 
 `src/model/types.ts`: `TelemetrySample`, `PackSample`, `DeviceAdapter`. A device adapter turns
-its messages into these types, and the DB writer only knows them (groundwork for other
-stations, #12).
+its messages into these types, and the DB writer only knows them. The adapter comes with a
+device plugin ([DEVICE_PLUGINS.md](DEVICE_PLUGINS.md)), #12.

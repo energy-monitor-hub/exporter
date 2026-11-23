@@ -4,6 +4,7 @@ import { MessageCensus, productCode } from '../src/discovery/census.js';
 import { SampleRecorder } from '../src/discovery/recorder.js';
 import { DiscoveryService } from '../src/discovery/service.js';
 import { CONSENT_TEXTS, consentSha256 } from '../src/discovery/texts.js';
+import { ecoflowDiscovery } from '../src/sources/ecoflow.js';
 import type { Source } from '../src/sources/types.js';
 import { encodeHeaderMessage } from './helpers/proto.js';
 
@@ -34,7 +35,7 @@ describe('census', () => {
   });
 
   it('counts message types without values or serial', () => {
-    const c = new MessageCensus('ecoflow', SN);
+    const c = new MessageCensus('ecoflow', productCode(SN), ecoflowDiscovery);
     c.observe(payload(21));
     c.observe(payload(21));
     c.observe(payload(22));
@@ -53,7 +54,7 @@ describe('SampleRecorder', () => {
   it('masks identifiers, also XOR-ed and serial-like, and compresses', () => {
     let now = 1_000;
     const r = new SampleRecorder(() => now);
-    r.start(5, [SN, USER_ID, EMAIL]);
+    r.start(5, [SN, USER_ID, EMAIL], ecoflowDiscovery);
     r.observe(payload(21, 'OTHERSERIAL123'), () => meta);
     now += 2_000;
     r.observe(payload(22), () => meta);
@@ -77,7 +78,7 @@ describe('SampleRecorder', () => {
   it('stops by itself when the time is up', () => {
     let now = 0;
     const r = new SampleRecorder(() => now);
-    r.start(1, [SN]);
+    r.start(1, [SN], ecoflowDiscovery);
     r.observe(payload(), () => meta);
     now = 61_000;
     r.observe(payload(), () => meta);
@@ -86,8 +87,8 @@ describe('SampleRecorder', () => {
 
   it('blocks an empty recording and checks the duration', () => {
     const r = new SampleRecorder();
-    expect(() => r.start(0, [SN])).toThrow();
-    r.start(1, [SN]);
+    expect(() => r.start(0, [SN], ecoflowDiscovery)).toThrow();
+    r.start(1, [SN], ecoflowDiscovery);
     expect(r.stop(meta).blocked).toBe('nothing was recorded');
   });
 });
@@ -139,6 +140,8 @@ function fakeDb(opts: { consents?: string[]; reserve?: unknown }) {
 function fakeSource(): Source {
   return {
     sn: SN,
+    productCode: productCode(SN),
+    discovery: ecoflowDiscovery,
     adapter: { descriptor: { vendor: 'ecoflow', model: 'x' } },
     identifiers: () => [SN, USER_ID, EMAIL],
   } as unknown as Source;

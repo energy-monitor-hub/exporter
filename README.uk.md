@@ -209,13 +209,13 @@ make dev                 # docker compose watch: src/ синхронізуєть
 ## Структура
 
 ```
-src/            index.ts (старт), server.ts + status.ts + ui/ (сторінка стану, /healthz), decode/ (protobuf → стан), model/ (спільна модель), exporter/ (семпли, відключення, буфер, запис), mqtt/, auth/ (вхід EcoFlow), oauth/ (вхід Supabase), secrets/, sources/, packs/ (підписані пакети декодера), update/ (перевірка релізів), updater/ (контейнер-оновлювач), discovery/ (перепис, зразки), proto/, db/
+src/            index.ts (старт), server.ts + status.ts + ui/ (сторінка стану, /healthz), decode/ (protobuf → стан), model/ (спільна модель), exporter/ (семпли, відключення, буфер, запис), mqtt/, auth/ (вхід EcoFlow), oauth/ (вхід Supabase), secrets/, sources/ (плагіни пристроїв, docs/uk/DEVICE_PLUGINS.md), packs/ (підписані пакети декодера), update/ (перевірка релізів), updater/ (контейнер-оновлювач), discovery/ (перепис, зразки), proto/, db/
 decoders/       пакети декодера (дані; підписує й публікує деплой дашборда)
 releases/       releases.json: список релізів, який перевіряє сторінка стану (підписується так само)
 test/           vitest, fixtures/ (записаний MQTT, серійники замасковані)
 deploy/         docker-compose.yml (прод), docker-compose.dev.yml (watch)
 packaging/      встановлювачі сервісу для однофайлових бінарників
-docs/           DB_CONTRACT.md, DECODER.md, DECODER_PACKS.md, DATA_CATALOG.md, UPDATES.md, NATIVE.md, DESIGN.md; uk/ — українською
+docs/           DB_CONTRACT.md, DEVICE_PLUGINS.md, DECODER.md, DECODER_PACKS.md, DATA_CATALOG.md, UPDATES.md, NATIVE.md, DESIGN.md; uk/ — українською
 .github/        CI, образ (ghcr.io) і бінарники, з build provenance
 scripts/        build-sea.mjs (бінарники), check-deps.mjs (точні версії + карантин)
 ```

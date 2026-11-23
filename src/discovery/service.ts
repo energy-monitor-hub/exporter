@@ -1,7 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { Logger } from '../mqtt/client.js';
 import type { Source } from '../sources/types.js';
-import { MessageCensus, productCode, type Fingerprint } from './census.js';
+import { MessageCensus, type Fingerprint } from './census.js';
 import { SampleRecorder, type SampleMeta, type SampleSummary } from './recorder.js';
 import { CONSENT_TEXTS, consentSha256, type DiscoveryPurpose } from './texts.js';
 
@@ -79,7 +79,7 @@ export class DiscoveryService {
     const s = this.d.source();
     if (!s) return;
     if (this.censusSn !== s.sn) {
-      this.census = new MessageCensus(s.adapter.descriptor.vendor, s.sn);
+      this.census = s.discovery ? new MessageCensus(s.adapter.descriptor.vendor, s.productCode, s.discovery) : undefined;
       this.censusSn = s.sn;
       this.censusSentAt = undefined;
     }
@@ -96,7 +96,7 @@ export class DiscoveryService {
     const d = s?.adapter.descriptor;
     return {
       vendor: d?.vendor ?? 'unknown',
-      productCode: productCode(s?.sn ?? ''),
+      productCode: s?.productCode ?? '',
       firmware: d?.firmware ?? null,
       exporterVersion: this.d.exporterVersion,
     };
@@ -200,9 +200,10 @@ export class DiscoveryService {
   startRecording(minutes: unknown): void {
     const s = this.d.source();
     if (!s) throw new Error('no device connected');
+    if (!s.discovery) throw new Error('this kind of device cannot record samples yet');
     if (!this.consents.raw_sample_upload) throw new Error('give the consent for samples first');
     const m = typeof minutes === 'number' ? minutes : Number(minutes);
-    this.recorder.start(m, s.identifiers());
+    this.recorder.start(m, s.identifiers(), s.discovery);
     this.lastSample = undefined;
     this.d.log.info(`discovery: recording a sample for ${m} min`);
   }
