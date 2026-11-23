@@ -1,6 +1,15 @@
 {
   "releases": [
     {
+      "version": "0.3.0",
+      "digest": "sha256:4db49f0dab67181d8ce554621819593f82d8a4e04de55f7c8a41192d4d1260c9",
+      "channel": "beta",
+      "published_at": "2026-11-23T06:50:05.000Z",
+      "min_db_migration": "20261123080000",
+      "notes": "Tells the exporter's own blind stretches (host asleep, exporter stopped, no connection) apart from grid outages: gaps are recorded with their cause, outages whose start or end fell into one get a time window, and an outage missed entirely is inferred from a battery drop. Needs DB migration 20261123080000.",
+      "revoked": false
+    },
+    {
       "version": "0.2.0",
       "digest": "sha256:62fd14b42d306593df9f35edcd07451a92d6066d4022be753077a8c4749ac72d",
       "channel": "beta",
