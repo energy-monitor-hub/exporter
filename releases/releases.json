@@ -1,6 +1,15 @@
 {
   "releases": [
     {
+      "version": "0.4.1",
+      "digest": "sha256:271314dc25ce44d9fb42e29dff912c78b1a95d417382f403011f74a3a1bd6386",
+      "channel": "beta",
+      "published_at": "2026-11-28T09:44:20.000Z",
+      "min_db_migration": "20261123080000",
+      "notes": "Device support is organised as one plugin per kind of device (no change in behaviour for EcoFlow). Built with build provenance in the re-created repository: install this one to keep one-click updates verifiable.",
+      "revoked": false
+    },
+    {
       "version": "0.4.0",
       "digest": "sha256:416a5177edd3c22ed7de064d3d378717a026f9e97d7586018c028b7075c5dd8a",
       "channel": "beta",
