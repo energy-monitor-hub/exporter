@@ -91,10 +91,21 @@ executable is updated by installing the new file from the release ([NATIVE.md](N
    `releases.json` entry in the run summary.
 3. Add the entry to `releases/releases.json` with `"channel": "beta"` (pull request). The web
    deploy signs and publishes it with the dashboard.
-4. **Quarantine**: after 7 days without problem reports, change it to `"stable"` (the same 7 days as
-   the npm rule in `CLAUDE.md`). Only then do stable exporters see it.
+4. **Beta period**: after 7 days without problem reports, change it to `"stable"`. Only then do
+   stable exporters (and auto mode) see it. This is a test period for the project's own code on
+   beta installs, not the npm quarantine: dependencies already pass their 7 days before they are
+   installed (`min-release-age`), so a release never waits for them. Shorter for small fixes:
+   - a **bug fix or small change** with no new dependencies: `stable` after 1–2 days on beta
+     without problem reports;
+   - a **hotfix for a broken `stable` release**: revoke the broken one and mark the fix `stable`
+     at once (auto mode installs only `stable`, so otherwise auto-updating exporters stay on the
+     revoked version until the fix gets there).
+   A release that adds or updates dependencies, or changes the updater, the release check or
+   what leaves the machine, keeps the full 7 days.
 5. Kill switch: `"revoked": true` on a bad release. Exporters running it show a red banner and are
-   never offered it.
+   never offered it (no button, no auto mode, and the updater refuses it); the button offers the
+   newest non-revoked release instead. A bad **beta** never reached stable exporters: revoke it and
+   ship the fix as a new beta with its own beta period.
 
 `min_db_migration` is the newest migration the release needs on the server. Apply migrations
 before marking a release stable.
