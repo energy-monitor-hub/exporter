@@ -1,12 +1,17 @@
 name: ci
 
+# Pull requests only: main changes only through squash-merged PRs, so a run on
+# main would repeat the checks the PR already passed.
 on:
   pull_request:
-  push:
-    branches: [main]
 
 permissions:
   contents: read
+
+# A new push to a PR cancels the run for its previous commit.
+concurrency:
+  group: ci-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
 
 env:
   # npm-pin: npm
